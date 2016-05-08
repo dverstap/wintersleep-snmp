@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Davy Verstappen.
+ * Copyright 2012-2016 Davy Verstappen.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JEnumConstant;
-import org.jsmiparser.smi.SmiCodeNamingStrategy;
-import org.jsmiparser.smi.SmiMib;
-import org.jsmiparser.smi.SmiModule;
-import org.jsmiparser.smi.SmiNamedNumber;
-import org.jsmiparser.smi.SmiPrimitiveType;
-import org.jsmiparser.smi.SmiType;
+import org.jsmiparser.smi.*;
 import org.jsmiparser.util.FileTestUtil;
 import org.jsmiparser.util.token.BigIntegerToken;
 import org.jsmiparser.util.token.IdToken;
@@ -55,7 +50,7 @@ public class EnumBuilderTest {
 
     @After
     public void after() throws IOException {
-        File dir = FileTestUtil.makeBuildSubDir(EnumBuilderTest.class, "jsmiparser-codegen-test");
+        File dir = FileTestUtil.makeTargetSubDir(EnumBuilderTest.class, "jsmiparser-codegen-test");
         codeModel.build(dir, (PrintStream) null);
         codeModel = null;
     }

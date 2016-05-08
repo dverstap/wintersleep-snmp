@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Davy Verstappen.
+ * Copyright 2009-2016 Davy Verstappen.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.net.URL;
 
 public abstract class FileTestUtil {
 
-    public static File getBuildDir(Class testClass) {
+    public static File getTargetDir(Class testClass) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         URL url = cl.getResource(testClass.getName().replace('.', '/') + ".class");
         if (url == null) {
@@ -40,17 +40,17 @@ public abstract class FileTestUtil {
         }
         File dir = classFile.getParentFile();
         while (dir != null) {
-            if (dir.getName().equals("build")) {
+            if (dir.getName().equals("target")) {
                 return dir;
             }
             dir = dir.getParentFile();
         }
-        throw new IllegalStateException("Could not find 'build' dir as a parent of " + classFile);
+        throw new IllegalStateException("Could not find 'target' dir as a parent of " + classFile);
     }
 
-    public static File makeBuildSubDir(Class testClass, String... subDirs) {
-        File result = getBuildDir(testClass);
-        for (String subDir: subDirs) {
+    public static File makeTargetSubDir(Class testClass, String... subDirs) {
+        File result = getTargetDir(testClass);
+        for (String subDir : subDirs) {
             result = new File(result, subDir);
         }
         return createDir(result);
