@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.jsmiparser</groupId>
-    <artifactId>jsmiparser</artifactId>
+    <groupId>org.wintersleep.snmp</groupId>
+    <artifactId>wintersleep-snmp</artifactId>
     <packaging>pom</packaging>
     <version>0.14-SNAPSHOT</version>
     <name>Java SMI Parser</name>
@@ -18,7 +18,7 @@
         <developer>
             <id>stappend</id>
             <name>Davy Verstappen</name>
-            <email>davy@jsmiparser.org</email>
+            <email>davy@wintersleep.org</email>
             <timezone>+1</timezone>
         </developer>
     </developers>
@@ -31,9 +31,11 @@
     </licenses>
 
     <modules>
-        <module>jsmiparser-util</module>
-        <module>jsmiparser-api</module>
-        <module>jsmiparser-codegen</module>
+        <module>wintersleep-snmp-util</module>
+        <module>wintersleep-snmp-mib</module>
+        <module>wintersleep-snmp-mib2java</module>
+        <!--<module>wintersleep-snmp-anttasks</module>-->
+        <!--<module>wintersleep-snmp-test</module>-->
     </modules>
 
     <scm>
@@ -109,24 +111,57 @@
                 <version>${spring.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jsmiparser</groupId>
-                <artifactId>jsmiparser-util</artifactId>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-anttasks</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jsmiparser</groupId>
-                <artifactId>jsmiparser-util</artifactId>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-anttasks</artifactId>
                 <classifier>tests</classifier>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jsmiparser</groupId>
-                <artifactId>jsmiparser-api</artifactId>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-mib</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jsmiparser</groupId>
-                <artifactId>jsmiparser-api</artifactId>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-mib</artifactId>
+                <classifier>tests</classifier>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-mib2java</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-mib2java</artifactId>
+                <classifier>tests</classifier>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-test</artifactId>
+                <classifier>tests</classifier>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-util</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep.snmp</groupId>
+                <artifactId>wintersleep-snmp-util</artifactId>
                 <classifier>tests</classifier>
                 <version>${project.version}</version>
             </dependency>

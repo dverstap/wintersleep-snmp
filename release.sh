@@ -9,7 +9,7 @@ then
 fi
 
 VERSION=$1
-SRC_DIST=jsmiparser-src-$VERSION
+SRC_DIST=wintersleep-snmp-src-$VERSION
 
 rm -rf $SRC_DIST
 git tag $VERSION
