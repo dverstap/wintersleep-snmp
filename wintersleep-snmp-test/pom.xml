@@ -28,4 +28,51 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <taskdef resource="wintersleep-snmp-anttasks.properties"/>
+                                <mib2java id="libsmi"
+                                          packageName="org.wintersleep.snmp.test.libsmi"
+                                          outputDir="${project.build.directory}/generated-sources/mib2java">
+                                    <!--<taskName>libsmi</taskName>-->
+                                    <!--
+                                                                        <packageName>org.wintersleep.snmp.test.libsmi</packageName>
+                                                                        <outputDir></outputDir>
+                                    -->
+                                    <fileset dir="../wintersleep-snmp-mib/src/test/resources/libsmi-0.4.8/mibs/">
+                                        <exclude name="**/*orig"/>
+                                        <!-- obsoleted by RFC-1213: -->
+                                        <exclude name="ietf/RFC1158-MIB"/>
+                                        <exclude name="irtf/**"/>
+                                        <exclude name="iana/IANA-ITU-ALARM-TC-MIB"/>
+                                        <exclude name="**/Makefile*"/>
+                                    </fileset>
+                                </mib2java>
+                            </tasks>
+                            <sourceRoot>${project.build.directory}/generated-sources/mib2java</sourceRoot>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.wintersleep.snmp</groupId>
+                        <artifactId>wintersleep-snmp-anttasks</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

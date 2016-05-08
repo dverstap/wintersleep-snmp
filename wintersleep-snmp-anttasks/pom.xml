@@ -19,6 +19,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wintersleep.snmp</groupId>
             <artifactId>wintersleep-snmp-mib</artifactId>
         </dependency>

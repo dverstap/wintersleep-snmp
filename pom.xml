@@ -34,8 +34,8 @@
         <module>wintersleep-snmp-util</module>
         <module>wintersleep-snmp-mib</module>
         <module>wintersleep-snmp-mib2java</module>
-        <!--<module>wintersleep-snmp-anttasks</module>-->
-        <!--<module>wintersleep-snmp-test</module>-->
+        <module>wintersleep-snmp-anttasks</module>
+        <module>wintersleep-snmp-test</module>
     </modules>
 
     <scm>
@@ -79,6 +79,11 @@
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>1.2.17</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant</artifactId>
+                <version>1.9.7</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -174,8 +179,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -192,6 +197,11 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>

@@ -83,7 +83,11 @@ public class CodeBuilder {
 
     public void write(PrintStream status) throws IOException {
         build();
+        File outputDir = createOutputDir();
+        codeModel.build(outputDir, status);
+    }
 
+    public File createOutputDir() {
         File outputDir = settings.getOutputDir();
         if (outputDir.exists()) {
             if (!outputDir.isDirectory()) {
@@ -95,7 +99,7 @@ public class CodeBuilder {
                 throw new IllegalStateException("Output directory " + outputDir + " could not be created.");
             }
         }
-        codeModel.build(outputDir, status);
+        return outputDir;
     }
 
 }

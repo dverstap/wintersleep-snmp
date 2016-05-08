@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Davy Verstappen.
+ * Copyright 2012-2016 Davy Verstappen.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,37 +16,31 @@
 package org.wintersleep.snmp.anttasks.mib2java;
 
 
-import org.gradle.api.DefaultTask;
-import org.gradle.api.file.FileCollection;
-import org.gradle.api.tasks.InputFiles;
-import org.gradle.api.tasks.OutputFile;
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.tooling.BuildException;
-import org.wintersleep.snmp.mib2java.BuilderFactory;
-import org.wintersleep.snmp.mib2java.CodeBuilder;
-import org.wintersleep.snmp.mib2java.DefaultCodeBuilderSettings;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.FileSet;
 import org.wintersleep.snmp.mib.parser.SmiDefaultParser;
 import org.wintersleep.snmp.mib.smi.SmiMib;
 import org.wintersleep.snmp.mib.smi.SmiModule;
+import org.wintersleep.snmp.mib2java.BuilderFactory;
+import org.wintersleep.snmp.mib2java.CodeBuilder;
+import org.wintersleep.snmp.mib2java.DefaultCodeBuilderSettings;
 
 import java.io.File;
 import java.io.PrintStream;
 
-
-public class CodegenTask extends DefaultTask {
+public class Mib2JavaTask extends Task {
 
     private final DefaultCodeBuilderSettings settings = new DefaultCodeBuilderSettings();
     private SmiMib mib;
-    private FileCollection inputFiles;
+    private FileSet fileset;
     private File statusFile;
     private boolean failOnMibError = true;
     private BuilderFactory builderFactory;
 
-    // TODO: this is ugly, because it forces you to write "settings.xyz = ..." in the build file,
-    // but I'm keeping this for now to avoid too much code duplication/delegation. With a plugin that
-    // declares extensions, this should not be too bad.
-    public DefaultCodeBuilderSettings getSettings() {
-        return settings;
+    public void setPackageName(String packageName) {
+        settings.setPackageName(packageName);
     }
 
     public SmiMib getMib() {
@@ -57,19 +51,22 @@ public class CodegenTask extends DefaultTask {
         this.mib = mib;
     }
 
-    @InputFiles
-    public FileCollection getInputFiles() {
-        return inputFiles;
+    public FileSet getFileset() {
+        return fileset;
     }
 
-    public void setInputFiles(FileCollection inputFiles) {
-        this.inputFiles = inputFiles;
+    public void setFileset(FileSet fileset) {
+        this.fileset = fileset;
+    }
+
+    public void addFileset(FileSet fileset) {
+        this.fileset = fileset;
     }
 
     public File getOutputDir() {
-        if (settings.getOutputDir() == null) {
-            settings.setOutputDir(new File(new File(getProject().getBuildDir(), "generated-src"), "java"));
-        }
+//        if (settings.getOutputDir() == null) {
+//            settings.setOutputDir(new File(getProject().getBaseDir(), "target/generated-sources/mib2java"));
+//        }
         return settings.getOutputDir();
     }
 
@@ -77,12 +74,11 @@ public class CodegenTask extends DefaultTask {
         settings.setOutputDir(outputDir);
     }
 
-    @OutputFile
     public File getStatusFile() {
         if (statusFile != null) {
-        return statusFile;
+            return statusFile;
         }
-        return new File(getOutputDir(), "." + CodegenTask.class.getName() + "." + getName());
+        return new File(getOutputDir(), "." + Mib2JavaTask.class.getName() + "." + getTaskName());
     }
 
     public void setStatusFile(File statusFile) {
@@ -105,20 +101,43 @@ public class CodegenTask extends DefaultTask {
         this.builderFactory = builderFactory;
     }
 
-    @TaskAction
-    public void build() throws Exception {
-        SmiMib mib = determineMib();
-        getLogger().debug("Compiling {} mibs to package {} in {}", mib.getModules().size(), settings.getPackageName(), settings.getOutputDir());
-
-        for (SmiModule module : mib.getModules()) {
-            getLogger().debug(module.getId());
-        }
-        PrintStream status = new PrintStream(getStatusFile());
+    @Override
+    public void execute() throws BuildException {
         try {
-            CodeBuilder codeBuilder = determineBuilderFactory().createCodeBuilder(mib);
+            if (isUptodate()) {
+                log("Generated java files are up to date.");
+            } else {
+                compile();
+            }
+        } catch (Exception e) {
+            throw new BuildException(e.getMessage(), e);
+        }
+    }
+
+    private boolean isUptodate() {
+        if (getStatusFile().exists()) {
+            long statusLastModified = getStatusFile().lastModified();
+            for (File file : FileSetURLListFactory.listFiles(fileset)) {
+                if (file.exists() && file.lastModified() > statusLastModified) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void compile() throws Exception {
+        SmiMib mib = determineMib();
+        log("Compiling " + mib.getModules().size() + " mibs to package " + settings.getPackageName() + " to " + settings.getOutputDir());
+        for (SmiModule module : mib.getModules()) {
+            log(module.getId(), Project.MSG_DEBUG);
+        }
+
+        CodeBuilder codeBuilder = determineBuilderFactory().createCodeBuilder(mib);
+        codeBuilder.createOutputDir();
+        try (PrintStream status = new PrintStream(getStatusFile())) {
             codeBuilder.write(status);
-        } finally {
-            status.close();
         }
     }
 
@@ -126,27 +145,28 @@ public class CodegenTask extends DefaultTask {
         if (builderFactory != null) {
             return builderFactory;
         }
-        return new BuilderFactory(getSettings());
+        return new BuilderFactory(settings);
     }
 
     protected SmiMib determineMib() throws Exception {
         if (mib != null) {
             return mib;
-        } else if (inputFiles != null) {
+        } else if (fileset != null) {
             return parseMib();
         }
-        throw new BuildException("Either mib or inputFiles should be set.", null);
+        throw new BuildException("Either mib or inputFiles should be set.");
     }
 
+    // TODO log and report errors ...
     protected SmiMib parseMib() throws Exception {
         SmiDefaultParser parser = createParser();
         SmiMib result = parser.parse();
         if (parser.getProblemEventHandler().isNotOk()) {
             int problemCount = parser.getProblemEventHandler().getTotalCount();
             if (failOnMibError) {
-                throw new BuildException("Found " + problemCount + " problems.", null);
+                throw new BuildException("Found " + problemCount + " problems.");
             } else {
-                getLogger().quiet("Found {} problems, but continuing anyway, because failOnMibError is set to false.", problemCount);
+                log("Found " + problemCount + " problems, but continuing anyway, because failOnMibError is set to false.", Project.MSG_DEBUG);
             }
         }
         return result;
@@ -154,7 +174,7 @@ public class CodegenTask extends DefaultTask {
 
     protected SmiDefaultParser createParser() throws Exception {
         SmiDefaultParser parser = new SmiDefaultParser();
-        parser.getFileParserPhase().setInputUrls(new FileCollectionURLListFactory(inputFiles).create());
+        parser.getFileParserPhase().setInputUrls(new FileSetURLListFactory(fileset).create());
         return parser;
     }
 
