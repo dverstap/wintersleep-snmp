@@ -9,7 +9,7 @@
     <title>${title}</title>
 
     <meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8"/>
-    <link rel="stylesheet" href="../../../../../../../bootstrap.min.css"/>
+    <link rel="stylesheet" href="bootstrap.min.css"/>
 </head>
 <body>
 

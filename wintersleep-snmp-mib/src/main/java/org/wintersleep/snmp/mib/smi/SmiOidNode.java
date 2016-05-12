@@ -116,12 +116,17 @@ public class SmiOidNode {
     }
 
     public <T extends SmiOidValue> T getSingleValue(Class<T> clazz) {
-        if (m_values.size() != 1) {
-            throw new AssertionError("expected only a single value");
+        switch (m_values.size()) {
+            case 0:
+                throw new AssertionError("Expected exactly one value, but found 0");
+            case 1:
+                return clazz.cast(m_values.get(0));
+            default:
+                throw new AssertionError("Expected exactly one value, but found " + m_values);
         }
-        return clazz.cast(m_values.get(0));
     }
 
+    // TODO this is bad: different versions of getSingleValue() return null or throw an exception when something is not there
     public <T extends SmiOidValue> T getSingleValue(Class<T> clazz, SmiModule module) {
         T result = null;
         for (SmiOidValue value : m_values) {

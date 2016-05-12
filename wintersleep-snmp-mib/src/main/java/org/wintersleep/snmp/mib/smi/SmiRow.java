@@ -15,6 +15,8 @@
  */
 package org.wintersleep.snmp.mib.smi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wintersleep.snmp.util.token.IdToken;
 import org.wintersleep.snmp.mib.phase.xref.XRefProblemReporter;
 
@@ -23,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SmiRow extends SmiObjectType {
+
+    private static final Logger log = LoggerFactory.getLogger(SmiRow.class);
 
     // TODO remove?
     private List<SmiRow> m_parentRows = new ArrayList<SmiRow>();
@@ -40,10 +44,16 @@ public class SmiRow extends SmiObjectType {
     }
 
     public List<SmiVariable> getColumns() {
-
         List<SmiVariable> result = new ArrayList<SmiVariable>();
         for (SmiOidNode child : getNode().getChildren()) {
-            result.add(child.getSingleValue(SmiVariable.class));
+            SmiVariable column = child.getSingleValue(SmiVariable.class, getModule());
+            if (column == null) {
+                // This can happen when a new mib adds new columns to a table:
+                // for example: kdiff3 RFC1269-MIB BGP4-MIB
+                log.debug("{}: Could not find SmiVariable for {}", getIdToken(), child);
+            } else {
+                result.add(column);
+            }
         }
         return result;
     }

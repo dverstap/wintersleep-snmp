@@ -59,10 +59,6 @@ public abstract class SmiSymbol implements Serializable, Comparable {
         return m_idToken;
     }
 
-    public void setIdToken(IdToken idToken) {
-        m_idToken = idToken;
-    }
-
     public abstract String getCodeId();
 
     public String getFullCodeId() {
