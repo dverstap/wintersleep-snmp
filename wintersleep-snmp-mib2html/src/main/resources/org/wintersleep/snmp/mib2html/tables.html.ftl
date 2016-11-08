@@ -4,6 +4,7 @@
         <th>Name</th>
         <th>Module</th>
         <th>#Columns</th>
+        <!-- TODO: Indexes and augments -->
     </tr>
     [#list tables as table]
         <tr>

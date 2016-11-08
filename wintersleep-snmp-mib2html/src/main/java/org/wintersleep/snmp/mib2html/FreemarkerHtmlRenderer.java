@@ -24,10 +24,7 @@ import org.wintersleep.snmp.mib.smi.SmiMib;
 import org.wintersleep.snmp.mib.smi.SmiModule;
 import org.wintersleep.snmp.mib.smi.SmiTable;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.Collections;
 
 public class FreemarkerHtmlRenderer {
@@ -48,8 +45,12 @@ public class FreemarkerHtmlRenderer {
                 throw new IOException("Could not create directory: " + dir);
             }
         }
+        copyBootstrap(dir);
         try (Writer w = new FileWriter(new File(dir, "index.html"))) {
             renderModules(w);
+        }
+        try (Writer w = new FileWriter(new File(dir, "tables.html"))) {
+            renderTables(w);
         }
         for (SmiModule module : mib.getModules()) {
             try (Writer w = new FileWriter(new File(dir, module.getId() + ".html"))) {
@@ -68,9 +69,26 @@ public class FreemarkerHtmlRenderer {
         }
     }
 
+    private void copyBootstrap(File dir) throws IOException {
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("bootstrap.min.css")) {
+            try (OutputStream os = new BufferedOutputStream(new FileOutputStream(new File(dir, "bootstrap.min.css")))) {
+                int b = is.read();
+                while (b >= 0) {
+                    os.write(b);
+                    b = is.read();
+                }
+            }
+        }
+    }
+
     public void renderModules(Writer w) throws IOException, TemplateException {
         Template template = configuration.getTemplate("modules.html.ftl");
         template.process(mib, w);
+    }
+
+    public void renderTables(Writer w) throws IOException, TemplateException {
+        Template template = configuration.getTemplate("tables.html.ftl");
+        template.process(Collections.singletonMap("tables", mib.getTables().getAll()), w);
     }
 
     private void renderModule(SmiModule module, Writer w) throws IOException, TemplateException {
