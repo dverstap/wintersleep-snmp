@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class LibSmiDocTest extends AbstractMibTestCase{
+public class LibSmiDocTest extends AbstractMibTestCase {
 
     public LibSmiDocTest() {
         super(null);
@@ -37,6 +37,8 @@ public class LibSmiDocTest extends AbstractMibTestCase{
         if (mibsURL == null) {
             throw new IllegalStateException("Could not find resource: " + LIBSMI_MIBS_URL);
         }
+        System.out.println(mibsURL);
+        System.out.println(mibsURL.toURI());
         File mibsDir = new File(mibsURL.toURI());
         return new LibSmiParserFactory(mibsDir).create();
     }

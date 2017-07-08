@@ -16,30 +16,7 @@
 package org.wintersleep.snmp.mib.phase.file;
 
 import antlr.Token;
-import org.wintersleep.snmp.mib.smi.OidComponent;
-import org.wintersleep.snmp.mib.smi.ScopedId;
-import org.wintersleep.snmp.mib.smi.SmiConstants;
-import org.wintersleep.snmp.mib.smi.SmiDefaultValue;
-import org.wintersleep.snmp.mib.smi.SmiImports;
-import org.wintersleep.snmp.mib.smi.SmiMacro;
-import org.wintersleep.snmp.mib.smi.SmiModule;
-import org.wintersleep.snmp.mib.smi.SmiNamedNumber;
-import org.wintersleep.snmp.mib.smi.SmiNotificationType;
-import org.wintersleep.snmp.mib.smi.SmiOidMacro;
-import org.wintersleep.snmp.mib.smi.SmiOidValue;
-import org.wintersleep.snmp.mib.smi.SmiPrimitiveType;
-import org.wintersleep.snmp.mib.smi.SmiProtocolType;
-import org.wintersleep.snmp.mib.smi.SmiRange;
-import org.wintersleep.snmp.mib.smi.SmiReferencedType;
-import org.wintersleep.snmp.mib.smi.SmiRow;
-import org.wintersleep.snmp.mib.smi.SmiSymbol;
-import org.wintersleep.snmp.mib.smi.SmiTable;
-import org.wintersleep.snmp.mib.smi.SmiTextualConvention;
-import org.wintersleep.snmp.mib.smi.SmiTrapType;
-import org.wintersleep.snmp.mib.smi.SmiType;
-import org.wintersleep.snmp.mib.smi.SmiVariable;
-import org.wintersleep.snmp.mib.smi.SmiVersion;
-import org.wintersleep.snmp.mib.smi.StatusV2;
+import org.wintersleep.snmp.mib.smi.*;
 import org.wintersleep.snmp.util.location.Location;
 import org.wintersleep.snmp.util.token.BigIntegerToken;
 import org.wintersleep.snmp.util.token.BinaryStringToken;
@@ -165,21 +142,21 @@ public class ModuleParser {
         }
         return new SmiVariable(idToken, m_module, t, unitsToken, defaultValue);
     }
-    
+
     public SmiNotificationType createNotification(IdToken idToken, List<IdToken> objectTokens,
                                                   StatusV2 status, String description, String reference) {
-    	final String methodWithParams = "createNotification(" + idToken.getId() + ")";
-    	m_log.debug(methodWithParams);
-    	
-    	return new SmiNotificationType(idToken, m_module, objectTokens, status, description, reference);
+        final String methodWithParams = "createNotification(" + idToken.getId() + ")";
+        m_log.debug(methodWithParams);
+
+        return new SmiNotificationType(idToken, m_module, objectTokens, status, description, reference);
     }
-    
+
     public SmiTrapType createTrap(IdToken idToken, IdToken enterpriseIdToken,
                                   List<IdToken> objectTokens, String description, String reference) {
-    	final String methodWithParams = "createTrap(" + idToken.getId() + ")";
-    	m_log.debug(methodWithParams);
-    	
-    	return new SmiTrapType(idToken, m_module, enterpriseIdToken, objectTokens,
+        final String methodWithParams = "createTrap(" + idToken.getId() + ")";
+        m_log.debug(methodWithParams);
+
+        return new SmiTrapType(idToken, m_module, enterpriseIdToken, objectTokens,
                 description, reference);
     }
 
@@ -362,5 +339,12 @@ public class ModuleParser {
         return new ScopedId(m_module, moduleToken != null ? idt(moduleToken) : null, idt(symbolToken));
     }
 
+    public void setModuleIdentity(Token lastUpdated, Token organization, Token contactInfo, Token description, List<SmiModuleRevision> revisions) {
+        m_module.setModuleIdentity(new SmiModuleIdentity(getOptCStr(lastUpdated), getOptCStr(organization), getOptCStr(contactInfo), getOptCStr(description), revisions));
+    }
+
+    public SmiModuleRevision createModuleRevision(Token revision, Token description) {
+        return new SmiModuleRevision(getOptCStr(revision), getOptCStr(description));
+    }
 }
 

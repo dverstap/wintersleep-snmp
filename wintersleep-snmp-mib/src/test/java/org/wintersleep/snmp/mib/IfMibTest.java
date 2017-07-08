@@ -15,20 +15,7 @@
  */
 package org.wintersleep.snmp.mib;
 
-import org.wintersleep.snmp.mib.smi.SmiNotificationType;
-import org.wintersleep.snmp.mib.smi.SmiVariable;
-import org.wintersleep.snmp.mib.smi.SmiConstants;
-import org.wintersleep.snmp.mib.smi.SmiMib;
-import org.wintersleep.snmp.mib.smi.SmiModule;
-import org.wintersleep.snmp.mib.smi.SmiPrimitiveType;
-import org.wintersleep.snmp.mib.smi.SmiRow;
-import org.wintersleep.snmp.mib.smi.SmiTable;
-import org.wintersleep.snmp.mib.smi.SmiTextualConvention;
-import org.wintersleep.snmp.mib.smi.SmiType;
-import org.wintersleep.snmp.mib.smi.SmiVersion;
-import org.wintersleep.snmp.mib.smi.StatusV2;
-import org.wintersleep.snmp.mib.smi.SmiIndex;
-import org.wintersleep.snmp.mib.smi.SmiOidNode;
+import org.wintersleep.snmp.mib.smi.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -260,4 +247,20 @@ public class IfMibTest extends AbstractMibTestCase {
         assertSame(ifOperStatus, linkDown.getObjects().get(2));
     }
 
+    public void testModuleIdentity() {
+        SmiModule ifMib = getMib().findModule("IF-MIB");
+        assertNotNull(ifMib);
+
+        SmiModuleIdentity moduleIdentity = ifMib.getModuleIdentity();
+        assertNotNull("ModuleIdentity must not be null", moduleIdentity);
+        assertEquals("IETF Interfaces MIB Working Group", moduleIdentity.getOrganization());
+        assertEquals("200006140000Z", moduleIdentity.getLastUpdated());
+
+        List<SmiModuleRevision> revisions = moduleIdentity.getRevisions();
+        assertEquals(3, revisions.size());
+
+        SmiModuleRevision lastRevision = revisions.get(2);
+        assertEquals("199311082155Z", lastRevision.getRevision());
+        assertEquals("Initial revision, published as part of RFC 1573.", lastRevision.getDescription());
+    }
 }
