@@ -4,7 +4,7 @@
     <groupId>org.wintersleep.snmp</groupId>
     <artifactId>wintersleep-snmp</artifactId>
     <packaging>pom</packaging>
-    <version>0.14-SNAPSHOT</version>
+    <version>0.100-SNAPSHOT</version>
     <name>Java SMI Parser</name>
     <url>https://github.com/dverstap/wintersleep-snmp</url>
     <inceptionYear>2005</inceptionYear>
