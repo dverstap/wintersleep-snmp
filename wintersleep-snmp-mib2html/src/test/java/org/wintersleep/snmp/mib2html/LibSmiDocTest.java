@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.wintersleep.snmp.mib.AbstractMibTestCase;
 import org.wintersleep.snmp.mib.parser.LibSmiParserFactory;
 import org.wintersleep.snmp.mib.parser.SmiDefaultParser;
-import org.wintersleep.snmp.util.FileTestUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,8 +32,7 @@ public class LibSmiDocTest extends AbstractMibTestCase {
 
     @Override
     protected SmiDefaultParser createParser() throws Exception {
-        File mibsDir = new File(LIBSMI_MIBS_DIR);
-        return new LibSmiParserFactory(mibsDir).create();
+        return new LibSmiParserFactory(LIBSMI_DIR).create();
     }
 
     protected boolean mustParseSuccessfully() {

@@ -8,7 +8,7 @@
     <bean id="urlListFactory"
           class="org.wintersleep.snmp.util.url.FileURLListFactory">
         <property name="rootPath">
-            <util:constant static-field="org.wintersleep.snmp.mib.AbstractMibTestCase.LIBSMI_MIBS_URL"/>
+            <util:constant static-field="org.wintersleep.snmp.mib.AbstractMibTestCase.LIBSMI_DIR_NAME"/>
         </property>
         <property name="children">
             <list>

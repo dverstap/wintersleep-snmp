@@ -38,7 +38,6 @@ import org.wintersleep.snmp.util.token.HexStringToken;
 import java.io.File;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,8 +49,7 @@ public class SmiDefaultParserTest extends AbstractMibTestCase {
 
     @Override
     protected SmiDefaultParser createParser() throws Exception {
-        File mibsDir = new File(LIBSMI_MIBS_DIR);
-        return new LibSmiParserFactory(mibsDir).create();
+        return new LibSmiParserFactory(LIBSMI_DIR).create();
     }
 
     public void testLibSmi() throws URISyntaxException {

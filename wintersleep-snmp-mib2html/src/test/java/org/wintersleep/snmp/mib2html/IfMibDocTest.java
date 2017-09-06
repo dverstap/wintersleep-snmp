@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.wintersleep.snmp.mib.AbstractMibTestCase;
 import org.wintersleep.snmp.mib.smi.SmiModule;
 import org.wintersleep.snmp.mib.smi.SmiVersion;
+import org.wintersleep.snmp.util.url.DefaultURLListBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +28,16 @@ import java.io.IOException;
 public class IfMibDocTest extends AbstractMibTestCase {
 
     public IfMibDocTest() {
-        super(SmiVersion.V2,
-                new File(LIBSMI_MIBS_URL + "/iana/IANAifType-MIB"),
-                new File(LIBSMI_MIBS_URL + "/ietf/IF-MIB"));
+        super(SmiVersion.V2);
+    }
+
+    @Override
+    protected void addUrls(DefaultURLListBuilder builder) {
+        super.addUrls(builder);
+        builder.addDir(LIBSMI_IANA_DIR,
+                "IANAifType-MIB");
+        builder.addDir(LIBSMI_IETF_DIR,
+                "IF-MIB");
     }
 
     @Test

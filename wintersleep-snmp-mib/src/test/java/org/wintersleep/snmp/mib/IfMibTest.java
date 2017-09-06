@@ -16,6 +16,7 @@
 package org.wintersleep.snmp.mib;
 
 import org.wintersleep.snmp.mib.smi.*;
+import org.wintersleep.snmp.util.url.DefaultURLListBuilder;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -24,9 +25,16 @@ import java.util.List;
 public class IfMibTest extends AbstractMibTestCase {
 
     public IfMibTest() {
-        super(SmiVersion.V2,
-                new File(LIBSMI_MIBS_URL + "/iana/IANAifType-MIB"),
-                new File(LIBSMI_MIBS_URL + "/ietf/IF-MIB"));
+        super(SmiVersion.V2);
+    }
+
+    @Override
+    protected void addUrls(DefaultURLListBuilder builder) {
+        super.addUrls(builder);
+        builder.addDir(LIBSMI_IANA_DIR,
+                "IANAifType-MIB");
+        builder.addDir(LIBSMI_IETF_DIR,
+                "IF-MIB");
     }
 
     public void testSizes() {

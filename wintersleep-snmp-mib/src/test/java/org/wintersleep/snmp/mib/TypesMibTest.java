@@ -16,6 +16,7 @@
 package org.wintersleep.snmp.mib;
 
 import org.wintersleep.snmp.mib.smi.*;
+import org.wintersleep.snmp.util.url.DefaultURLListBuilder;
 
 import java.math.BigInteger;
 import java.net.URL;
@@ -23,8 +24,10 @@ import java.util.List;
 
 public class TypesMibTest extends AbstractMibTestCase {
 
-    public TypesMibTest() {
-        super(null, TypesMibTest.class.getClassLoader().getResource("types.txt"));
+    @Override
+    protected void addUrls(DefaultURLListBuilder builder) {
+        super.addUrls(builder);
+        builder.addResource("types.txt");
     }
 
     // TODO need to add lots of new tests here

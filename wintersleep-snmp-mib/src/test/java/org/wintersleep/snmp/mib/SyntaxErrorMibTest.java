@@ -2,6 +2,7 @@ package org.wintersleep.snmp.mib;
 
 import org.wintersleep.snmp.mib.smi.SmiVersion;
 import org.wintersleep.snmp.util.problem.annotations.ProblemSeverity;
+import org.wintersleep.snmp.util.url.DefaultURLListBuilder;
 
 /*
 * Copyright 2007 Davy Verstappen.
@@ -20,8 +21,10 @@ import org.wintersleep.snmp.util.problem.annotations.ProblemSeverity;
 */
 public class SyntaxErrorMibTest extends AbstractMibTestCase {
 
-    public SyntaxErrorMibTest() {
-        super(SmiVersion.V2, "SYNTAX-ERROR-MIB.txt");
+    @Override
+    protected void addUrls(DefaultURLListBuilder builder) {
+        super.addUrls(builder);
+        builder.addResource("SYNTAX-ERROR-MIB.txt");
     }
 
     public void test() {

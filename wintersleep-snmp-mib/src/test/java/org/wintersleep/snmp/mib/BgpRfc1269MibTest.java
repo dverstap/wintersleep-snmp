@@ -19,17 +19,24 @@ import org.wintersleep.snmp.mib.smi.SmiModule;
 import org.wintersleep.snmp.mib.smi.SmiTrapType;
 import org.wintersleep.snmp.mib.smi.SmiVariable;
 import org.wintersleep.snmp.mib.smi.SmiVersion;
+import org.wintersleep.snmp.util.url.DefaultURLListBuilder;
 
 import java.io.File;
 
 public class BgpRfc1269MibTest extends AbstractMibTestCase {
 
     public BgpRfc1269MibTest() {
-        super(SmiVersion.V1,
-                new File(LIBSMI_MIBS_URL + "/ietf/RFC-1212"),
-                new File(LIBSMI_MIBS_URL + "/ietf/RFC1213-MIB"),
-                new File(LIBSMI_MIBS_URL + "/ietf/RFC-1215"),
-                new File(LIBSMI_MIBS_URL + "/ietf/RFC1269-MIB"));
+        super(SmiVersion.V1);
+    }
+
+    @Override
+    protected void addUrls(DefaultURLListBuilder builder) {
+        super.addUrls(builder);
+        builder.addDir(LIBSMI_IETF_DIR,
+                "RFC-1212",
+                "RFC1213-MIB",
+                "RFC-1215",
+                "RFC1269-MIB");
     }
 
     public void testSizes() {

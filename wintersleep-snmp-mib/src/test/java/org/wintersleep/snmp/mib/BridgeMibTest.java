@@ -16,6 +16,7 @@
 package org.wintersleep.snmp.mib;
 
 import org.wintersleep.snmp.mib.smi.*;
+import org.wintersleep.snmp.util.url.DefaultURLListBuilder;
 
 import java.io.File;
 import java.util.List;
@@ -23,10 +24,17 @@ import java.util.List;
 public class BridgeMibTest extends AbstractMibTestCase {
 
     public BridgeMibTest() {
-        super(SmiVersion.V2,
-                new File(LIBSMI_MIBS_URL + "/iana/IANAifType-MIB"),
-                new File(LIBSMI_MIBS_URL + "/ietf/IF-MIB"),
-                new File(LIBSMI_MIBS_URL + "/ietf/BRIDGE-MIB"));
+        super(SmiVersion.V2);
+    }
+
+    @Override
+    protected void addUrls(DefaultURLListBuilder builder) {
+        super.addUrls(builder);
+        builder.addDir(LIBSMI_IANA_DIR,
+                "IANAifType-MIB");
+        builder.addDir(LIBSMI_IETF_DIR,
+                "IF-MIB",
+                "BRIDGE-MIB");
     }
 
     public void testBridgeMib() {

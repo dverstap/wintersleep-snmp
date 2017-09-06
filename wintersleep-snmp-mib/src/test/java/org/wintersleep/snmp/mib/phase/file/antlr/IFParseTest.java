@@ -42,7 +42,7 @@ public class IFParseTest extends TestCase {
 
     public void testModule_definition() throws RecognitionException, TokenStreamException, URISyntaxException, FileNotFoundException, MalformedURLException {
 
-        String path = AbstractMibTestCase.LIBSMI_MIBS_URL + "/ietf/IF-MIB";
+        String path = AbstractMibTestCase.LIBSMI_IETF_DIR + "/IF-MIB";
         URL resource = new File(path).toURI().toURL();
         File inputFile = new File(resource.toURI());
         InputStream is = new BufferedInputStream(new FileInputStream(inputFile));
