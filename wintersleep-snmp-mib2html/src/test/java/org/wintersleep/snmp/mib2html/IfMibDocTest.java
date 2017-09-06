@@ -28,8 +28,8 @@ public class IfMibDocTest extends AbstractMibTestCase {
 
     public IfMibDocTest() {
         super(SmiVersion.V2,
-                LIBSMI_MIBS_URL + "/iana/IANAifType-MIB",
-                LIBSMI_MIBS_URL + "/ietf/IF-MIB");
+                new File(LIBSMI_MIBS_URL + "/iana/IANAifType-MIB"),
+                new File(LIBSMI_MIBS_URL + "/ietf/IF-MIB"));
     }
 
     @Test

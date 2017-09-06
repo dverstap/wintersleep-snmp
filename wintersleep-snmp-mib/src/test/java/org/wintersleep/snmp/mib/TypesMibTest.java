@@ -18,12 +18,13 @@ package org.wintersleep.snmp.mib;
 import org.wintersleep.snmp.mib.smi.*;
 
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.List;
 
 public class TypesMibTest extends AbstractMibTestCase {
 
     public TypesMibTest() {
-        super(null, "types.txt");
+        super(null, TypesMibTest.class.getClassLoader().getResource("types.txt"));
     }
 
     // TODO need to add lots of new tests here

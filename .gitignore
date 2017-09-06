@@ -9,6 +9,7 @@ out
 .gradle
 .project
 .classpath
+.svn*
 cobertura.ser
 ObjectStore
 projectFilesBackup*

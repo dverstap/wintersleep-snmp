@@ -15,23 +15,18 @@
  */
 package org.wintersleep.snmp.mib;
 
-import org.wintersleep.snmp.mib.smi.SmiTextualConvention;
-import org.wintersleep.snmp.mib.smi.SmiPrimitiveType;
-import org.wintersleep.snmp.mib.smi.SmiVariable;
-import org.wintersleep.snmp.mib.smi.SmiType;
-import org.wintersleep.snmp.mib.smi.SmiModule;
-import org.wintersleep.snmp.mib.smi.SmiRange;
-import org.wintersleep.snmp.mib.smi.SmiVersion;
+import org.wintersleep.snmp.mib.smi.*;
 
+import java.io.File;
 import java.util.List;
 
 public class BridgeMibTest extends AbstractMibTestCase {
 
     public BridgeMibTest() {
         super(SmiVersion.V2,
-                LIBSMI_MIBS_URL + "/iana/IANAifType-MIB",
-                LIBSMI_MIBS_URL + "/ietf/IF-MIB",
-                LIBSMI_MIBS_URL + "/ietf/BRIDGE-MIB");
+                new File(LIBSMI_MIBS_URL + "/iana/IANAifType-MIB"),
+                new File(LIBSMI_MIBS_URL + "/ietf/IF-MIB"),
+                new File(LIBSMI_MIBS_URL + "/ietf/BRIDGE-MIB"));
     }
 
     public void testBridgeMib() {

@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -39,13 +40,10 @@ public class IFParseTest extends TestCase {
         super();
     }
 
-    public void testModule_definition() throws RecognitionException, TokenStreamException, URISyntaxException, FileNotFoundException {
+    public void testModule_definition() throws RecognitionException, TokenStreamException, URISyntaxException, FileNotFoundException, MalformedURLException {
 
         String path = AbstractMibTestCase.LIBSMI_MIBS_URL + "/ietf/IF-MIB";
-        URL resource = Thread.currentThread().getContextClassLoader().getResource(path);
-        if (resource == null) {
-            throw new IllegalStateException("Cannot locate classpath entry: " + path);
-        }
+        URL resource = new File(path).toURI().toURL();
         File inputFile = new File(resource.toURI());
         InputStream is = new BufferedInputStream(new FileInputStream(inputFile));
         SMILexer lexer = new SMILexer(is);

@@ -45,16 +45,12 @@ import java.util.List;
 public class SmiDefaultParserTest extends AbstractMibTestCase {
 
     public SmiDefaultParserTest() {
-        super(null);
+        super();
     }
 
     @Override
     protected SmiDefaultParser createParser() throws Exception {
-        URL mibsURL = getClass().getClassLoader().getResource(LIBSMI_MIBS_URL);
-        if (mibsURL == null) {
-            throw new IllegalStateException("Could not find resource: " + LIBSMI_MIBS_URL);
-        }
-        File mibsDir = new File(mibsURL.toURI());
+        File mibsDir = new File(LIBSMI_MIBS_DIR);
         return new LibSmiParserFactory(mibsDir).create();
     }
 

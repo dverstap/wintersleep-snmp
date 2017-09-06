@@ -57,7 +57,6 @@ public class EnumBuilderTest {
 
     @Test
     public void testMyEnum() throws JClassAlreadyExistsException {
-        SmiCodeNamingStrategy namingStrategy = new StraightNamingStrategy("");
         SmiType type = new SmiType(new IdToken(null, "MyEnum"), new SmiModule(new SmiMib(null, null), new IdToken(null, "MyModule")), SmiPrimitiveType.ENUM);
         type.getModule().getMib().setCodeNamingStrategy(new StraightNamingStrategy(settings.getPackageName()));
         type.setEnumValues(Arrays.asList(new SmiNamedNumber(new IdToken(null, "enum1"), new BigIntegerToken(1)),

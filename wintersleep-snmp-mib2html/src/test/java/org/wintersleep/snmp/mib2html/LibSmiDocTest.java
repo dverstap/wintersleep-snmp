@@ -20,10 +20,10 @@ import org.junit.Test;
 import org.wintersleep.snmp.mib.AbstractMibTestCase;
 import org.wintersleep.snmp.mib.parser.LibSmiParserFactory;
 import org.wintersleep.snmp.mib.parser.SmiDefaultParser;
+import org.wintersleep.snmp.util.FileTestUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 public class LibSmiDocTest extends AbstractMibTestCase {
 
@@ -33,13 +33,7 @@ public class LibSmiDocTest extends AbstractMibTestCase {
 
     @Override
     protected SmiDefaultParser createParser() throws Exception {
-        URL mibsURL = getClass().getClassLoader().getResource(LIBSMI_MIBS_URL);
-        if (mibsURL == null) {
-            throw new IllegalStateException("Could not find resource: " + LIBSMI_MIBS_URL);
-        }
-        System.out.println(mibsURL);
-        System.out.println(mibsURL.toURI());
-        File mibsDir = new File(mibsURL.toURI());
+        File mibsDir = new File(LIBSMI_MIBS_DIR);
         return new LibSmiParserFactory(mibsDir).create();
     }
 

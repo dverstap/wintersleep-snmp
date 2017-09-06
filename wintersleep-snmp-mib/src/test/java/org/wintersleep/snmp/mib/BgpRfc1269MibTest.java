@@ -15,35 +15,37 @@
  */
 package org.wintersleep.snmp.mib;
 
-import org.wintersleep.snmp.mib.smi.SmiTrapType;
 import org.wintersleep.snmp.mib.smi.SmiModule;
+import org.wintersleep.snmp.mib.smi.SmiTrapType;
 import org.wintersleep.snmp.mib.smi.SmiVariable;
 import org.wintersleep.snmp.mib.smi.SmiVersion;
+
+import java.io.File;
 
 public class BgpRfc1269MibTest extends AbstractMibTestCase {
 
     public BgpRfc1269MibTest() {
         super(SmiVersion.V1,
-        		LIBSMI_MIBS_URL + "/ietf/RFC-1212",
-        		LIBSMI_MIBS_URL + "/ietf/RFC1213-MIB",
-        		LIBSMI_MIBS_URL + "/ietf/RFC-1215",
-                LIBSMI_MIBS_URL + "/ietf/RFC1269-MIB");
+                new File(LIBSMI_MIBS_URL + "/ietf/RFC-1212"),
+                new File(LIBSMI_MIBS_URL + "/ietf/RFC1213-MIB"),
+                new File(LIBSMI_MIBS_URL + "/ietf/RFC-1215"),
+                new File(LIBSMI_MIBS_URL + "/ietf/RFC1269-MIB"));
     }
 
     public void testSizes() {
-    	assertNotNull("MIB cannot be null", getMib());
-    	assertNotNull(getMib().getScalars());
+        assertNotNull("MIB cannot be null", getMib());
+        assertNotNull(getMib().getScalars());
         assertEquals(108, getMib().getScalars().size());
-        
+
         assertNotNull(getMib().getColumns());
         assertEquals(89, getMib().getColumns().size());
-        
+
         // { bgpEstablished, bgpBackwardTransition } from RFC1269-MIB 
         assertEquals(2, getMib().getTrapTypes().size());
 
         SmiModule bgpMib = getMib().findModule("RFC1269-MIB");
         assertNotNull(bgpMib);
-        
+
         // { bgpEstablished, bgpBackwardTransition } from RFC1269-MIB
         assertEquals(2, bgpMib.getTrapTypes().size());
 
@@ -64,12 +66,12 @@ public class BgpRfc1269MibTest extends AbstractMibTestCase {
     }
 
     public void testTrapTypes() {
-    	SmiModule bgpMib = getMib().findModule("RFC1269-MIB");
+        SmiModule bgpMib = getMib().findModule("RFC1269-MIB");
         assertNotNull(bgpMib);
-        
+
         SmiTrapType bgpEstablished = bgpMib.findTrapType("bgpEstablished");
         assertNotNull(bgpEstablished);
-        
+
         SmiTrapType bgpBackwardTransition = bgpMib.findTrapType("bgpBackwardTransition");
         assertNotNull(bgpBackwardTransition);
 
@@ -87,7 +89,7 @@ public class BgpRfc1269MibTest extends AbstractMibTestCase {
         assertEquals("1.3.6.1.2.1.15.1", bgpEstablished.getOidStr());
 
         assertEquals("The BGP Established event is generated when\n"
-            + "          the BGP FSM enters the ESTABLISHED state. ", bgpEstablished.getDescription());
+                + "          the BGP FSM enters the ESTABLISHED state. ", bgpEstablished.getDescription());
         assertNull(bgpEstablished.getReference());
 
         assertNotNull(bgpEstablished.getVariableTokens());

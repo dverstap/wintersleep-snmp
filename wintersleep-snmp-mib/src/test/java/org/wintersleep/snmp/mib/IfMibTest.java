@@ -17,6 +17,7 @@ package org.wintersleep.snmp.mib;
 
 import org.wintersleep.snmp.mib.smi.*;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -24,25 +25,25 @@ public class IfMibTest extends AbstractMibTestCase {
 
     public IfMibTest() {
         super(SmiVersion.V2,
-                LIBSMI_MIBS_URL + "/iana/IANAifType-MIB",
-                LIBSMI_MIBS_URL + "/ietf/IF-MIB");
+                new File(LIBSMI_MIBS_URL + "/iana/IANAifType-MIB"),
+                new File(LIBSMI_MIBS_URL + "/ietf/IF-MIB"));
     }
 
     public void testSizes() {
         assertEquals(44, getMib().getScalars().size());
         assertEquals(57, getMib().getColumns().size());
-        
+
         // { linkUp, linkDown } from IF-MIB plus { warmStart, coldStart, authenticationFailure } from SNMPv2-MIB dependency 
         assertEquals(5, getMib().getNotificationTypes().size());
 
         SmiModule ifMib = getMib().findModule("IF-MIB");
         assertNotNull(ifMib);
-        
+
         // Just linkUp, linkDown
         assertEquals(2, ifMib.getNotificationTypes().size());
 
         assertEquals(3, ifMib.getScalars().size());
-        assertEquals(22+19+3+3+6, ifMib.getColumns().size());
+        assertEquals(22 + 19 + 3 + 3 + 6, ifMib.getColumns().size());
 
         assertNotNull(ifMib.findScalar("ifNumber"));
         assertNull(ifMib.findColumn("ifNumber"));
@@ -179,14 +180,14 @@ public class IfMibTest extends AbstractMibTestCase {
         assertEquals(1, result.getValues().size());
         assertEquals("org", result.getValues().get(0).getId());
     }
-    
+
     public void testNotificationTypes() {
-    	SmiModule ifMib = getMib().findModule("IF-MIB");
+        SmiModule ifMib = getMib().findModule("IF-MIB");
         assertNotNull(ifMib);
-        
+
         SmiNotificationType linkUp = ifMib.findNotificationType("linkUp");
         assertNotNull(linkUp);
-        
+
         SmiNotificationType linkDown = ifMib.findNotificationType("linkDown");
         assertNotNull(linkDown);
 
@@ -202,14 +203,14 @@ public class IfMibTest extends AbstractMibTestCase {
         // coldStart is defined in SNMPv2-MIB, not in IF-MIB
         SmiNotificationType coldStart = ifMib.findNotificationType("coldStart");
         assertNull(coldStart);
-        
+
         assertEquals("1.3.6.1.6.3.1.1.5.4", linkUp.getOidStr());
         assertEquals("A linkUp trap signifies that the SNMP entity, acting in an\n"
-            + "            agent role, has detected that the ifOperStatus object for\n"
-            + "            one of its communication links left the down state and\n"
-            + "            transitioned into some other state (but not into the\n"
-            + "            notPresent state).  This other state is indicated by the\n"
-            + "            included value of ifOperStatus.", linkUp.getDescription());
+                + "            agent role, has detected that the ifOperStatus object for\n"
+                + "            one of its communication links left the down state and\n"
+                + "            transitioned into some other state (but not into the\n"
+                + "            notPresent state).  This other state is indicated by the\n"
+                + "            included value of ifOperStatus.", linkUp.getDescription());
         assertNull(linkUp.getReference());
         assertNotNull(linkUp.getObjectTokens());
         assertEquals(3, linkUp.getObjectTokens().size());
@@ -224,14 +225,14 @@ public class IfMibTest extends AbstractMibTestCase {
         assertSame(ifAdminStatus, linkUp.getObjects().get(1));
         assertSame(ifOperStatus, linkUp.getObjects().get(2));
 
-        
+
         assertEquals("1.3.6.1.6.3.1.1.5.3", linkDown.getOidStr());
         assertEquals("A linkDown trap signifies that the SNMP entity, acting in\n"
-        		+ "            an agent role, has detected that the ifOperStatus object for\n"
-        		+ "            one of its communication links is about to enter the down\n"
-        		+ "            state from some other state (but not from the notPresent\n"
-        		+ "            state).  This other state is indicated by the included value\n"
-        		+ "            of ifOperStatus.", linkDown.getDescription());
+                + "            an agent role, has detected that the ifOperStatus object for\n"
+                + "            one of its communication links is about to enter the down\n"
+                + "            state from some other state (but not from the notPresent\n"
+                + "            state).  This other state is indicated by the included value\n"
+                + "            of ifOperStatus.", linkDown.getDescription());
         assertNull(linkDown.getReference());
         assertNotNull(linkDown.getObjectTokens());
         assertEquals(3, linkDown.getObjectTokens().size());

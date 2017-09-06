@@ -18,6 +18,7 @@ package org.wintersleep.snmp.mib;
 import junit.framework.TestCase;
 import org.wintersleep.snmp.mib.parser.SmiDefaultParser;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,10 +28,9 @@ public class MixedV1V2Test extends TestCase {
 
     public void testToV2() throws MalformedURLException {
         String[] mibFileNames = { "TOKEN-RING-RMON-MIB", "RFC1271-MIB", "SNMPv2-SMI", "SNMPv2-TC"};
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        URL resource = cl.getResource(AbstractMibTestCase.LIBSMI_MIBS_URL + "/ietf");
+        URL resource = new File(AbstractMibTestCase.LIBSMI_MIBS_URL + "/ietf").toURI().toURL();
         assertNotNull(resource);
-        List<URL> urls = new ArrayList<URL>();
+        List<URL> urls = new ArrayList<>();
         for (String fn : mibFileNames) {
             URL url = new URL(resource + "/" + fn);
             urls.add(url);

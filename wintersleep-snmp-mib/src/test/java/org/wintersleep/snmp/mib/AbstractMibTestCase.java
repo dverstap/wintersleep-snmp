@@ -16,36 +16,35 @@
 package org.wintersleep.snmp.mib;
 
 import junit.framework.TestCase;
-import org.wintersleep.snmp.mib.parser.SmiDefaultParser;
-import org.wintersleep.snmp.mib.parser.SmiParser;
-import org.wintersleep.snmp.mib.smi.SmiConstants;
-import org.wintersleep.snmp.mib.smi.SmiMib;
-import org.wintersleep.snmp.mib.smi.SmiModule;
-import org.wintersleep.snmp.mib.smi.SmiObjectType;
-import org.wintersleep.snmp.mib.smi.SmiOidNode;
-import org.wintersleep.snmp.mib.smi.SmiOidValue;
-import org.wintersleep.snmp.mib.smi.SmiPrimitiveType;
-import org.wintersleep.snmp.mib.smi.SmiSymbol;
-import org.wintersleep.snmp.mib.smi.SmiType;
-import org.wintersleep.snmp.mib.smi.SmiVersion;
-import org.wintersleep.snmp.util.problem.annotations.ProblemSeverity;
-import org.wintersleep.snmp.util.url.ClassPathURLListFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
+import org.wintersleep.snmp.mib.parser.SmiDefaultParser;
+import org.wintersleep.snmp.mib.parser.SmiParser;
+import org.wintersleep.snmp.mib.smi.*;
+import org.wintersleep.snmp.util.problem.annotations.ProblemSeverity;
+import org.wintersleep.snmp.util.url.FileURLListFactory;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 public abstract class AbstractMibTestCase extends TestCase {
 
-    public static final String LIBSMI_MIBS_URL = "libsmi-0.4.8/mibs";
+    public static final String LIBSMI_MIBS_URL = findMibs() + "/libsmi";
+    public static final String LIBSMI_MIBS_DIR = LIBSMI_MIBS_URL;
 
     private static final Logger m_log = LoggerFactory.getLogger(AbstractMibTestCase.class);
 
-    private final SmiVersion m_version;
-    private final String[] m_resources;
+    private final SmiVersion version;
+    // TODO: this can probably be factored out into a
+    private final URL[] urls;
+    private final File[] files;
+    private final String[] resources;
 
     private static ThreadLocal<Class<? extends AbstractMibTestCase>> m_testClass = new ThreadLocal<Class<? extends AbstractMibTestCase>>();
     private static ThreadLocal<SmiMib> m_mib = new ThreadLocal<SmiMib>();
@@ -55,10 +54,69 @@ public abstract class AbstractMibTestCase extends TestCase {
     private SmiDefaultParser m_parser;
 
 
-    public AbstractMibTestCase(SmiVersion version, String... resources) {
-        m_version = version;
-        m_resources = resources;
+    private static String findMibs() {
+        File pwd = Paths.get("").toAbsolutePath().toFile();
+        File parent = pwd.getParentFile();
+        while (parent != null) {
+            File mibs = new File(parent, "mibs");
+            if (mibs.exists()) {
+                return mibs.getAbsolutePath();
+            }
+            parent = parent.getParentFile();
+        }
+        throw new IllegalStateException("Cannot find mibs directory.");
     }
+
+    public AbstractMibTestCase() {
+        this.version = null;
+        this.urls = new URL[0];
+        this.files = new File[0];
+        this.resources = new String[0];
+    }
+
+    public AbstractMibTestCase(SmiVersion version) {
+        this.version = version;
+        this.urls = new URL[0];
+        this.files = new File[0];
+        this.resources = new String[0];
+    }
+
+    public AbstractMibTestCase(SmiVersion version, URL... urls) {
+        for (URL url : urls) {
+            if (url == null) {
+                throw new IllegalArgumentException("Null URLs are not allowed.");
+            }
+        }
+        this.version = version;
+        this.files = new File[0];
+        this.urls = urls;
+        this.resources = new String[0];
+    }
+
+    public AbstractMibTestCase(SmiVersion version, File... files) {
+        for (File file : files) {
+            if (file == null) {
+                throw new IllegalArgumentException("Null files are not allowed.");
+            }
+        }
+        this.version = version;
+        this.urls = new URL[0];
+        this.files = files;
+        this.resources = new String[0];
+    }
+
+    public AbstractMibTestCase(SmiVersion version, String... resources) {
+        for (String resource : resources) {
+            if (resource == null) {
+                throw new IllegalArgumentException("Null resources are not allowed.");
+            }
+        }
+        this.version = version;
+        this.urls = new URL[0];
+        this.files = new File[0];
+        this.resources = resources;
+    }
+
 
     protected SmiDefaultParser getParser() {
         return m_parser;
@@ -92,21 +150,30 @@ public abstract class AbstractMibTestCase extends TestCase {
     }
 
     protected SmiParser createParser() throws Exception {
-        ClassPathURLListFactory urlListFactory = new ClassPathURLListFactory(LIBSMI_MIBS_URL + "/ietf");
+        FileURLListFactory urlListFactory = new FileURLListFactory(LIBSMI_MIBS_URL + "/ietf");
 
-        if (m_version == null || m_version == SmiVersion.V1) {
+        if (version == null || version == SmiVersion.V1) {
             urlListFactory.add("RFC1155-SMI");
         }
-        if (m_version == null || m_version == SmiVersion.V2) {
+        if (version == null || version == SmiVersion.V2) {
             urlListFactory.add("SNMPv2-SMI");
             urlListFactory.add("SNMPv2-TC");
             urlListFactory.add("SNMPv2-CONF");
             urlListFactory.add("SNMPv2-MIB");
         }
 
+        // TODO: fix hack
         List<URL> urls = urlListFactory.create();
-        for (String resource : getResources()) {
-            urls.add(getClass().getClassLoader().getResource(resource));
+        urls.addAll(Arrays.asList(this.urls));
+        for (File file : getFiles()) {
+            urls.add(file.toURI().toURL());
+        }
+        for (String resource : resources) {
+            URL url = Thread.currentThread().getContextClassLoader().getResource(resource);
+            if (url == null) {
+                throw new IllegalArgumentException("Could not find resource: " + resource);
+            }
+            urls.add(url);
         }
 
         m_parser = new SmiDefaultParser();
@@ -114,8 +181,8 @@ public abstract class AbstractMibTestCase extends TestCase {
         return m_parser;
     }
 
-    public final String[] getResources() {
-        return m_resources;
+    public final File[] getFiles() {
+        return files;
     }
 
     public SmiType getInteger32() {

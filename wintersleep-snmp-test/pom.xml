@@ -50,7 +50,7 @@
                                                                         <packageName>org.wintersleep.snmp.test.libsmi</packageName>
                                                                         <outputDir></outputDir>
                                     -->
-                                    <fileset dir="../wintersleep-snmp-mib/src/test/resources/libsmi-0.4.8/mibs/">
+                                    <fileset dir="../mibs/libsmi/">
                                         <exclude name="**/*orig"/>
                                         <!-- obsoleted by RFC-1213: -->
                                         <exclude name="ietf/RFC1158-MIB"/>

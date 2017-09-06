@@ -23,6 +23,10 @@ import java.net.URL;
 
 public abstract class FileTestUtil {
 
+    public static File getProjectDir(Class<?> testClass) {
+        return getTargetDir(testClass).getParentFile();
+    }
+
     public static File getTargetDir(Class testClass) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         URL url = cl.getResource(testClass.getName().replace('.', '/') + ".class");

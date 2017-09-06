@@ -31,7 +31,6 @@ public class LibSmiParserFactory {
     }
 
     public SmiDefaultParser create() throws Exception {
-        System.out.println("Creating a SmiDefaultParser for the libsmi mibs ...");
         SmiDefaultParser parser = new SmiDefaultParser();
         List<URL> inputUrls = initFileParserOptions(mibsDir, "iana", "ietf", "site", "tubs");
         parser.getFileParserPhase().setInputUrls(inputUrls);
@@ -39,7 +38,7 @@ public class LibSmiParserFactory {
     }
 
     private List<URL> initFileParserOptions(File mibsDir, String... subDirNames) throws Exception {
-        List<URL> result = new ArrayList<URL>();
+        List<URL> result = new ArrayList<>();
 
         for (String subDirName : subDirNames) {
             File dir = new File(mibsDir, subDirName);
@@ -48,6 +47,9 @@ public class LibSmiParserFactory {
 
             FileURLListFactory urlListFactory = new FileURLListFactory(dir);
             File[] files = dir.listFiles();
+            if (files == null) {
+                throw new IllegalArgumentException("Could not list files in: " + mibsDir);
+            }
             for (File file : files) {
                 if (file.isFile()
                         && !file.getName().equals("RFC1158-MIB") // obsoleted by RFC-1213
