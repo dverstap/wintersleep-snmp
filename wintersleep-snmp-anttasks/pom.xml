@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wintersleep-snmp-anttasks</artifactId>
     <packaging>jar</packaging>
-    <version>0.100-SNAPSHOT</version>
+    <version>0.25-SNAPSHOT</version>
     <name>Wintersleep SNMP Ant Tasks</name>
 
     <parent>
         <groupId>org.wintersleep.snmp</groupId>
         <artifactId>wintersleep-snmp</artifactId>
-        <version>0.100-SNAPSHOT</version>
+        <version>0.25-SNAPSHOT</version>
     </parent>
 
     <dependencies>

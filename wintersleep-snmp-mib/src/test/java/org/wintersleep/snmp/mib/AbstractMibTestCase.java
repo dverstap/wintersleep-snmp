@@ -15,10 +15,10 @@
  */
 package org.wintersleep.snmp.mib;
 
+import com.google.common.base.Stopwatch;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StopWatch;
 import org.wintersleep.snmp.mib.parser.SmiDefaultParser;
 import org.wintersleep.snmp.mib.parser.SmiParser;
 import org.wintersleep.snmp.mib.smi.*;
@@ -27,9 +27,9 @@ import org.wintersleep.snmp.util.url.DefaultURLListBuilder;
 import org.wintersleep.snmp.util.url.URLListFactory;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractMibTestCase extends TestCase {
 
@@ -82,11 +82,9 @@ public abstract class AbstractMibTestCase extends TestCase {
         if (m_mib.get() == null || m_testClass.get() != getClass()) {
             try {
                 SmiParser parser = createParser();
-                StopWatch stopWatch = new StopWatch();
-                stopWatch.start();
+                Stopwatch stopWatch = Stopwatch.createStarted();
                 SmiMib mib = parser.parse();
-                stopWatch.stop();
-                m_log.info("Parsing time: " + stopWatch.getTotalTimeSeconds() + " s");
+                m_log.info("Parsing time: " + stopWatch.elapsed(TimeUnit.MILLISECONDS) + " ms");
                 if (mustParseSuccessfully()) {
                     assertTrue(((SmiDefaultParser) parser).getProblemEventHandler().isOk());
                     assertEquals(0, ((SmiDefaultParser) parser).getProblemEventHandler().getSeverityCount(ProblemSeverity.ERROR));

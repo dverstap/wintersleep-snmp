@@ -3,19 +3,25 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wintersleep-snmp-util</artifactId>
     <packaging>jar</packaging>
-    <version>0.100-SNAPSHOT</version>
+    <version>0.25-SNAPSHOT</version>
     <name>Wintersleep SNMP Utilities</name>
 
     <parent>
         <groupId>org.wintersleep.snmp</groupId>
         <artifactId>wintersleep-snmp</artifactId>
-        <version>0.100-SNAPSHOT</version>
+        <version>0.25-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>

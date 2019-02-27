@@ -16,7 +16,6 @@
 package org.wintersleep.snmp.mib.smi;
 
 
-// TODO add an interface with isWritable, isReadable etc methods, implemented by all three AccessX classes
 public enum AccessAll implements AccessPermissions {
     READ_ONLY,
     READ_WRITE,

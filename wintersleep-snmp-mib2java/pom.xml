@@ -3,17 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wintersleep-snmp-mib2java</artifactId>
     <packaging>jar</packaging>
-    <version>0.100-SNAPSHOT</version>
+    <version>0.25-SNAPSHOT</version>
     <name>Wintersleep SNMP Mib to Java Compiler</name>
 
     <parent>
         <groupId>org.wintersleep.snmp</groupId>
         <artifactId>wintersleep-snmp</artifactId>
-        <version>0.100-SNAPSHOT</version>
+        <version>0.25-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <!-- TODO: Replace with: com.github.javaparser:javaparser-core -->
+        <!-- or JavaPoet -->
         <dependency>
             <groupId>com.sun.codemodel</groupId>
             <artifactId>codemodel</artifactId>
