@@ -2,9 +2,9 @@ module IRTF-NMRG-SMING-TYPES {
 
 //
 // $RCSfile: IRTF-NMRG-SMING-TYPES,v $
-// $Revision: 7606 $
-// $Author: schoenw $
-// $Date: 2008-01-22 13:38:03 +0100 (Tue, 22 Jan 2008) $
+// $Revision$
+// $Author$
+// $Date$
 //
 
     organization    "IRTF Network Management Research Group (NMRG),

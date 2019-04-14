@@ -157,8 +157,8 @@ EntitySensorDataScale ::= TEXTUAL-CONVENTION
         mega(11),   -- 10^6
         giga(12),   -- 10^9
         tera(13),   -- 10^12
-        exa(14),    -- 10^15
-        peta(15),   -- 10^18
+        peta(14),   -- 10^15
+        exa(15),    -- 10^18
         zetta(16),  -- 10^21
         yotta(17)   -- 10^24
     }

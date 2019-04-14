@@ -35,9 +35,7 @@ import org.wintersleep.snmp.mib.smi.SmiVarBindField;
 import org.wintersleep.snmp.mib.smi.SmiVariable;
 import org.wintersleep.snmp.util.token.HexStringToken;
 
-import java.io.File;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,7 +50,7 @@ public class SmiDefaultParserTest extends AbstractMibTestCase {
         return new LibSmiParserFactory(LIBSMI_DIR).create();
     }
 
-    public void testLibSmi() throws URISyntaxException {
+    public void testLibSmi() {
         SmiMib mib = getMib();
         assertNotNull(mib);
         //showOverview(mib);
@@ -63,16 +61,16 @@ public class SmiDefaultParserTest extends AbstractMibTestCase {
         //XStream xStream = new XStream();
         //xStream.toXML(mib, System.out);
 
-        assertEquals(298, mib.getModules().size());
-        assertEquals(2227, mib.getTypes().size());
-        assertEquals(661, mib.getTextualConventions().size());
-        assertEquals(1502, mib.getTables().size());
-        assertEquals(1502, mib.getRows().size());
-        assertEquals(14909, mib.getVariables().size());
-        assertEquals(1689, mib.getScalars().size());
-        assertEquals(13220, mib.getColumns().size());
+        assertEquals(348, mib.getModules().size());
+        assertEquals(2635, mib.getTypes().size());
+        assertEquals(841, mib.getTextualConventions().size());
+        assertEquals(1730, mib.getTables().size());
+        assertEquals(1730, mib.getRows().size());
+        assertEquals(17242, mib.getVariables().size());
+        assertEquals(2034, mib.getScalars().size());
+        assertEquals(15208, mib.getColumns().size());
         assertEquals(mib.getVariables().size(), mib.getScalars().size() + mib.getColumns().size());
-        assertEquals(22576, mib.getOidValues().size());
+        assertEquals(26277, mib.getOidValues().size());
         assertEquals(mib.getTables().size() + mib.getRows().size() + mib.getVariables().size(), mib.getObjectTypes().size());
 
         checkObjectTypeAccessAll(mib);
@@ -320,7 +318,7 @@ public class SmiDefaultParserTest extends AbstractMibTestCase {
         for (SmiRow row : mib.getRows()) {
             if (row.getAugments() == null) {
                 assertNotNull(row.getIndexes());
-                assertTrue(row.getId(), !row.getIndexes().isEmpty());
+                assertFalse(row.getId(), row.getIndexes().isEmpty());
             }
         }
 

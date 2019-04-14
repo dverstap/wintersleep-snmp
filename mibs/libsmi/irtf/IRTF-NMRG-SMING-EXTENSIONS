@@ -2,9 +2,9 @@ module IRTF-NMRG-SMING-EXTENSIONS {
 
 //
 // $RCSfile: IRTF-NMRG-SMING-EXTENSIONS.sming,v $
-// $Revision: 813 $
+// $Revision: 1.2 $
 // $Author: strauss $
-// $Date: 2000-02-13 23:08:34 +0100 (Sun, 13 Feb 2000) $
+// $Date: 2000/02/13 21:34:21 $
 //
 
     organization    "IRTF Network Management Research Group (NMRG),
