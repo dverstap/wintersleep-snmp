@@ -26,58 +26,58 @@ import java.math.BigInteger;
  */
 public class SmiNamedNumber {
 
-	private SmiType m_type;
-	private IdToken m_idToken;
-	private BigIntegerToken m_valueToken;
+	private SmiType type;
+	private IdToken idToken;
+	private BigIntegerToken valueToken;
 
     public SmiNamedNumber(IdToken id, BigIntegerToken value) {
 		super();
-//		m_type = type;
-		m_idToken = id;
-		m_valueToken = value;
+//		type = type;
+		idToken = id;
+		valueToken = value;
 	}
 
     public Location getLocation() {
-        return m_idToken.getLocation();
+        return idToken.getLocation();
     }
 
 	public String getId() {
-		return m_idToken.getId();
+		return idToken.getId();
 	}
 
     public BigInteger getValue() {
-		return m_valueToken.getValue();
+		return valueToken.getValue();
 	}
 
     public String getCodeId() {
-		return m_type.getModule().getMib().getCodeNamingStrategy().getEnumValueId(this);
+		return type.getModule().getMib().getCodeNamingStrategy().getEnumValueId(this);
 	}
 
     public SmiType getType() {
-        return m_type;
+        return type;
     }
 
     public void setType(SmiType type) {
-        m_type = type;
+        this.type = type;
     }
 
     public IdToken getIdToken() {
-        return m_idToken;
+        return idToken;
     }
 
     public BigIntegerToken getValueToken() {
-        return m_valueToken;
+        return valueToken;
     }
 
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (m_idToken != null) {
-            sb.append(m_idToken.getId());
+        if (idToken != null) {
+            sb.append(idToken.getId());
         }
-        if (m_valueToken != null) {
-            sb.append('(').append(m_valueToken.getValue()).append(')');
+        if (valueToken != null) {
+            sb.append('(').append(valueToken.getValue()).append(')');
         }
         return sb.toString();
     }

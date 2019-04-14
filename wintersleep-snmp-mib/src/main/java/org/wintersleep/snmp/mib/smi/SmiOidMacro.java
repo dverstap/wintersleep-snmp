@@ -20,22 +20,22 @@ import org.wintersleep.snmp.util.token.IdToken;
 
 public class SmiOidMacro extends SmiOidValue {
 
-    protected StatusAll m_status;
+    protected StatusAll status;
 
     public SmiOidMacro(IdToken idToken, SmiModule module) {
         super(idToken, module);
     }
 
     public StatusAll getStatus() {
-        return m_status;
+        return status;
     }
 
     public StatusV1 getStatusV1() {
-        return m_status.getStatusV1();
+        return status.getStatusV1();
     }
 
     public StatusV2 getStatusV2() {
-        return m_status.getStatusV2();
+        return status.getStatusV2();
     }
 
 }

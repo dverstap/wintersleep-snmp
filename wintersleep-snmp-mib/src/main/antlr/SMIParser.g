@@ -300,33 +300,33 @@ options	{
 }
 
 {
-    private SmiMib m_mib;
-    private String m_locationPath;
-	private ModuleParser m_mp;
+    private SmiMib mib;
+    private String locationPath;
+	private ModuleParser mp;
 
     public void init(SmiMib mib, String locationPath) {
-        m_mib = mib;
-        m_locationPath = locationPath;
+        this.mib = mib;
+        this.locationPath = locationPath;
     }
 
     SmiModule beginModule(Token idToken) {
-        if (m_mp != null) {
-            throw new IllegalStateException("Module " + m_mp.getModule().getIdToken() + " is still being parsed when trying to create new module " + idToken);
+        if (mp != null) {
+            throw new IllegalStateException("Module " + mp.getModule().getIdToken() + " is still being parsed when trying to create new module " + idToken);
         }
-        SmiModule module = m_mib.createModule(idt(idToken));
-        m_mp = new ModuleParser(module);
+        SmiModule module = mib.createModule(idt(idToken));
+        mp = new ModuleParser(module);
         return module;
     }
 
     private void endModule() {
-        if (m_mp == null) {
+        if (mp == null) {
             throw new IllegalStateException("No module is being parsed");
         }
-        m_mp = null;
+        mp = null;
     }
 
     private Location makeLocation(Token token) {
-        return new Location(m_locationPath, token.getLine(), token.getColumn());
+        return new Location(locationPath, token.getLine(), token.getColumn());
     }
 
     private IdToken idt(Token idToken) {
@@ -380,11 +380,11 @@ symbols_from_module
 :
 	idTokenList=symbol_list FROM_KW m=upper
 {
-	m_mp.addImports(m, idTokenList);
+	mp.addImports(m, idTokenList);
 } 
 ;
 
-symbol_list returns [List<IdToken> result = m_mp.makeIdTokenList()]
+symbol_list returns [List<IdToken> result = mp.makeIdTokenList()]
 {
 	IdToken s1 = null, s2 = null;
 }
@@ -406,18 +406,18 @@ macroName returns [IdToken result = null]
 :
 (
 	ot:"OBJECT-TYPE"
-	| mi:"MODULE-IDENTITY"    { m_mp.getModule().incV2Features(); }
-	| oi:"OBJECT-IDENTITY"    { m_mp.getModule().incV2Features(); }
-	| nt:"NOTIFICATION-TYPE"  { m_mp.getModule().incV2Features(); }
-    | tc:"TEXTUAL-CONVENTION" { m_mp.getModule().incV2Features(); }
-	| og:"OBJECT-GROUP"       { m_mp.getModule().incV2Features(); }
-	| ng:"NOTIFICATION-GROUP" { m_mp.getModule().incV2Features(); }
-	| mc:"MODULE-COMPLIANCE"  { m_mp.getModule().incV2Features(); }
-	| ac:"AGENT-CAPABILITIES" { m_mp.getModule().incV2Features(); }
-	| tt:"TRAP-TYPE"{ m_mp.getModule().incV1Features(); }
+	| mi:"MODULE-IDENTITY"    { mp.getModule().incV2Features(); }
+	| oi:"OBJECT-IDENTITY"    { mp.getModule().incV2Features(); }
+	| nt:"NOTIFICATION-TYPE"  { mp.getModule().incV2Features(); }
+    | tc:"TEXTUAL-CONVENTION" { mp.getModule().incV2Features(); }
+	| og:"OBJECT-GROUP"       { mp.getModule().incV2Features(); }
+	| ng:"NOTIFICATION-GROUP" { mp.getModule().incV2Features(); }
+	| mc:"MODULE-COMPLIANCE"  { mp.getModule().incV2Features(); }
+	| ac:"AGENT-CAPABILITIES" { mp.getModule().incV2Features(); }
+	| tt:"TRAP-TYPE"{ mp.getModule().incV1Features(); }
 )
 {
-	result = m_mp.idt(ot, mi, oi, nt, tc, og, ng, mc, ac, tt);
+	result = mp.idt(ot, mi, oi, nt, tc, og, ng, mc, ac, tt);
 }
 ;
 
@@ -430,12 +430,12 @@ assignment returns [SmiSymbol s = null]
 }
 :
     (
-	u:UPPER ASSIGN_OP s=type_assignment[m_mp.idt(u)]
-	| l:LOWER s=value_assignment[m_mp.idt(l)]
-	| mn=macroName "MACRO" ASSIGN_OP BEGIN_KW ( ~(END_KW) )* END_KW    { s = m_mp.createMacro(mn); }
+	u:UPPER ASSIGN_OP s=type_assignment[mp.idt(u)]
+	| l:LOWER s=value_assignment[mp.idt(l)]
+	| mn=macroName "MACRO" ASSIGN_OP BEGIN_KW ( ~(END_KW) )* END_KW    { s = mp.createMacro(mn); }
 	)
 	{
-	    m_mp.addSymbol(s);
+	    mp.addSymbol(s);
 	}
 ;
 
@@ -470,7 +470,7 @@ integer_type[IdToken idToken, Token applicationTagToken] returns [SmiType t = nu
 	intToken=integer_type_kw[idToken]
 	(namedNumbers=named_number_list | rangeConstraints=range_constraint)?
 	{
-	    t = m_mp.createIntegerType(idToken, intToken, applicationTagToken, namedNumbers, rangeConstraints);
+	    t = mp.createIntegerType(idToken, intToken, applicationTagToken, namedNumbers, rangeConstraints);
 	}
 ;
 
@@ -478,7 +478,7 @@ integer_type[IdToken idToken, Token applicationTagToken] returns [SmiType t = nu
 // TODO should return SmiPrimitiveTypeIdToken here
 integer_type_kw[IdToken idToken] returns [IntKeywordToken t = null]
 :
-	i:INTEGER_KW	{ t = m_mp.intkt(i, SmiPrimitiveType.INTEGER, null); }
+	i:INTEGER_KW	{ t = mp.intkt(i, SmiPrimitiveType.INTEGER, null); }
 ;
 
 
@@ -486,7 +486,7 @@ oid_type[IdToken idToken] returns [SmiType t = null]
 :
 	OBJECT_KW IDENTIFIER_KW
 {
-	t = m_mp.createType(idToken, SmiConstants.OBJECT_IDENTIFIER_TYPE);
+	t = mp.createType(idToken, SmiConstants.OBJECT_IDENTIFIER_TYPE);
 }
 ;
 
@@ -497,7 +497,7 @@ octet_string_type[IdToken idToken, Token applicationTagToken] returns [SmiType t
 :
 	OCTET_KW STRING_KW (sizeConstraints=size_constraint)?
 	{
-	    type = m_mp.createOctetStringType(idToken, applicationTagToken, sizeConstraints);
+	    type = mp.createOctetStringType(idToken, applicationTagToken, sizeConstraints);
 	}
 ;
 
@@ -509,7 +509,7 @@ bits_type[IdToken idToken] returns [SmiType type = null]
 :
 	"BITS" (namedNumbers=named_number_list)?
 	{
-        type = m_mp.createBitsType(idToken, namedNumbers);
+        type = mp.createBitsType(idToken, namedNumbers);
 	}
 ;
 
@@ -518,7 +518,7 @@ choice_type[IdToken idToken] returns [SmiType t = null]
 :
     "CHOICE" L_BRACE ( ~(R_BRACE) )* R_BRACE
     {
-        return m_mp.createChoiceType(idToken);
+        return mp.createChoiceType(idToken);
     }
 ;
 
@@ -532,13 +532,13 @@ defined_type[IdToken idToken] returns [SmiType type = null]
 	(mt:UPPER DOT)? tt:UPPER
 	(namedNumbers=named_number_list | sizeConstraints=size_constraint | rangeConstraints=range_constraint)?
 	{
-	    type = m_mp.createDefinedType(idToken, mt, tt, namedNumbers, sizeConstraints, rangeConstraints);
+	    type = mp.createDefinedType(idToken, mt, tt, namedNumbers, sizeConstraints, rangeConstraints);
 	}
 ;
 
 sequence_type[IdToken idToken] returns [SmiType t = null]
 :
-	SEQUENCE_KW	{ t = m_mp.createSequenceType(idToken); }
+	SEQUENCE_KW	{ t = mp.createSequenceType(idToken); }
 	L_BRACE
 		sequence_field[t]
 		(COMMA sequence_field[t])*
@@ -553,7 +553,7 @@ sequence_field[SmiType sequenceType]
 	l: LOWER
 	fieldType=leaf_type[null]
 {
-	m_mp.addField(sequenceType, l, fieldType);
+	mp.addField(sequenceType, l, fieldType);
 }
 ;
 
@@ -561,7 +561,7 @@ sequenceof_type returns [SmiType t = null]
 :
 	SEQUENCE_KW OF_KW u:UPPER
 {
-	t = m_mp.createSequenceOfType(u);
+	t = mp.createSequenceOfType(u);
 }
 ;
 
@@ -593,7 +593,7 @@ range[List<SmiRange> rc]
 	rv1=range_value
 	(DOTDOT rv2=range_value)?
 {
-	m_mp.addRange(rc, rv1, rv2);
+	mp.addRange(rc, rv1, rv2);
 }
 ;
 
@@ -620,7 +620,7 @@ oid_value_assignment[IdToken idToken] returns [SmiOidValue v = null]
 :
 	OBJECT_KW IDENTIFIER_KW ASSIGN_OP last=oid_sequence[idToken]
 {
-	v = m_mp.createOidValue(idToken, last);
+	v = mp.createOidValue(idToken, last);
 }
 ;
 
@@ -647,7 +647,7 @@ oid_macro_value_assignment[IdToken idToken] returns [SmiOidMacro v = null]
 	// TODO it's probably better to move the oid stuff into the macro def
 {
 	if (v == null) { // TODO temporary
-		v = m_mp.createOidMacro(idToken);
+		v = mp.createOidMacro(idToken);
 	}
 	v.setLastOidComponent(lastOidComponent);
 }
@@ -657,7 +657,7 @@ int_macro_value_assignment[IdToken idToken] returns [SmiTrapType v = null]
 :
 	(v=traptype_macro[idToken] ASSIGN_OP specificType:NUMBER)
 {
-	v.setSpecificTypeToken(m_mp.intt(specificType));
+	v.setSpecificTypeToken(mp.intt(specificType));
 }
 ;
 
@@ -684,7 +684,7 @@ leaf_value returns [SmiDefaultValue result = null]
 	| NULL_KW { isNullValue = true; }
 	)
 {
-    result = new SmiDefaultValue(m_mp.getModule(), bit, bitsIdTokenList, lastOidComponent, bst, hst, qst, scopedId, isNullValue);
+    result = new SmiDefaultValue(mp.getModule(), bit, bitsIdTokenList, lastOidComponent, bst, hst, qst, scopedId, isNullValue);
 }
 ;
 
@@ -698,8 +698,8 @@ oid_sequence [IdToken idToken] returns [OidComponent last = null]
 
 oid_component[OidComponent parent] returns [OidComponent oc = null]
 :
-	nt1:NUMBER { oc = m_mp.createOidComponent(parent, null, nt1); }
-	| (lt:LOWER (L_PAREN nt2:NUMBER R_PAREN)?) { oc = m_mp.createOidComponent(parent, lt, nt2); }
+	nt1:NUMBER { oc = mp.createOidComponent(parent, null, nt1); }
+	| (lt:LOWER (L_PAREN nt2:NUMBER R_PAREN)?) { oc = mp.createOidComponent(parent, lt, nt2); }
 ;
 
 bits_value returns [List<IdToken> result = new ArrayList<IdToken>()]
@@ -709,7 +709,7 @@ bits_value returns [List<IdToken> result = new ArrayList<IdToken>()]
 
 defined_value returns [ScopedId id=null]
 :
-	(u:UPPER DOT)? l:LOWER { id = m_mp.makeScopedId(u, l); }
+	(u:UPPER DOT)? l:LOWER { id = mp.makeScopedId(u, l); }
 ;
 
 // TODO: it might be possible to split this up into several
@@ -742,19 +742,19 @@ objecttype_macro[IdToken idToken] returns [SmiObjectType ot = null]
 
 	{
 	    if (sequenceOfType != null) {
-	        ot = table = m_mp.createTable(idToken, sequenceOfType);
+	        ot = table = mp.createTable(idToken, sequenceOfType);
 	    } else if (row != null) {
 	        ot = row;
 	    } else {
-	        ot = var = m_mp.createVariable(idToken, type, units, defaultValue);
+	        ot = var = mp.createVariable(idToken, type, units, defaultValue);
 	    }
 	    if (access != null) {
-	        ot.setAccessToken(m_mp.idt(access));
+	        ot.setAccessToken(mp.idt(access));
 	    } else {
-    	    ot.setMaxAccessToken(m_mp.idt(maxAccess));
+    	    ot.setMaxAccessToken(mp.idt(maxAccess));
     	}
 	    ot.setStatus(status);
-	    ot.setDescription(m_mp.getOptCStr(desc));
+	    ot.setDescription(mp.getOptCStr(desc));
 	}
 ;
 
@@ -770,12 +770,12 @@ status_v2 returns [StatusV2 status = null]
 :
 	l:LOWER
 {
-	status = m_mp.findStatusV2(l.getText());
+	status = mp.findStatusV2(l.getText());
 }
 ;
 
 
-objecttype_macro_index[IdToken idToken, SmiType type] returns [SmiRow row = m_mp.createRow(idToken, type)]
+objecttype_macro_index[IdToken idToken, SmiType type] returns [SmiRow row = mp.createRow(idToken, type)]
 :
 	L_BRACE
 		objecttype_macro_indextype[row]
@@ -794,7 +794,7 @@ objecttype_macro_indextype[SmiRow row]
 	{ row.addIndex(id, implied); }
 ;
 
-objecttype_macro_augments[IdToken idToken, SmiType type] returns [SmiRow row = m_mp.createRow(idToken, type)]
+objecttype_macro_augments[IdToken idToken, SmiType type] returns [SmiRow row = mp.createRow(idToken, type)]
 {
     ScopedId id;
 }
@@ -820,7 +820,7 @@ moduleidentity_macro
 	"DESCRIPTION"  description:C_STRING
 	(moduleidentity_macro_revision[revisions])*
 	{
-	    m_mp.setModuleIdentity(lastUpdated, organization, contactInfo, description, revisions);
+	    mp.setModuleIdentity(lastUpdated, organization, contactInfo, description, revisions);
 	}
 ;
 
@@ -829,7 +829,7 @@ moduleidentity_macro_revision[List<SmiModuleRevision> revisions]
 	"REVISION"    revision:C_STRING
 	"DESCRIPTION" description:C_STRING
 	{
-        revisions.add(m_mp.createModuleRevision(revision, description));
+        revisions.add(mp.createModuleRevision(revision, description));
 	}
 ;
 
@@ -853,7 +853,7 @@ notificationtype_macro[IdToken idToken] returns [SmiNotificationType nt = null]
 	"DESCRIPTION" description:C_STRING
 	("REFERENCE" reference:C_STRING)?
 	{
-		nt = m_mp.createNotification(idToken, objectTokens, status, m_mp.getCStr(description), m_mp.getOptCStr(reference));
+		nt = mp.createNotification(idToken, objectTokens, status, mp.getCStr(description), mp.getOptCStr(reference));
 	}
 ;
 
@@ -871,7 +871,7 @@ textualconvention_macro[IdToken idToken] returns [SmiTextualConvention tc=null]
 	("REFERENCE" reference:C_STRING)?
 	"SYNTAX" type=leaf_type[null]
 	{
-	    tc = m_mp.createTextualConvention(idToken, displayHint, status, description, reference, type);
+	    tc = mp.createTextualConvention(idToken, displayHint, status, description, reference, type);
 	}
 ;
 
@@ -1003,7 +1003,7 @@ traptype_macro[IdToken idToken] returns [SmiTrapType tt = null]
 	("DESCRIPTION" description:C_STRING)?
 	("REFERENCE" reference:C_STRING)?
 	{
-		tt = m_mp.createTrap(idToken, m_mp.idt(enterprise), variables, m_mp.getOptCStr(description), m_mp.getOptCStr(reference));
+		tt = mp.createTrap(idToken, mp.idt(enterprise), variables, mp.getOptCStr(description), mp.getOptCStr(reference));
 	}
 ;
 
@@ -1029,29 +1029,29 @@ named_number[List<SmiNamedNumber> l]
 
 big_integer_token returns [BigIntegerToken bit = null]
 :
-	(mt:MINUS)? nt:NUMBER { bit = m_mp.bintt(mt, nt); }
+	(mt:MINUS)? nt:NUMBER { bit = mp.bintt(mt, nt); }
 ;
 
 binary_string_token returns [BinaryStringToken t = null]
 :
-	bt:B_STRING		{ t = m_mp.bst(bt); }
+	bt:B_STRING		{ t = mp.bst(bt); }
 ;
 
 hex_string_token returns [HexStringToken t = null]
 :
-    ht:H_STRING		{ t = m_mp.hst(ht); }
+    ht:H_STRING		{ t = mp.hst(ht); }
 ;
 
 double_quoted_string_token returns [QuotedStringToken t = null]
 :
-    ct:C_STRING { t = m_mp.dqst(ct); }
+    ct:C_STRING { t = mp.dqst(ct); }
 ;
 
 upper returns [IdToken result = null]
 :
 	u:UPPER
 {
-	result = m_mp.idt(u);
+	result = mp.idt(u);
 }
 ;
 
@@ -1059,6 +1059,6 @@ lower returns [IdToken result = null]
 :
 	l:LOWER
 {
-	result = m_mp.idt(l);
+	result = mp.idt(l);
 }
 ;

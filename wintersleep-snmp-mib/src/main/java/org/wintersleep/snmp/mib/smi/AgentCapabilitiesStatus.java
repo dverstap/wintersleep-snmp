@@ -19,18 +19,18 @@ public enum AgentCapabilitiesStatus {
     CURRENT(StatusAll.CURRENT),
     OBSOLETE(StatusAll.OBSOLETE);
 
-    private StatusAll m_statusAll;
+    private StatusAll statusAll;
 
     private AgentCapabilitiesStatus(StatusAll statusAll) {
-        m_statusAll = statusAll;
+        this.statusAll = statusAll;
     }
 
     public StatusAll getStatusAll() {
-        return m_statusAll;
+        return statusAll;
     }
 
     public String toString() {
-        return m_statusAll.toString();
+        return statusAll.toString();
     }
 
     public static AgentCapabilitiesStatus find(String keyword, boolean mandatory) {

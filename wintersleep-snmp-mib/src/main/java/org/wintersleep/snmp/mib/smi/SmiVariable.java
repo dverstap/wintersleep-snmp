@@ -28,16 +28,16 @@ import java.util.List;
  */
 public class SmiVariable extends SmiObjectType {
 
-    private final QuotedStringToken m_unitsToken;
-    private final SmiDefaultValue m_defaultValue;
+    private final QuotedStringToken unitsToken;
+    private final SmiDefaultValue defaultValue;
 
     public SmiVariable(IdToken idToken, SmiModule module, SmiType type, QuotedStringToken unitsToken, SmiDefaultValue defaultValue) {
         super(idToken, module);
         setType(type);
-        m_unitsToken = unitsToken;
-        m_defaultValue = defaultValue;
-        if (m_defaultValue != null) {
-            m_defaultValue.m_variable = this;
+        this.unitsToken = unitsToken;
+        this.defaultValue = defaultValue;
+        if (this.defaultValue != null) {
+            this.defaultValue.variable = this;
         }
     }
 
@@ -92,15 +92,15 @@ public class SmiVariable extends SmiObjectType {
     }
 
     public String getUnits() {
-        return m_unitsToken != null ? m_unitsToken.getValue() : null;
+        return unitsToken != null ? unitsToken.getValue() : null;
     }
 
     public QuotedStringToken getUnitsToken() {
-        return m_unitsToken;
+        return unitsToken;
     }
 
     public SmiTextualConvention getTextualConvention() {
-        SmiType type = m_type;
+        SmiType type = this.type;
         while (type != null) {
             if (type instanceof SmiTextualConvention) {
                 return (SmiTextualConvention) type;
@@ -111,11 +111,11 @@ public class SmiVariable extends SmiObjectType {
     }
 
     public SmiPrimitiveType getPrimitiveType() {
-        return m_type.getPrimitiveType();
+        return type.getPrimitiveType();
     }
 
     public SmiType getEnumType() {
-        SmiType type = m_type;
+        SmiType type = this.type;
         while (type != null) {
             if (type.getEnumValues() != null) {
                 return type;
@@ -134,7 +134,7 @@ public class SmiVariable extends SmiObjectType {
     }
 
     public SmiType getBitFieldType() {
-        SmiType type = m_type;
+        SmiType type = this.type;
         while (type != null) {
             if (type.getBitFields() != null) {
                 return type;
@@ -154,7 +154,7 @@ public class SmiVariable extends SmiObjectType {
     }
 
     public SmiType getRangeConstraintType() {
-        SmiType type = m_type;
+        SmiType type = this.type;
         while (type != null) {
             if (type.getRangeConstraints() != null) {
                 return type;
@@ -173,7 +173,7 @@ public class SmiVariable extends SmiObjectType {
     }
 
     public SmiType getSizeConstraintType() {
-        SmiType type = m_type;
+        SmiType type = this.type;
         while (type != null) {
             if (type.getSizeConstraints() != null) {
                 return type;
@@ -192,7 +192,7 @@ public class SmiVariable extends SmiObjectType {
     }
 
     public SmiDefaultValue getDefaultValue() {
-        return m_defaultValue;
+        return defaultValue;
     }
 
     public SmiNamedNumber resolveBitField(IdToken idToken, XRefProblemReporter reporter) {

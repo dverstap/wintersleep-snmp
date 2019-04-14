@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TextUtil {
-    private static final Logger m_log = LoggerFactory.getLogger(TextUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextUtil.class);
 
     static Map<String, String> keyWordMap_ = makeKeyWordMap();
 
@@ -89,7 +89,7 @@ public class TextUtil {
             r.close();
             return m;
         } catch (Throwable e) {
-            m_log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -115,8 +115,8 @@ public class TextUtil {
     }
 
     public static String getPath(Package pkg) {
-        m_log.debug("package: " + pkg);
-        m_log.debug("getPath() for: " + pkg.getName());
+        LOGGER.debug("package: " + pkg);
+        LOGGER.debug("getPath() for: " + pkg.getName());
         return "/" + pkg.getName().replace('.', '/');
     }
 

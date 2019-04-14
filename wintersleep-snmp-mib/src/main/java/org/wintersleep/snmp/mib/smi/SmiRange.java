@@ -26,41 +26,41 @@ import java.math.BigInteger;
 
 public class SmiRange {
 
-    private Token m_beginToken;
-    private Token m_endToken;
+    private Token beginToken;
+    private Token endToken;
 
     public SmiRange(Token beginToken, Token endToken) {
-        m_beginToken = beginToken;
-        m_endToken = endToken;
+        this.beginToken = beginToken;
+        this.endToken = endToken;
     }
 
     public SmiRange(Token singleToken) {
-        m_beginToken = singleToken;
-        m_endToken = singleToken;
+        beginToken = singleToken;
+        endToken = singleToken;
     }
 
     public Token getBeginToken() {
-        return m_beginToken;
+        return beginToken;
     }
 
     public Token getEndToken() {
-        return m_endToken;
+        return endToken;
     }
 
     public boolean isSingle() {
-        return m_beginToken == m_endToken;
+        return beginToken == endToken;
     }
 
     public Location getLocation() {
-        return m_beginToken.getLocation();
+        return beginToken.getLocation();
     }
 
     public BigInteger getMinValue() {
-        return getValue(m_beginToken);
+        return getValue(beginToken);
     }
 
     public BigInteger getMaxValue() {
-        return getValue(m_endToken);
+        return getValue(endToken);
     }
 
     private static BigInteger getValue(Token token) {
@@ -76,13 +76,13 @@ public class SmiRange {
 
 
     public String toString() {
-        if (m_beginToken == m_endToken) {
-            return m_beginToken.getObject().toString();
+        if (beginToken == endToken) {
+            return beginToken.getObject().toString();
         } else {
             StringBuilder result = new StringBuilder("(");
-            result.append(m_beginToken.getObject());
+            result.append(beginToken.getObject());
             result.append("..");
-            result.append(m_endToken);
+            result.append(endToken);
             result.append(")");
             return result.toString();
         }

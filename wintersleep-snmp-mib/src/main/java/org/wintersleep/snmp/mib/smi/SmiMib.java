@@ -27,89 +27,89 @@ import java.util.Set;
 
 public class SmiMib {
 
-    private Map<String, SmiModule> m_moduleMap = new LinkedHashMap<String, SmiModule>();
-    private final SmiOptions m_options;
-    private SmiCodeNamingStrategy m_codeNamingStrategy;
-    private SmiOidNode m_rootNode;
+    private Map<String, SmiModule> moduleMap = new LinkedHashMap<String, SmiModule>();
+    private final SmiOptions options;
+    private SmiCodeNamingStrategy codeNamingStrategy;
+    private SmiOidNode rootNode;
 
-    SmiSymbolMapImpl<SmiType> m_typeMap = new SmiSymbolMapImpl<SmiType>(SmiType.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiTextualConvention> m_textualConventionMap = new SmiSymbolMapImpl<SmiTextualConvention>(SmiTextualConvention.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiSymbol> m_symbolMap = new SmiSymbolMapImpl<SmiSymbol>(SmiSymbol.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiVariable> m_variableMap = new SmiSymbolMapImpl<SmiVariable>(SmiVariable.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiTable> m_tableMap = new SmiSymbolMapImpl<SmiTable>(SmiTable.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiRow> m_rowMap = new SmiSymbolMapImpl<SmiRow>(SmiRow.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiVariable> m_columnMap = new SmiSymbolMapImpl<SmiVariable>(SmiVariable.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiVariable> m_scalarMap = new SmiSymbolMapImpl<SmiVariable>(SmiVariable.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiOidValue> m_oidValueMap = new SmiSymbolMapImpl<SmiOidValue>(SmiOidValue.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiObjectType> m_objectTypesMap = new SmiSymbolMapImpl<SmiObjectType>(SmiObjectType.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiNotificationType> m_notificationTypesMap = new SmiSymbolMapImpl<SmiNotificationType>(SmiNotificationType.class, m_moduleMap);
-    SmiSymbolMapImpl<SmiTrapType> m_trapTypesMap = new SmiSymbolMapImpl<SmiTrapType>(SmiTrapType.class, m_moduleMap);
+    SmiSymbolMapImpl<SmiType> typeMap = new SmiSymbolMapImpl<SmiType>(SmiType.class, moduleMap);
+    SmiSymbolMapImpl<SmiTextualConvention> textualConventionMap = new SmiSymbolMapImpl<SmiTextualConvention>(SmiTextualConvention.class, moduleMap);
+    SmiSymbolMapImpl<SmiSymbol> symbolMap = new SmiSymbolMapImpl<SmiSymbol>(SmiSymbol.class, moduleMap);
+    SmiSymbolMapImpl<SmiVariable> variableMap = new SmiSymbolMapImpl<SmiVariable>(SmiVariable.class, moduleMap);
+    SmiSymbolMapImpl<SmiTable> tableMap = new SmiSymbolMapImpl<SmiTable>(SmiTable.class, moduleMap);
+    SmiSymbolMapImpl<SmiRow> rowMap = new SmiSymbolMapImpl<SmiRow>(SmiRow.class, moduleMap);
+    SmiSymbolMapImpl<SmiVariable> columnMap = new SmiSymbolMapImpl<SmiVariable>(SmiVariable.class, moduleMap);
+    SmiSymbolMapImpl<SmiVariable> scalarMap = new SmiSymbolMapImpl<SmiVariable>(SmiVariable.class, moduleMap);
+    SmiSymbolMapImpl<SmiOidValue> oidValueMap = new SmiSymbolMapImpl<SmiOidValue>(SmiOidValue.class, moduleMap);
+    SmiSymbolMapImpl<SmiObjectType> objectTypesMap = new SmiSymbolMapImpl<SmiObjectType>(SmiObjectType.class, moduleMap);
+    SmiSymbolMapImpl<SmiNotificationType> notificationTypesMap = new SmiSymbolMapImpl<SmiNotificationType>(SmiNotificationType.class, moduleMap);
+    SmiSymbolMapImpl<SmiTrapType> trapTypesMap = new SmiSymbolMapImpl<SmiTrapType>(SmiTrapType.class, moduleMap);
 
-    int m_dummyOidNodesCount;
-    private SmiModule m_internalModule;
+    int dummyOidNodesCount;
+    private SmiModule internalModule;
 
     public SmiMib(SmiOptions options, SmiCodeNamingStrategy codeNamingStrategy) {
-        m_options = options;
+        this.options = options;
 
         //assert(codeNamingStrategy != null);
-        m_codeNamingStrategy = codeNamingStrategy;
+        this.codeNamingStrategy = codeNamingStrategy;
 
         SmiModule internalMib = buildInternalMib();
-        m_moduleMap.put(internalMib.getId(), internalMib);
+        moduleMap.put(internalMib.getId(), internalMib);
     }
 
     private SmiModule buildInternalMib() {
         Location location = new Location("JSMI_INTERNAL_MIB");
-        m_internalModule = new SmiModule(this, new IdToken(location, "JSMI_INTERNAL_MIB"));
+        internalModule = new SmiModule(this, new IdToken(location, "JSMI_INTERNAL_MIB"));
 
-        m_rootNode = SmiOidNode.createRootNode();
-        //m_rootNode.setOidComponents(Collections.<OidComponent>emptyList());
+        rootNode = SmiOidNode.createRootNode();
+        //rootNode.setOidComponents(Collections.<OidComponent>emptyList());
 
-        return m_internalModule;
+        return internalModule;
     }
 
     public SmiOidNode getRootNode() {
-        return m_rootNode;
+        return rootNode;
     }
 
     public SmiModule getInternalModule() {
-        return m_internalModule;
+        return internalModule;
     }
 
     public SmiModule findModule(String id) {
-        return m_moduleMap.get(id);
+        return moduleMap.get(id);
     }
 
     public Collection<SmiModule> getModules() {
-        return m_moduleMap.values();
+        return moduleMap.values();
     }
 
     public SmiOptions getOptions() {
-        return m_options;
+        return options;
     }
 
     public SmiCodeNamingStrategy getCodeNamingStrategy() {
-        return m_codeNamingStrategy;
+        return codeNamingStrategy;
     }
 
     public void setCodeNamingStrategy(SmiCodeNamingStrategy codeNamingStrategy) {
-        m_codeNamingStrategy = codeNamingStrategy;
+        this.codeNamingStrategy = codeNamingStrategy;
     }
 
     public SmiModule createModule(IdToken idToken) {
-        SmiModule oldModule = m_moduleMap.get(idToken.getId());
+        SmiModule oldModule = moduleMap.get(idToken.getId());
         if (oldModule != null) {
             // TODO error handling
             // should do this in the XRefPhase
             throw new IllegalStateException("Duplicate module: " + oldModule.getIdToken() + " is already defined when adding: " + idToken);
         }
         SmiModule module = new SmiModule(this, idToken);
-        m_moduleMap.put(module.getId(), module);
+        moduleMap.put(module.getId(), module);
         return module;
     }
 
     public void determineInheritanceRelations() {
-        for (SmiRow row : m_rowMap.values()) {
+        for (SmiRow row : rowMap.values()) {
             if (row.getAugments() != null) {
                 row.addParentRow(row.getAugments());
             } else if (row.getIndexes().size() == 1) {
@@ -129,90 +129,90 @@ public class SmiMib {
     }
 
     void addModule(String id, SmiModule module) {
-        SmiModule oldModule = m_moduleMap.get(id);
+        SmiModule oldModule = moduleMap.get(id);
         if (oldModule != null) {
             throw new IllegalArgumentException("Mib already contains a module: " + oldModule);
         }
-        m_moduleMap.put(id, module);
+        moduleMap.put(id, module);
     }
 
     public void fillTables() {
         // TODO deal with double defines
-        for (SmiModule module : m_moduleMap.values()) {
+        for (SmiModule module : moduleMap.values()) {
             module.fillTables();
-            m_typeMap.putAll(module.m_typeMap);
-            m_textualConventionMap.putAll(module.m_textualConventionMap);
-            m_variableMap.putAll(module.m_variableMap);
-            m_rowMap.putAll(module.m_rowMap);
-            m_tableMap.putAll(module.m_tableMap);
-            m_symbolMap.putAll(module.m_symbolMap);
-            m_oidValueMap.putAll(module.m_oidValueMap);
-            m_objectTypesMap.putAll(module.m_objectTypeMap);
-            m_notificationTypesMap.putAll(module.m_notificationTypeMap);
-            m_trapTypesMap.putAll(module.m_trapTypeMap);
+            typeMap.putAll(module.typeMap);
+            textualConventionMap.putAll(module.textualConventionMap);
+            variableMap.putAll(module.variableMap);
+            rowMap.putAll(module.rowMap);
+            tableMap.putAll(module.tableMap);
+            symbolMap.putAll(module.symbolMap);
+            oidValueMap.putAll(module.oidValueMap);
+            objectTypesMap.putAll(module.objectTypeMap);
+            notificationTypesMap.putAll(module.notificationTypeMap);
+            trapTypesMap.putAll(module.trapTypeMap);
         }
     }
 
     public void fillExtraTables() {
         // TODO deal with double defines
-        for (SmiModule module : m_moduleMap.values()) {
+        for (SmiModule module : moduleMap.values()) {
             module.fillExtraTables();
-            m_scalarMap.putAll(module.m_scalarMap);
-            m_columnMap.putAll(module.m_columnMap);
+            scalarMap.putAll(module.scalarMap);
+            columnMap.putAll(module.columnMap);
         }
     }
 
 
     public int getDummyOidNodesCount() {
-        return m_dummyOidNodesCount;
+        return dummyOidNodesCount;
     }
 
     public SmiSymbolMap<SmiType> getTypes() {
-        return m_typeMap;
+        return typeMap;
     }
 
     public SmiSymbolMap<SmiTextualConvention> getTextualConventions() {
-        return m_textualConventionMap;
+        return textualConventionMap;
     }
 
     public SmiSymbolMap<SmiSymbol> getSymbols() {
-        return m_symbolMap;
+        return symbolMap;
     }
 
     public SmiSymbolMap<SmiVariable> getVariables() {
-        return m_variableMap;
+        return variableMap;
     }
 
     public SmiSymbolMap<SmiTable> getTables() {
-        return m_tableMap;
+        return tableMap;
     }
 
     public SmiSymbolMap<SmiRow> getRows() {
-        return m_rowMap;
+        return rowMap;
     }
 
     public SmiSymbolMap<SmiVariable> getColumns() {
-        return m_columnMap;
+        return columnMap;
     }
 
     public SmiSymbolMap<SmiVariable> getScalars() {
-        return m_scalarMap;
+        return scalarMap;
     }
 
     public SmiSymbolMap<SmiOidValue> getOidValues() {
-        return m_oidValueMap;
+        return oidValueMap;
     }
 
     public SmiSymbolMap<SmiObjectType> getObjectTypes() {
-        return m_objectTypesMap;
+        return objectTypesMap;
     }
     
     public SmiSymbolMap<SmiNotificationType> getNotificationTypes() {
-    	return m_notificationTypesMap;
+    	return notificationTypesMap;
     }
     
     public SmiSymbolMap<SmiTrapType> getTrapTypes() {
-    	return m_trapTypesMap;
+    	return trapTypesMap;
     }
 
     public SmiOidNode findByOid(int... oid) {
@@ -250,7 +250,7 @@ public class SmiMib {
 
     public Set<SmiModule> findModules(SmiVersion version) {
         Set<SmiModule> result = new HashSet<SmiModule>();
-        for (SmiModule module : m_moduleMap.values()) {
+        for (SmiModule module : moduleMap.values()) {
             if (module.getVersion() == null || module.getVersion() == version) {
                 result.add(module);
             }
@@ -259,30 +259,30 @@ public class SmiMib {
     }
 
     public void defineMissingStandardOids() {
-        Location location = m_internalModule.getIdToken().getLocation();
+        Location location = internalModule.getIdToken().getLocation();
 
-        if (m_symbolMap.findAll("itu").isEmpty()) {
-            SmiOidNode ituNode = new SmiOidNode(m_rootNode, 0);
-            SmiOidValue itu = new SmiOidValue(new IdToken(location, "itu"), m_internalModule, ituNode);
+        if (symbolMap.findAll("itu").isEmpty()) {
+            SmiOidNode ituNode = new SmiOidNode(rootNode, 0);
+            SmiOidValue itu = new SmiOidValue(new IdToken(location, "itu"), internalModule, ituNode);
             //itu.setLastOidComponent(new OidComponent(null, null, new IntegerToken(location, 0)));
-            m_internalModule.addSymbol(itu);
-            m_internalModule.m_symbolMap.put(itu.getId(), itu);
-            m_symbolMap.put(itu.getId(), itu);
-            m_oidValueMap.put(itu.getId(), itu);
+            internalModule.addSymbol(itu);
+            internalModule.symbolMap.put(itu.getId(), itu);
+            symbolMap.put(itu.getId(), itu);
+            oidValueMap.put(itu.getId(), itu);
         }
 
-        if (m_symbolMap.findAll("iso").isEmpty()) {
-            SmiOidNode isoNode = new SmiOidNode(m_rootNode, 1);
-            SmiOidValue iso = new SmiOidValue(new IdToken(location, "iso"), m_internalModule, isoNode);
-            m_internalModule.addSymbol(iso);
-            m_internalModule.m_symbolMap.put(iso.getId(), iso);
-            m_symbolMap.put(iso.getId(), iso);
-            m_oidValueMap.put(iso.getId(), iso);
+        if (symbolMap.findAll("iso").isEmpty()) {
+            SmiOidNode isoNode = new SmiOidNode(rootNode, 1);
+            SmiOidValue iso = new SmiOidValue(new IdToken(location, "iso"), internalModule, isoNode);
+            internalModule.addSymbol(iso);
+            internalModule.symbolMap.put(iso.getId(), iso);
+            symbolMap.put(iso.getId(), iso);
+            oidValueMap.put(iso.getId(), iso);
         }
     }
 
     public SmiModule resolveModule(IdToken moduleToken, XRefProblemReporter reporter) {
-        SmiModule result = m_moduleMap.get(moduleToken.getId());
+        SmiModule result = moduleMap.get(moduleToken.getId());
         if (result == null) {
             reporter.reportCannotFindModule(moduleToken);
         }

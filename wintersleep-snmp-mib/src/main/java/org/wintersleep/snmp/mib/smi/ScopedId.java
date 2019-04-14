@@ -20,47 +20,47 @@ import org.wintersleep.snmp.mib.phase.xref.XRefProblemReporter;
 */
 public class ScopedId {
 
-    private final SmiModule m_localModule;
-    private final IdToken m_moduleToken;
-    private final IdToken m_symbolToken;
-    private SmiModule m_module;
-    private SmiSymbol m_symbol;
+    private final SmiModule localModule;
+    private final IdToken moduleToken;
+    private final IdToken symbolToken;
+    private SmiModule module;
+    private SmiSymbol symbol;
 
     public ScopedId(SmiModule localModule, IdToken moduleToken, IdToken symbolToken) {
-        m_localModule = localModule;
-        m_moduleToken = moduleToken;
-        m_symbolToken = symbolToken;
+        this.localModule = localModule;
+        this.moduleToken = moduleToken;
+        this.symbolToken = symbolToken;
     }
 
 
     public SmiModule getLocalModule() {
-        return m_localModule;
+        return localModule;
     }
 
     public IdToken getModuleToken() {
-        return m_moduleToken;
+        return moduleToken;
     }
 
     public IdToken getSymbolToken() {
-        return m_symbolToken;
+        return symbolToken;
     }
 
     public SmiModule getModule() {
-        return m_module;
+        return module;
     }
 
     public SmiSymbol getSymbol() {
-        return m_symbol;
+        return symbol;
     }
 
     public void resolveReferences(XRefProblemReporter reporter) {
-        if (m_moduleToken != null) {
-            m_module = m_localModule.getMib().resolveModule(m_moduleToken, reporter);
+        if (moduleToken != null) {
+            module = localModule.getMib().resolveModule(moduleToken, reporter);
         }
-        if (m_module != null) {
-            m_symbol = m_module.resolveReference(m_symbolToken, reporter);
+        if (module != null) {
+            symbol = module.resolveReference(symbolToken, reporter);
         } else {
-            m_symbol = m_localModule.resolveReference(m_symbolToken, reporter);
+            symbol = localModule.resolveReference(symbolToken, reporter);
         }
     }
 }

@@ -19,14 +19,14 @@ import org.wintersleep.snmp.util.location.Location;
 
 public abstract class AbstractToken implements Token {
 
-    private Location m_location;
+    private Location location;
 
     protected AbstractToken(Location location) {
-        m_location = location;
+        this.location = location;
     }
 
     public Location getLocation() {
-        return m_location;
+        return location;
     }
 
     public String toString() {

@@ -20,18 +20,18 @@ public enum StatusV2 {
     DEPRECATED(StatusAll.DEPRECATED),
     OBSOLETE(StatusAll.OBSOLETE);
 
-    private StatusAll m_statusAll;
+    private StatusAll statusAll;
 
     private StatusV2(StatusAll statusAll) {
-        m_statusAll = statusAll;
+        this.statusAll = statusAll;
     }
 
     public StatusAll getStatusAll() {
-        return m_statusAll;
+        return statusAll;
     }
 
     public String toString() {
-        return m_statusAll.toString();
+        return statusAll.toString();
     }
 
     public static StatusV2 find(String keyword, boolean mandatory) {

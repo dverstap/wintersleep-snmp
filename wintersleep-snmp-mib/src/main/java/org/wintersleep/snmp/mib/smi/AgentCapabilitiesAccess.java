@@ -23,18 +23,18 @@ public enum AgentCapabilitiesAccess {
     READ_CREATE(AccessAll.READ_CREATE),
     WRITE_ONLY(AccessAll.WRITE_ONLY);
 
-    private AccessAll m_accessAll;
+    private AccessAll accessAll;
 
     AgentCapabilitiesAccess(AccessAll accessAll) {
-        m_accessAll = accessAll;
+        this.accessAll = accessAll;
     }
 
     public AccessAll getAccessAll() {
-        return m_accessAll;
+        return accessAll;
     }
 
     public String toString() {
-        return m_accessAll.toString();
+        return accessAll.toString();
     }
 
     public static AgentCapabilitiesAccess find(String keyword, boolean mandatory) {

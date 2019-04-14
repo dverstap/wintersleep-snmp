@@ -19,31 +19,31 @@ import java.lang.reflect.Proxy;
 
 public class DefaultProblemReporterFactory implements ProblemReporterFactory {
 
-    private final ClassLoader m_classLoader;
-    private final ProblemEventHandler m_problemEventHandler;
+    private final ClassLoader classLoader;
+    private final ProblemEventHandler problemEventHandler;
 
     public DefaultProblemReporterFactory(ProblemEventHandler ph) {
-        m_classLoader = Thread.currentThread().getContextClassLoader();
-        m_problemEventHandler = ph;
+        classLoader = Thread.currentThread().getContextClassLoader();
+        problemEventHandler = ph;
     }
 
     public DefaultProblemReporterFactory(ClassLoader classLoader, ProblemEventHandler ph) {
-        m_classLoader = classLoader;
-        m_problemEventHandler = ph;
+        this.classLoader = classLoader;
+        problemEventHandler = ph;
     }
 
     public ClassLoader getClassLoader() {
-        return m_classLoader;
+        return classLoader;
     }
 
     public ProblemEventHandler getProblemEventHandler() {
-        return m_problemEventHandler;
+        return problemEventHandler;
     }
 
     @SuppressWarnings("unchecked")
     public <T> T create(Class<T> cl) {
         Class[] classArray = {cl};
-        return (T) Proxy.newProxyInstance(m_classLoader, classArray, new ProblemInvocationHandler(cl, m_problemEventHandler));
+        return (T) Proxy.newProxyInstance(classLoader, classArray, new ProblemInvocationHandler(cl, problemEventHandler));
     }
 
 }

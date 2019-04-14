@@ -42,35 +42,35 @@ import java.util.Set;
 
 public class FileParserPhase implements Phase {
 
-    private static final Logger m_log = LoggerFactory.getLogger(FileParserPhase.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileParserPhase.class);
 
-    private FileParserProblemReporter m_reporter;
+    private FileParserProblemReporter reporter;
 
-    private List<URL> m_inputUrls;
+    private List<URL> inputUrls;
 
     public FileParserPhase(FileParserProblemReporter reporter) {
-        m_reporter = reporter;
+        this.reporter = reporter;
     }
 
     public FileParserPhase(ProblemReporterFactory reporterFactory) {
-        m_reporter = reporterFactory.create(FileParserProblemReporter.class);
+        reporter = reporterFactory.create(FileParserProblemReporter.class);
     }
 
     public FileParserPhase(ProblemEventHandler eventHandler) {
         DefaultProblemReporterFactory reporterFactory = new DefaultProblemReporterFactory(eventHandler);
-        m_reporter = reporterFactory.create(FileParserProblemReporter.class);
+        reporter = reporterFactory.create(FileParserProblemReporter.class);
     }
 
     public FileParserProblemReporter getFileParserProblemReporter() {
-        return m_reporter;
+        return reporter;
     }
 
     public List<URL> getInputUrls() {
-        return m_inputUrls;
+        return inputUrls;
     }
 
     public void setInputUrls(List<URL> inputUrls) {
-        m_inputUrls = inputUrls;
+        this.inputUrls = inputUrls;
     }
 
     public SmiMib process(SmiMib mib) throws SmiException {
@@ -78,7 +78,7 @@ public class FileParserPhase implements Phase {
             parse(mib, url, determineResourceLocation(url));
         }
 
-        if (m_log.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             logParseResults(mib);
         }
 
@@ -95,7 +95,7 @@ public class FileParserPhase implements Phase {
     public void parse(SmiMib mib, URL url, String resourceLocation) {
         InputStream is = null;
         try {
-            m_log.debug("Parsing :" + url);
+            LOGGER.debug("Parsing :" + url);
             is = url.openStream();
             is = new BufferedInputStream(is);
             SMILexer lexer = new SMILexer(is);
@@ -109,21 +109,21 @@ public class FileParserPhase implements Phase {
                 module = parser.module_definition();
             }
         } catch (TokenStreamException e) {
-            m_log.debug(e.getMessage(), e);
-            m_reporter.reportTokenStreamError(resourceLocation, e.getMessage());
+            LOGGER.debug(e.getMessage(), e);
+            reporter.reportTokenStreamError(resourceLocation, e.getMessage());
         } catch (RecognitionException e) {
-            m_log.debug(e.getMessage(), e);
-            m_reporter.reportParseError(new Location(resourceLocation, e.getLine(), e.getColumn()), e.getMessage());
+            LOGGER.debug(e.getMessage(), e);
+            reporter.reportParseError(new Location(resourceLocation, e.getLine(), e.getColumn()), e.getMessage());
         } catch (IOException e) {
-            m_log.debug(e.getMessage(), e);
-            m_reporter.reportIoException(new Location(resourceLocation, 0, 0), e.getMessage());
+            LOGGER.debug(e.getMessage(), e);
+            reporter.reportIoException(new Location(resourceLocation, 0, 0), e.getMessage());
         } finally {
-            m_log.debug("Finished parsing :" + resourceLocation);
+            LOGGER.debug("Finished parsing :" + resourceLocation);
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    m_log.warn(e.getMessage(), e);
+                    LOGGER.warn(e.getMessage(), e);
                 }
             }
         }
@@ -132,19 +132,19 @@ public class FileParserPhase implements Phase {
     private void logParseResults(SmiMib mib) {
         Set<SmiModule> v1modules = mib.findModules(SmiVersion.V1);
         Set<SmiModule> v2modules = mib.findModules(SmiVersion.V2);
-        m_log.debug("#SMIv1 modules=" + v1modules.size() + " #SMIv2 modules=" + v2modules.size());
+        LOGGER.debug("#SMIv1 modules=" + v1modules.size() + " #SMIv2 modules=" + v2modules.size());
         if (v1modules.size() > v2modules.size()) {
-            m_log.debug("V2 modules:");
+            LOGGER.debug("V2 modules:");
             logMibs(v2modules);
         } else if (v1modules.size() < v2modules.size()) {
-            m_log.debug("V1 modules:");
+            LOGGER.debug("V1 modules:");
             logMibs(v1modules);
         }
     }
 
     private void logMibs(Set<SmiModule> modules) {
         for (SmiModule module : modules) {
-            m_log.debug(module + ": #V1 features=" + module.getV1Features() + " #V2 features=" + module.getV2Features());
+            LOGGER.debug(module + ": #V1 features=" + module.getV1Features() + " #V2 features=" + module.getV2Features());
         }
     }
 

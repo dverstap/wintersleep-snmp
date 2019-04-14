@@ -20,11 +20,11 @@ import org.wintersleep.snmp.util.token.IdToken;
 import org.wintersleep.snmp.util.location.Location;
 
 public class SmiModuleTest extends TestCase {
-    private SmiMib m_mib = new SmiMib(new SmiOptions(), new SmiJavaCodeNamingStrategy("test"));
-    private SmiModule m_module = new SmiModule(m_mib, new IdToken(new Location("IF-MIBsource", 1, 0), "IF-MIB"));
+    private SmiMib mib = new SmiMib(new SmiOptions(), new SmiJavaCodeNamingStrategy("test"));
+    private SmiModule module = new SmiModule(mib, new IdToken(new Location("IF-MIBsource", 1, 0), "IF-MIB"));
 
     public void testGetJavaId() {
-        assertEquals("IfMib", m_module.getCodeId());
+        assertEquals("IfMib", module.getCodeId());
     }
 
 }

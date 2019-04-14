@@ -26,25 +26,25 @@ import java.util.List;
 
 public class SmiTrapType extends SmiValue implements Notification {
 
-    private IdToken m_enterpriseIdToken;
-    private SmiOidValue m_enterpriseOid;
-    private List<IdToken> m_variableTokens;
-    private List<SmiVariable> m_variables = new ArrayList<SmiVariable>();
-    private String m_description;
-    private String m_reference;
-    private IntegerToken m_specificTypeToken;
+    private IdToken enterpriseIdToken;
+    private SmiOidValue enterpriseOid;
+    private List<IdToken> variableTokens;
+    private List<SmiVariable> variables = new ArrayList<SmiVariable>();
+    private String description;
+    private String reference;
+    private IntegerToken specificTypeToken;
     
     public SmiTrapType(IdToken idToken, SmiModule module,
                        IdToken enterpriseIdToken, List<IdToken> variableTokens,
                        String description, String reference) {
         super(idToken, module);
-        m_enterpriseIdToken = enterpriseIdToken;
-        m_variableTokens = variableTokens;
-        if (m_variableTokens == null) {
-            m_variableTokens = Collections.emptyList();
+        this.enterpriseIdToken = enterpriseIdToken;
+        this.variableTokens = variableTokens;
+        if (this.variableTokens == null) {
+            this.variableTokens = Collections.emptyList();
         }
-        m_description = description;
-        m_reference = reference;
+        this.description = description;
+        this.reference = reference;
     }
 
     public String getCodeId() {
@@ -52,41 +52,41 @@ public class SmiTrapType extends SmiValue implements Notification {
 	}
 
     public void resolveReferences(XRefProblemReporter reporter) {
-    	m_enterpriseOid = getModule().resolveReference(m_enterpriseIdToken, SmiOidValue.class, reporter);
-        for (IdToken variableToken : m_variableTokens) {
+    	enterpriseOid = getModule().resolveReference(enterpriseIdToken, SmiOidValue.class, reporter);
+        for (IdToken variableToken : variableTokens) {
             SmiVariable variable = getModule().resolveReference(variableToken, SmiVariable.class, reporter);
             if (variable != null) {
-                m_variables.add(variable);
+                variables.add(variable);
             }
         }
     }
 
     public IdToken getEnterpriseIdToken() {
-        return m_enterpriseIdToken;
+        return enterpriseIdToken;
     }
 
     public SmiOidValue getEnterpriseOid() {
-        return m_enterpriseOid;
+        return enterpriseOid;
     }
 
     public List<IdToken> getVariableTokens() {
-        return m_variableTokens;
+        return variableTokens;
     }
 
     public List<SmiVariable> getVariables() {
-        return m_variables;
+        return variables;
     }
 
     public List<SmiVariable> getObjects() {
-        return m_variables;
+        return variables;
     }
 
     public List<IdToken> getObjectTokens() {
-        return m_variableTokens;
+        return variableTokens;
     }
 
     public String getDescription() {
-        return m_description;
+        return description;
     }
 
     /**
@@ -111,19 +111,19 @@ public class SmiTrapType extends SmiValue implements Notification {
     }
 
     public String getReference() {
-        return m_reference;
+        return reference;
     }
 
     public IntegerToken getSpecificTypeToken() {
-    	return m_specificTypeToken;
+    	return specificTypeToken;
     }
     
     public void setSpecificTypeToken(IntegerToken specificTypeToken) {
-    	m_specificTypeToken = specificTypeToken;
+    	this.specificTypeToken = specificTypeToken;
     }
 
     public int getSpecificType() {
-        return m_specificTypeToken.getValue();
+        return specificTypeToken.getValue();
     }
 
 }

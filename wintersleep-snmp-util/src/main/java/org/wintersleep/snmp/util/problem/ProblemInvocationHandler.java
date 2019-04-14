@@ -31,15 +31,15 @@ import java.util.Map;
 
 public class ProblemInvocationHandler <T> implements InvocationHandler {
 
-    private ProblemEventHandler m_problemEventHandler;
-    private Map<Method, MethodInvocationHandler> m_methodInvocationHandlerMap = new HashMap<Method, MethodInvocationHandler>();
+    private ProblemEventHandler problemEventHandler;
+    private Map<Method, MethodInvocationHandler> methodInvocationHandlerMap = new HashMap<Method, MethodInvocationHandler>();
 
     public ProblemInvocationHandler(Class<T> cl, ProblemEventHandler eh) {
-        m_problemEventHandler = eh;
+        problemEventHandler = eh;
 
         for (Method method : cl.getDeclaredMethods()) {
             MethodInvocationHandler mih = new MethodInvocationHandler(method);
-            m_methodInvocationHandlerMap.put(method, mih);
+            methodInvocationHandlerMap.put(method, mih);
         }
 
         // TODO build up invocation data structure
@@ -62,7 +62,7 @@ public class ProblemInvocationHandler <T> implements InvocationHandler {
             return toString();
         }
 
-        MethodInvocationHandler mih = m_methodInvocationHandlerMap.get(method);
+        MethodInvocationHandler mih = methodInvocationHandlerMap.get(method);
         return mih.invoke(args);
     }
 
@@ -72,15 +72,15 @@ public class ProblemInvocationHandler <T> implements InvocationHandler {
 
 
     class MethodInvocationHandler {
-        private Method m_method;
-        private ProblemMethod m_problemMethod;
-        private String m_messageKey; // TODO
-        private int m_locationParameterIndex = -1;
+        private Method method;
+        private ProblemMethod problemMethod;
+        private String messageKey; // TODO
+        private int locationParameterIndex = -1;
 
         public MethodInvocationHandler(Method method) {
-            m_method = method;
-            m_problemMethod = method.getAnnotation(ProblemMethod.class);
-            if (m_problemMethod == null) {
+            this.method = method;
+            problemMethod = method.getAnnotation(ProblemMethod.class);
+            if (problemMethod == null) {
                 throw new IllegalArgumentException(getMethodName(method) + " is missing the " + ProblemMethod.class.getSimpleName() + " annotation");
             }
             // TODO determine messageKey
@@ -89,8 +89,8 @@ public class ProblemInvocationHandler <T> implements InvocationHandler {
         }
 
         private void check() {
-            Class[] paramTypes = m_method.getParameterTypes();
-            Annotation[][] paramAnnotations = m_method.getParameterAnnotations();
+            Class[] paramTypes = method.getParameterTypes();
+            Annotation[][] paramAnnotations = method.getParameterAnnotations();
             for (int i = 0; i < paramAnnotations.length; i++) {
                 ProblemProperty ep = getErrorParameter(paramAnnotations[i]);
                 if (ep != null) {
@@ -104,7 +104,7 @@ public class ProblemInvocationHandler <T> implements InvocationHandler {
                         m = MethodUtils.getAccessibleMethod(paramType, propertyName, (Class[]) null);
                     }
                     if (m == null) {
-                        throw new IllegalArgumentException(getMethodName(m_method) + ": parameter class does not have a property " + propertyName);
+                        throw new IllegalArgumentException(getMethodName(method) + ": parameter class does not have a property " + propertyName);
                     }
                 }
             }
@@ -113,10 +113,10 @@ public class ProblemInvocationHandler <T> implements InvocationHandler {
             for (int i = 0; i < paramTypes.length; i++) {
                 Class c = paramTypes[i];
                 if (Location.class.equals(c)) {
-                    if (m_locationParameterIndex >= 0) {
-                        //throw new IllegalArgumentException(getMethodName(m_method) + " has more than one " + Location.class.getSimpleName() + " parameter");
+                    if (locationParameterIndex >= 0) {
+                        //throw new IllegalArgumentException(getMethodName(method) + " has more than one " + Location.class.getSimpleName() + " parameter");
                     } else {
-                        m_locationParameterIndex = i;
+                        locationParameterIndex = i;
                     }
                 }
             }
@@ -129,13 +129,13 @@ public class ProblemInvocationHandler <T> implements InvocationHandler {
                 args = processParameters(args);
 
                 Location location = null;
-                if (m_locationParameterIndex >= 0) {
+                if (locationParameterIndex >= 0) {
                     location = getLocation(args);
                     args = removeLocation(args);
                 }
 
-                ProblemEvent ev = new ProblemEvent(location, m_problemMethod.severity(), m_messageKey, m_problemMethod.message(), args);
-                m_problemEventHandler.handle(ev);
+                ProblemEvent ev = new ProblemEvent(location, problemMethod.severity(), messageKey, problemMethod.message(), args);
+                problemEventHandler.handle(ev);
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
             } catch (IllegalAccessException e) {
@@ -147,20 +147,20 @@ public class ProblemInvocationHandler <T> implements InvocationHandler {
         }
 
         private Location getLocation(Object[] args) {
-            if (m_locationParameterIndex >= 0) {
-                return (Location) args[m_locationParameterIndex];
+            if (locationParameterIndex >= 0) {
+                return (Location) args[locationParameterIndex];
             }
             return null;
         }
 
         private Object[] removeLocation(Object[] args) {
             Object[] result = args;
-            if (m_locationParameterIndex >= 0) {
+            if (locationParameterIndex >= 0) {
                 result = new Object[args.length - 1];
-                for (int i = 0; i < m_locationParameterIndex; i++) {
+                for (int i = 0; i < locationParameterIndex; i++) {
                     result[i] = args[i];
                 }
-                for (int i = m_locationParameterIndex+1; i < args.length; i++) {
+                for (int i = locationParameterIndex +1; i < args.length; i++) {
                     result[i-1] = args[i];
                 }
             }
@@ -168,7 +168,7 @@ public class ProblemInvocationHandler <T> implements InvocationHandler {
         }
 
         private Object[] processParameters(Object[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-            Annotation[][] paramAnnotations = m_method.getParameterAnnotations();
+            Annotation[][] paramAnnotations = method.getParameterAnnotations();
             for (int i = 0; i < paramAnnotations.length; i++) {
                 ProblemProperty ep = getErrorParameter(paramAnnotations[i]);
                 if (ep != null) {

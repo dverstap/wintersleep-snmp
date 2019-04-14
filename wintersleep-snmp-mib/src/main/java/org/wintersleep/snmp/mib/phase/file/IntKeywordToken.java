@@ -21,7 +21,7 @@ import org.wintersleep.snmp.mib.smi.SmiPrimitiveType;
 
 public class IntKeywordToken extends IdToken {
 
-    private SmiPrimitiveType m_primitiveType;
+    private SmiPrimitiveType primitiveType;
 
     public IntKeywordToken(Location location, String value, SmiPrimitiveType primitiveType) {
         super(location, value);
@@ -30,10 +30,10 @@ public class IntKeywordToken extends IdToken {
             throw new IllegalArgumentException("Primitive type is mandatory.");
         }
 
-        m_primitiveType = primitiveType;
+        this.primitiveType = primitiveType;
     }
 
     public SmiPrimitiveType getPrimitiveType() {
-        return m_primitiveType;
+        return primitiveType;
     }
 }

@@ -27,19 +27,19 @@ public enum StatusAll {
     DEPRECATED(OBJECT_TYPE_V1, OBJECT_IDENTITY, NOTIFICATION_TYPE, TEXTUAL_CONVENTION, OBJECT_GROUP, NOTIFICATION_GROUP, MODULE_COMPLIANCE),
     CURRENT(OBJECT_IDENTITY, NOTIFICATION_TYPE, TEXTUAL_CONVENTION, OBJECT_GROUP, NOTIFICATION_GROUP, MODULE_COMPLIANCE, AGENT_CAPABILITIES);
 
-    private String m_keyword;
-    private Set<MacroType> m_supportedMacroTypes = EnumSet.noneOf(MacroType.class);
+    private String keyword;
+    private Set<MacroType> supportedMacroTypes = EnumSet.noneOf(MacroType.class);
 
     private StatusAll(MacroType... macroTypes) {
-        m_keyword = name().toLowerCase();
+        keyword = name().toLowerCase();
 
         for (MacroType macroType : macroTypes) {
-            m_supportedMacroTypes.add(macroType);
+            supportedMacroTypes.add(macroType);
         }
     }
 
     public String toString() {
-        return m_keyword;
+        return keyword;
     }
 
     public static StatusAll find(String keyword, boolean mandatory) {
@@ -74,7 +74,7 @@ public enum StatusAll {
     }
 
     public boolean isSupportedBy(MacroType macroType) {
-        return m_supportedMacroTypes.contains(macroType);
+        return supportedMacroTypes.contains(macroType);
     }
 
 }

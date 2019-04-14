@@ -24,61 +24,61 @@ public class Location {
     public static final int INVALID_LINE = -1;
     public static final int INVALID_COLUMN = -1;
 
-    private String m_source;
-    private int m_line = INVALID_LINE;
-    private int m_column = INVALID_COLUMN;
+    private String source;
+    private int line = INVALID_LINE;
+    private int column = INVALID_COLUMN;
 
     public Location(String file, int line, int column) {
-        m_source = file;
-        m_line = line;
-        m_column = column;
+        source = file;
+        this.line = line;
+        this.column = column;
     }
 
     public Location(String source, int line) {
-        m_source = source;
-        m_line = line;
+        this.source = source;
+        this.line = line;
     }
 
     public Location(String source) {
-        m_source = source;
+        this.source = source;
     }
 
     public String getSource() {
-        return m_source;
+        return source;
     }
 
     public void setSource(String source) {
-        m_source = source;
+        this.source = source;
     }
 
     public int getLine() {
-        return m_line;
+        return line;
     }
 
     public void setLine(int line) {
-        m_line = line;
+        this.line = line;
     }
 
     public int getColumn() {
-        return m_column;
+        return column;
     }
 
     public void setColumn(int column) {
-        m_column = column;
+        this.column = column;
     }
 
     public String toString() {
         StringBuilder result = new StringBuilder();
-        if (m_source != null) {
-            result.append(m_source);
+        if (source != null) {
+            result.append(source);
         }
         result.append(SEPARATOR);
-        if (m_line > INVALID_LINE) {
-            result.append(m_line);
+        if (line > INVALID_LINE) {
+            result.append(line);
         }
         result.append(SEPARATOR);
-        if (m_column > INVALID_LINE) {
-            result.append(m_column);
+        if (column > INVALID_LINE) {
+            result.append(column);
         }
         return result.toString();
     }

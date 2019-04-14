@@ -45,8 +45,8 @@ public class FileURLListFactory extends AbstractURLListFactory {
 
     public List<URL> create() throws Exception {
         List<URL> result = new ArrayList<>();
-        File dir = new File(m_rootPath);
-        for (String child : m_children) {
+        File dir = new File(rootPath);
+        for (String child : children) {
             File file = new File(dir, child);
             if (!file.exists()) {
                 throw new IllegalStateException("File doesn't exist: " + file);

@@ -37,22 +37,22 @@ import java.util.Map;
 
 public class XRefPhase implements Phase {
 
-    private static final Logger m_log = LoggerFactory.getLogger(XRefPhase.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(XRefPhase.class);
 
-    private XRefProblemReporter m_reporter;
-    private Map<String, SymbolDefiner> m_symbolDefinerMap = new LinkedHashMap<String, SymbolDefiner>();
+    private XRefProblemReporter reporter;
+    private Map<String, SymbolDefiner> symbolDefinerMap = new LinkedHashMap<String, SymbolDefiner>();
 
     public XRefPhase(XRefProblemReporter reporter) {
-        m_reporter = reporter;
+        this.reporter = reporter;
     }
 
     public XRefPhase(ProblemReporterFactory reporterFactory) {
-        m_reporter = reporterFactory.create(XRefProblemReporter.class);
+        reporter = reporterFactory.create(XRefProblemReporter.class);
     }
 
     public XRefPhase(ProblemEventHandler eventHandler) {
         DefaultProblemReporterFactory reporterFactory = new DefaultProblemReporterFactory(eventHandler);
-        m_reporter = reporterFactory.create(XRefProblemReporter.class);
+        reporter = reporterFactory.create(XRefProblemReporter.class);
     }
 
     public Object getOptions() {
@@ -60,26 +60,26 @@ public class XRefPhase implements Phase {
     }
 
     public Map<String, SymbolDefiner> getSymbolDefinerMap() {
-        return m_symbolDefinerMap;
+        return symbolDefinerMap;
     }
 
     public void setSymbolDefinerMap(Map<String, SymbolDefiner> symbolDefinerMap) {
-        m_symbolDefinerMap = symbolDefinerMap;
+        this.symbolDefinerMap = symbolDefinerMap;
     }
 
     public XRefPhase addSymbolDefiner(String moduleId, SymbolDefiner symbolDefiner) {
-        m_symbolDefinerMap.put(moduleId, symbolDefiner);
+        symbolDefinerMap.put(moduleId, symbolDefiner);
         return this;
     }
 
     public XRefPhase addSymbolDefiner(SymbolDefiner symbolDefiner) {
-        m_symbolDefinerMap.put(symbolDefiner.getModuleId(), symbolDefiner);
+        symbolDefinerMap.put(symbolDefiner.getModuleId(), symbolDefiner);
         return this;
     }
 
     public XRefPhase addSymbolDefiners(SymbolDefiner... symbolDefiners) {
         for (SymbolDefiner symbolDefiner : symbolDefiners) {
-            m_symbolDefinerMap.put(symbolDefiner.getModuleId(), symbolDefiner);
+            symbolDefinerMap.put(symbolDefiner.getModuleId(), symbolDefiner);
         }
         return this;
     }
@@ -92,7 +92,7 @@ public class XRefPhase implements Phase {
         mib.defineMissingStandardOids();
 
         for (SmiModule module : mib.getModules()) {
-            module.resolveImports(m_reporter);
+            module.resolveImports(reporter);
         }
 
         Collection<SmiModule> modules = mib.getModules();
@@ -105,7 +105,7 @@ public class XRefPhase implements Phase {
     }
 
     protected void defineMissingSymbols(SmiMib mib) {
-        for (Map.Entry<String, SymbolDefiner> entry : m_symbolDefinerMap.entrySet()) {
+        for (Map.Entry<String, SymbolDefiner> entry : symbolDefinerMap.entrySet()) {
             SmiModule module = mib.findModule(entry.getKey());
             if (module == null) {
                 module = mib.createModule(new IdToken(null, entry.getKey()));
@@ -117,16 +117,16 @@ public class XRefPhase implements Phase {
     protected void resolveReferences(Collection<SmiModule> modules) {
         for (SmiModule module : modules) {
             for (SmiSymbol symbol : module.getSymbols()) {
-                symbol.resolveReferences(m_reporter);
+                symbol.resolveReferences(reporter);
             }
         }
     }
 
     protected void resolveOids(Collection<SmiModule> modules) {
         for (SmiModule module : modules) {
-            m_log.debug("Resolving oids in module: " + module.getId() + " hash=" + module.getId().hashCode());
+            LOGGER.debug("Resolving oids in module: " + module.getId() + " hash=" + module.getId().hashCode());
             for (SmiOidValue oidValue : module.getOidValues()) {
-                oidValue.resolveOid(m_reporter);
+                oidValue.resolveOid(reporter);
             }
         }
         for (SmiModule module : modules) {
@@ -143,7 +143,7 @@ public class XRefPhase implements Phase {
         for (SmiVariable variable : mib.getVariables()) {
             SmiDefaultValue defaultValue = variable.getDefaultValue();
             if (defaultValue != null) {
-                defaultValue.resolveReferences(m_reporter);
+                defaultValue.resolveReferences(reporter);
             }
         }
     }

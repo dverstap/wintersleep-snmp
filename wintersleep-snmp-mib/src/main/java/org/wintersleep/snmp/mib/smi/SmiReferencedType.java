@@ -29,8 +29,8 @@ import java.util.List;
  */
 public class SmiReferencedType extends SmiType {
 
-    private IdToken m_referencedModuleToken;
-    private List<SmiNamedNumber> m_namedNumbers; // don't know yet whether this is enums or bitfields
+    private IdToken referencedModuleToken;
+    private List<SmiNamedNumber> namedNumbers; // don't know yet whether this is enums or bitfields
 
     public SmiReferencedType(IdToken idToken, SmiModule module) {
         super(idToken, module);
@@ -40,19 +40,19 @@ public class SmiReferencedType extends SmiType {
     }
 
     public IdToken getReferencedModuleToken() {
-        return m_referencedModuleToken;
+        return referencedModuleToken;
     }
 
     public void setReferencedModuleToken(IdToken referencedModuleToken) {
-        m_referencedModuleToken = referencedModuleToken;
+        this.referencedModuleToken = referencedModuleToken;
     }
 
     public List<SmiNamedNumber> getNamedNumbers() {
-        return m_namedNumbers;
+        return namedNumbers;
     }
 
     public void setNamedNumbers(List<SmiNamedNumber> namedNumbers) {
-        m_namedNumbers = namedNumbers;
+        this.namedNumbers = namedNumbers;
     }
 
     @Override

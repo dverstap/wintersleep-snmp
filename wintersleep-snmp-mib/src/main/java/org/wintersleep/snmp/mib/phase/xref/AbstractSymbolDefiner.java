@@ -34,32 +34,32 @@ import java.util.Collections;
 
 public abstract class AbstractSymbolDefiner implements SymbolDefiner {
 
-    protected String m_moduleId;
-    protected SmiModule m_module;
+    protected String moduleId;
+    protected SmiModule module;
 
-    protected boolean m_defineItu;
-    protected boolean m_defineIso;
+    protected boolean defineItu;
+    protected boolean defineIso;
 
     protected AbstractSymbolDefiner(String moduleId) {
-        m_moduleId = moduleId;
+        this.moduleId = moduleId;
     }
 
     public String getModuleId() {
-        return m_moduleId;
+        return moduleId;
     }
 
     public void setModuleId(String moduleId) {
-        m_moduleId = moduleId;
+        this.moduleId = moduleId;
     }
 
     public void defineSymbols(SmiModule module) {
-        m_module = module;
+        this.module = module;
         defineSymbols();
-        m_module = null;
+        this.module = null;
     }
 
     protected void defineSymbols() {
-        if (m_defineIso) {
+        if (defineIso) {
             addIsoOid();
         }
 
@@ -116,7 +116,7 @@ public abstract class AbstractSymbolDefiner implements SymbolDefiner {
 
     public void addOid(String id, StringIntPair... oidComponents) {
         if (isMissing(id)) {
-            SmiOidValue oidValue = new SmiOidValue(idt(id), m_module);
+            SmiOidValue oidValue = new SmiOidValue(idt(id), module);
             OidComponent oc = null;
             for (StringIntPair oidComponent : oidComponents) {
                 IdToken idToken = oidComponent.getString() != null ? idt(oidComponent.getString()) : null;
@@ -124,12 +124,12 @@ public abstract class AbstractSymbolDefiner implements SymbolDefiner {
                 oc = new OidComponent(oc, idToken, intToken);
             }
             oidValue.setLastOidComponent(oc);
-            m_module.addSymbol(oidValue);
+            module.addSymbol(oidValue);
         }
     }
 
     public boolean isMissing(String id) {
-        for (SmiSymbol symbol : m_module.getSymbols()) {
+        for (SmiSymbol symbol : module.getSymbols()) {
             if (id.equals(symbol.getId())) {
                 return false;
             }
@@ -160,8 +160,8 @@ public abstract class AbstractSymbolDefiner implements SymbolDefiner {
 
     public void addMacro(String id) {
         if (isMissing(id)) {
-            SmiMacro macro = new SmiMacro(idt(id), m_module);
-            m_module.addSymbol(macro);
+            SmiMacro macro = new SmiMacro(idt(id), module);
+            module.addSymbol(macro);
         }
     }
 
@@ -187,8 +187,8 @@ public abstract class AbstractSymbolDefiner implements SymbolDefiner {
 
     public void addChoiceType(String id) {
         if (isMissing(id)) {
-            SmiType type = SmiProtocolType.createChoiceType(idt(id), m_module);
-            m_module.addSymbol(type);
+            SmiType type = SmiProtocolType.createChoiceType(idt(id), module);
+            module.addSymbol(type);
         }
     }
 
@@ -202,18 +202,18 @@ public abstract class AbstractSymbolDefiner implements SymbolDefiner {
 
     public void addObjectIdentifierType(String id) {
         if (isMissing(id)) {
-            SmiType type = new SmiType(idt(id), m_module);
+            SmiType type = new SmiType(idt(id), module);
             type.setBaseType(SmiConstants.OBJECT_IDENTIFIER_TYPE);
         }
     }
 
     public void addInteger32Type() {
         if (isMissing("Integer32")) {
-            SmiType type = new SmiType(idt("Integer32"), m_module);
+            SmiType type = new SmiType(idt("Integer32"), module);
             type.setBaseType(SmiConstants.INTEGER_TYPE);
             SmiRange range = new SmiRange(new BigIntegerToken(-2147483648), new BigIntegerToken(2147483647));
             type.setRangeConstraints(Collections.singletonList(range));
-            m_module.addSymbol(type);
+            module.addSymbol(type);
         }
     }
 
@@ -255,44 +255,44 @@ public abstract class AbstractSymbolDefiner implements SymbolDefiner {
 
     public void addApplicationType(String id, int tag) {
         if (isMissing(id)) {
-            SmiType type = new SmiType(idt(id), m_module, tag);
-            m_module.addSymbol(type);
+            SmiType type = new SmiType(idt(id), module, tag);
+            module.addSymbol(type);
         }
     }
 
     public boolean isDefineItu() {
-        return m_defineItu;
+        return defineItu;
     }
 
     public void setDefineItu(boolean defineItu) {
-        m_defineItu = defineItu;
+        this.defineItu = defineItu;
     }
 
     public AbstractSymbolDefiner enableDefineItu() {
-        m_defineItu = true;
+        defineItu = true;
         return this;
     }
 
     public AbstractSymbolDefiner disableDefineItu() {
-        m_defineItu = false;
+        defineItu = false;
         return this;
     }
 
     public boolean isDefineIso() {
-        return m_defineIso;
+        return defineIso;
     }
 
     public void setDefineIso(boolean defineIso) {
-        m_defineIso = defineIso;
+        this.defineIso = defineIso;
     }
 
     public AbstractSymbolDefiner enableDefineIso() {
-        m_defineIso = true;
+        defineIso = true;
         return this;
     }
 
     public AbstractSymbolDefiner disableDefineIso() {
-        m_defineIso = false;
+        defineIso = false;
         return this;
     }
 

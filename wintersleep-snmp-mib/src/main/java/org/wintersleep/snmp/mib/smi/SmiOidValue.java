@@ -21,9 +21,9 @@ import org.wintersleep.snmp.util.token.IdToken;
 
 public class SmiOidValue extends SmiValue {
 
-    private OidComponent m_lastOidComponent;
+    private OidComponent lastOidComponent;
 
-    private SmiOidNode m_node;
+    private SmiOidNode node;
 
     public SmiOidValue(IdToken idToken, SmiModule module) {
         super(idToken, module);
@@ -31,44 +31,44 @@ public class SmiOidValue extends SmiValue {
 
     public SmiOidValue(IdToken idToken, SmiModule internalModule, SmiOidNode node) {
         super(idToken, internalModule);
-        m_node = node;
+        this.node = node;
     }
 
     public OidComponent getLastOidComponent() {
-        return m_lastOidComponent;
+        return lastOidComponent;
     }
 
     public void setLastOidComponent(OidComponent lastOidComponent) {
-        m_lastOidComponent = lastOidComponent;
+        this.lastOidComponent = lastOidComponent;
     }
 
     public int[] getOid() {
-        return m_node.getOid();
+        return node.getOid();
     }
 
     /**
      * @return null for the root node; the OID in decimal dotted notation for all other nodes
      */
     public String getOidStr() {
-        if (m_node == null) {
+        if (node == null) {
             throw new NullPointerException("OidNode was not resolved for " + getIdToken());
         }
-        return m_node.getOidStr();
+        return node.getOidStr();
     }
 
     public SmiOidNode resolveOid(XRefProblemReporter reporter) {
-        if (m_node == null) {
-            m_node = m_lastOidComponent.resolveNode(getModule(), reporter);
-            if (m_node != null) {
-                m_node.getValues().add(this);
+        if (node == null) {
+            node = lastOidComponent.resolveNode(getModule(), reporter);
+            if (node != null) {
+                node.getValues().add(this);
             }
             // assumption is that another error has already been reported for this
         }
-        return m_node;
+        return node;
     }
 
     public SmiOidNode getNode() {
-        return m_node;
+        return node;
     }
 
     public String getCodeId() {

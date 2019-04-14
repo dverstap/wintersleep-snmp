@@ -32,11 +32,11 @@ import org.wintersleep.snmp.util.problem.ProblemReporterFactory;
 
 public class SmiDefaultParser implements SmiParser {
 
-    protected boolean m_failOnError = false;
-    protected ProblemReporterFactory m_problemReporterFactory;
-    protected FileParserPhase m_fileParserPhase;
-    protected XRefPhase m_xRefPhase;
-    protected ErrorCheckPhase m_errorCheckPhase;
+    protected boolean failOnError = false;
+    protected ProblemReporterFactory problemReporterFactory;
+    protected FileParserPhase fileParserPhase;
+    protected XRefPhase xRefPhase;
+    protected ErrorCheckPhase errorCheckPhase;
     protected SmiOptions options = new SmiOptions();
 
     public SmiDefaultParser() {
@@ -48,7 +48,7 @@ public class SmiDefaultParser implements SmiParser {
     }
 
     public SmiDefaultParser(ProblemReporterFactory problemReporterFactory) {
-        m_problemReporterFactory = problemReporterFactory;
+        this.problemReporterFactory = problemReporterFactory;
     }
 
     public SmiMib parse() throws SmiException {
@@ -59,7 +59,7 @@ public class SmiDefaultParser implements SmiParser {
             phase.process(mib);
         }
 
-        if (m_failOnError && getProblemReporterFactory().getProblemEventHandler().isNotOk()) {
+        if (failOnError && getProblemReporterFactory().getProblemEventHandler().isNotOk()) {
             throw new SmiException();
         }
         return mib;
@@ -86,55 +86,55 @@ public class SmiDefaultParser implements SmiParser {
     }
 
     public ProblemEventHandler getProblemEventHandler() {
-        return m_problemReporterFactory.getProblemEventHandler();
+        return problemReporterFactory.getProblemEventHandler();
     }
     
     public ProblemReporterFactory getProblemReporterFactory() {
-        return m_problemReporterFactory;
+        return problemReporterFactory;
     }
 
     public void setProblemReporterFactory(ProblemReporterFactory problemReporterFactory) {
-        m_problemReporterFactory = problemReporterFactory;
+        this.problemReporterFactory = problemReporterFactory;
     }
 
     public FileParserPhase getFileParserPhase() {
-        if (m_fileParserPhase == null) {
-            m_fileParserPhase = createFileParserPhase();
+        if (fileParserPhase == null) {
+            fileParserPhase = createFileParserPhase();
         }
-        return m_fileParserPhase;
+        return fileParserPhase;
     }
 
     public void setFileParserPhase(FileParserPhase fileParserPhase) {
-        m_fileParserPhase = fileParserPhase;
+        this.fileParserPhase = fileParserPhase;
     }
 
     public XRefPhase getXRefPhase() {
-        if (m_xRefPhase == null) {
-            m_xRefPhase = createXRefPhase();
+        if (xRefPhase == null) {
+            xRefPhase = createXRefPhase();
         }
-        return m_xRefPhase;
+        return xRefPhase;
     }
 
     public void setXRefPhase(XRefPhase xrefPhase) {
-        m_xRefPhase = xrefPhase;
+        xRefPhase = xrefPhase;
     }
 
     public ErrorCheckPhase getErrorCheckPhase() {
-        if (m_errorCheckPhase == null) {
-            m_errorCheckPhase = createErrorCheckPhase();
+        if (errorCheckPhase == null) {
+            errorCheckPhase = createErrorCheckPhase();
         }
-        return m_errorCheckPhase;
+        return errorCheckPhase;
     }
 
     public void setErrorCheckPhase(ErrorCheckPhase errorCheckPhase) {
-        m_errorCheckPhase = errorCheckPhase;
+        this.errorCheckPhase = errorCheckPhase;
     }
 
     public boolean isFailOnError() {
-        return m_failOnError;
+        return failOnError;
     }
 
     public void setFailOnError(boolean failOnError) {
-        m_failOnError = failOnError;
+        this.failOnError = failOnError;
     }
 }

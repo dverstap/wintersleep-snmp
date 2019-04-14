@@ -17,13 +17,13 @@ package org.wintersleep.snmp.mib.smi;
 
 public class SmiOptions {
 
-    private boolean m_convertV1ImportsToV2;
+    private boolean convertV1ImportsToV2;
 
     public boolean isConvertV1ImportsToV2() {
-        return m_convertV1ImportsToV2;
+        return convertV1ImportsToV2;
     }
 
     public void setConvertV1ImportsToV2(boolean convertV1ImportsToV2) {
-        m_convertV1ImportsToV2 = convertV1ImportsToV2;
+        this.convertV1ImportsToV2 = convertV1ImportsToV2;
     }
 }

@@ -19,18 +19,18 @@ import org.wintersleep.snmp.util.problem.annotations.ProblemSeverity;
 
 public abstract class AbstractProblemEventHandler implements ProblemEventHandler {
 
-    private int[] m_severityCounters = new int[ProblemSeverity.values().length];
-    private int m_totalCounter;
+    private int[] severityCounters = new int[ProblemSeverity.values().length];
+    private int totalCounter;
 
     public void handle(ProblemEvent event) {
-        m_severityCounters[event.getSeverity().ordinal()]++;
-        m_totalCounter++;
+        severityCounters[event.getSeverity().ordinal()]++;
+        totalCounter++;
     }
 
     public boolean isOk() {
-        for (int i = 0; i < m_severityCounters.length; i++) {
+        for (int i = 0; i < severityCounters.length; i++) {
             if (i >= ProblemSeverity.ERROR.ordinal()) {
-                int severityCounter = m_severityCounters[i];
+                int severityCounter = severityCounters[i];
                 if (severityCounter > 0) {
                     return false;
                 }
@@ -44,10 +44,10 @@ public abstract class AbstractProblemEventHandler implements ProblemEventHandler
     }
 
     public int getSeverityCount(ProblemSeverity severity) {
-        return m_severityCounters[severity.ordinal()];
+        return severityCounters[severity.ordinal()];
     }
 
     public int getTotalCount() {
-        return m_totalCounter;
+        return totalCounter;
     }
 }

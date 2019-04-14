@@ -30,149 +30,149 @@ import java.util.List;
 */
 public class SmiDefaultValue {
 
-    private static final Logger m_log = LoggerFactory.getLogger(SmiDefaultValue.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SmiDefaultValue.class);
 
-    private final SmiModule m_module;
-    private final BigIntegerToken m_bigIntegerToken;
-    private final List<IdToken> m_bitsIdTokenList;
-    private final OidComponent m_lastOidComponent;
-    private final BinaryStringToken m_binaryStringToken;
-    private final HexStringToken m_hexStringToken;
-    private final QuotedStringToken m_quotedStringToken;
-    private final ScopedId m_scopedId;
-    private final boolean m_isNullValue;
+    private final SmiModule module;
+    private final BigIntegerToken bigIntegerToken;
+    private final List<IdToken> bitsIdTokenList;
+    private final OidComponent lastOidComponent;
+    private final BinaryStringToken binaryStringToken;
+    private final HexStringToken hexStringToken;
+    private final QuotedStringToken quotedStringToken;
+    private final ScopedId scopedId;
+    private final boolean isNullValue;
 
-    SmiVariable m_variable;
+    SmiVariable variable;
 
-    private ArrayList<SmiNamedNumber> m_bitsValue;
-    private SmiNamedNumber m_enumValue;
-    private SmiOidValue m_oidValue;
-    private SmiOidNode m_oidNode;
-    private SmiSymbol m_symbolValue;
+    private ArrayList<SmiNamedNumber> bitsValue;
+    private SmiNamedNumber enumValue;
+    private SmiOidValue oidValue;
+    private SmiOidNode oidNode;
+    private SmiSymbol symbolValue;
 
-    public SmiDefaultValue(SmiModule module, BigIntegerToken bigIntegerToken, List<IdToken> bitsIdTokenList, OidComponent lastOidComponent, BinaryStringToken binaryStringToken, HexStringToken hexStringToken, QuotedStringToken quotedStringToken, ScopedId scopedId, boolean nullValue) {
-        m_module = module;
-        m_bigIntegerToken = bigIntegerToken;
-        m_bitsIdTokenList = bitsIdTokenList;
-        m_lastOidComponent = lastOidComponent;
-        m_binaryStringToken = binaryStringToken;
-        m_hexStringToken = hexStringToken;
-        m_quotedStringToken = quotedStringToken;
-        m_scopedId = scopedId;
-        m_isNullValue = nullValue;
+    public SmiDefaultValue(SmiModule module, BigIntegerToken bigIntegerToken, List<IdToken> bitsIdTokenList, OidComponent lastOidComponent, BinaryStringToken binaryStringToken, HexStringToken hexStringToken, QuotedStringToken quotedStringToken, ScopedId scopedId, boolean isNullValue) {
+        this.module = module;
+        this.bigIntegerToken = bigIntegerToken;
+        this.bitsIdTokenList = bitsIdTokenList;
+        this.lastOidComponent = lastOidComponent;
+        this.binaryStringToken = binaryStringToken;
+        this.hexStringToken = hexStringToken;
+        this.quotedStringToken = quotedStringToken;
+        this.scopedId = scopedId;
+        this.isNullValue = isNullValue;
     }
 
     public SmiVariable getVariable() {
-        return m_variable;
+        return variable;
     }
 
     public BigInteger getIntegerValue() {
-        if (m_bigIntegerToken != null) {
-            return m_bigIntegerToken.getValue();
+        if (bigIntegerToken != null) {
+            return bigIntegerToken.getValue();
         }
         return null;
     }
 
     public List<SmiNamedNumber> getBitsValue() {
-        return m_bitsValue;
+        return bitsValue;
     }
 
     public SmiNamedNumber getEnumValue() {
-        return m_enumValue;
+        return enumValue;
     }
 
     public SmiOidValue getOidValue() {
-        return m_oidValue;
+        return oidValue;
     }
 
     public SmiOidNode getOidNode() {
-        if (m_oidNode != null) {
-            return m_oidNode;
-        } else if (m_oidValue != null) {
-            return m_oidValue.getNode();
+        if (oidNode != null) {
+            return oidNode;
+        } else if (oidValue != null) {
+            return oidValue.getNode();
         }
         return null;
     }
 
     public String getCStringValue() {
-        if (m_quotedStringToken != null) {
-            return m_quotedStringToken.getValue();
+        if (quotedStringToken != null) {
+            return quotedStringToken.getValue();
         }
         return null;
     }
 
     public String getBinaryStringValue() {
-        if (m_binaryStringToken != null) {
-            return m_binaryStringToken.getValue();
+        if (binaryStringToken != null) {
+            return binaryStringToken.getValue();
         }
         return null;
     }
 
     public String getHexStringValue() {
-        if (m_hexStringToken != null) {
-            return m_hexStringToken.getValue();
+        if (hexStringToken != null) {
+            return hexStringToken.getValue();
         }
         return null;
     }
 
     public SmiSymbol getSymbolValue() {
-        return m_symbolValue;
+        return symbolValue;
     }
 
     public BigIntegerToken getBigIntegerToken() {
-        return m_bigIntegerToken;
+        return bigIntegerToken;
     }
 
     public List<IdToken> getBitsIdTokenList() {
-        return m_bitsIdTokenList;
+        return bitsIdTokenList;
     }
 
     public OidComponent getLastOidComponents() {
-        return m_lastOidComponent;
+        return lastOidComponent;
     }
 
     public BinaryStringToken getBinaryStringToken() {
-        return m_binaryStringToken;
+        return binaryStringToken;
     }
 
     public HexStringToken getHexStringToken() {
-        return m_hexStringToken;
+        return hexStringToken;
     }
 
     public QuotedStringToken getQuotedStringToken() {
-        return m_quotedStringToken;
+        return quotedStringToken;
     }
 
     public ScopedId getScopedId() {
-        return m_scopedId;
+        return scopedId;
     }
 
     public boolean isNullValue() {
-        return m_isNullValue;
+        return isNullValue;
     }
 
     public void resolveReferences(XRefProblemReporter reporter) {
-        if (m_bitsIdTokenList != null) {
+        if (bitsIdTokenList != null) {
             resolveBits(reporter);
-        } else if (m_lastOidComponent != null) {
-            m_oidNode = resolveOids(reporter);
-        } else if (m_scopedId != null) {
-            if (m_scopedId.getModuleToken() != null) {
-                m_log.debug("Not yet implemented: " + m_scopedId.getModuleToken());
+        } else if (lastOidComponent != null) {
+            oidNode = resolveOids(reporter);
+        } else if (scopedId != null) {
+            if (scopedId.getModuleToken() != null) {
+                LOGGER.debug("Not yet implemented: " + scopedId.getModuleToken());
             } else {
-                if (m_variable.getEnumValues() != null) {
-                    m_enumValue = m_variable.resolveEnumConstant(m_scopedId.getSymbolToken(), reporter);
+                if (variable.getEnumValues() != null) {
+                    enumValue = variable.resolveEnumConstant(scopedId.getSymbolToken(), reporter);
                 } else {
-                    SmiSymbol symbol = m_variable.getModule().resolveReference(m_scopedId.getSymbolToken(), reporter);
+                    SmiSymbol symbol = variable.getModule().resolveReference(scopedId.getSymbolToken(), reporter);
                     if (symbol != null) {
-                        if (symbol instanceof SmiOidValue && m_variable.getPrimitiveType() == SmiPrimitiveType.OBJECT_IDENTIFIER) {
-                            m_oidValue = (SmiOidValue) symbol;
-                            m_oidNode = m_oidValue.getNode();
+                        if (symbol instanceof SmiOidValue && variable.getPrimitiveType() == SmiPrimitiveType.OBJECT_IDENTIFIER) {
+                            oidValue = (SmiOidValue) symbol;
+                            oidNode = oidValue.getNode();
                         } else {
                             // some proprietary mibs define the default value for an integer as a reference
                             // to some other integer variable; 
-                            m_symbolValue = symbol;
-                            reporter.reportInvalidDefaultValue(m_scopedId.getSymbolToken());
+                            symbolValue = symbol;
+                            reporter.reportInvalidDefaultValue(scopedId.getSymbolToken());
                         }
                     }
                 }
@@ -183,18 +183,18 @@ public class SmiDefaultValue {
     private SmiOidNode resolveOids(XRefProblemReporter reporter) {
         // TODO
         // reporter.reportOidDefaultValueMustBeSingleIdentifier(t);
-        return m_lastOidComponent.resolveNode(m_module, reporter);
+        return lastOidComponent.resolveNode(module, reporter);
     }
 
     private void resolveBits(XRefProblemReporter reporter) {
-        if (m_variable.getBitFields() != null) {
-            m_bitsValue = new ArrayList<SmiNamedNumber>();
-            for (IdToken idToken : m_bitsIdTokenList) {
-                SmiNamedNumber nn = m_variable.resolveBitField(idToken, reporter);
-                m_bitsValue.add(nn);
+        if (variable.getBitFields() != null) {
+            bitsValue = new ArrayList<SmiNamedNumber>();
+            for (IdToken idToken : bitsIdTokenList) {
+                SmiNamedNumber nn = variable.resolveBitField(idToken, reporter);
+                bitsValue.add(nn);
             }
         } else {
-            reporter.reportBitsValueWithoutBitsType(m_bitsIdTokenList.get(0).getLocation());
+            reporter.reportBitsValueWithoutBitsType(bitsIdTokenList.get(0).getLocation());
         }
     }
 }

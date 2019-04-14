@@ -59,64 +59,64 @@ public class SmiImports {
     };
 
 
-    private final SmiModule m_importerModule;
-    private final IdToken m_moduleToken;
-    private final List<IdToken> m_symbolTokens;
+    private final SmiModule importerModule;
+    private final IdToken moduleToken;
+    private final List<IdToken> symbolTokens;
 
-    private SmiModule m_module;
-    private LinkedHashMap<String, SmiSymbol> m_symbolMap = new LinkedHashMap<String, SmiSymbol>();
+    private SmiModule module;
+    private LinkedHashMap<String, SmiSymbol> symbolMap = new LinkedHashMap<String, SmiSymbol>();
 
     public SmiImports(SmiModule importerModule, IdToken moduleToken, List<IdToken> symbolTokens) {
         assert (importerModule != null);
         assert (moduleToken != null);
         assert (symbolTokens != null);
 
-        m_importerModule = importerModule;
+        this.importerModule = importerModule;
 
-        m_moduleToken = moduleToken;
-        m_symbolTokens = Collections.unmodifiableList(symbolTokens);
+        this.moduleToken = moduleToken;
+        this.symbolTokens = Collections.unmodifiableList(symbolTokens);
     }
 
     public SmiModule getModule() {
-        return m_module;
+        return module;
     }
 
     public Collection<SmiSymbol> getSymbols() {
-        return m_symbolMap.values();
+        return symbolMap.values();
     }
 
     public IdToken getModuleToken() {
-        return m_moduleToken;
+        return moduleToken;
     }
 
     public List<IdToken> getSymbolTokens() {
-        return m_symbolTokens;
+        return symbolTokens;
     }
 
     public Location getLocation() {
-        return m_moduleToken.getLocation();
+        return moduleToken.getLocation();
     }
 
     public SmiSymbol find(String id) {
-        return m_symbolMap.get(id);
+        return symbolMap.get(id);
     }
 
     public void resolveImports(XRefProblemReporter reporter) {
-        m_module = m_importerModule.getMib().findModule(m_moduleToken.getId());
-        if (m_module != null) {
+        module = importerModule.getMib().findModule(moduleToken.getId());
+        if (module != null) {
             for (IdToken idToken : getSymbolTokens()) {
                 SmiSymbol symbol = getModule().findSymbol(idToken.getId());
                 if (symbol != null) {
-                    m_symbolMap.put(idToken.getId(), symbol);
+                    symbolMap.put(idToken.getId(), symbol);
                 } else {
-                    reporter.reportCannotFindImportedSymbol(idToken, m_moduleToken);
+                    reporter.reportCannotFindImportedSymbol(idToken, moduleToken);
                 }
             }
         } else {
-            if (m_importerModule.getMib().getOptions().isConvertV1ImportsToV2()) {
+            if (importerModule.getMib().getOptions().isConvertV1ImportsToV2()) {
                 resolveV1Imports(reporter);
             } else {
-                reporter.reportCannotFindModule(m_moduleToken);
+                reporter.reportCannotFindModule(moduleToken);
             }
         }
     }
@@ -125,20 +125,20 @@ public class SmiImports {
         for (IdToken idToken : getSymbolTokens()) {
             Pair<String, String> v2Definition = findV2Definition(idToken.getId());
             if (v2Definition != null) {
-                // notice we are not setting the m_module in this case!
-                SmiModule module = m_importerModule.getMib().findModule(v2Definition.getFirst());
+                // notice we are not setting the module in this case!
+                SmiModule module = importerModule.getMib().findModule(v2Definition.getFirst());
                 if (module != null) {
                     SmiSymbol symbol = module.findSymbol(v2Definition.getSecond());
                     if (symbol != null) {
-                        m_symbolMap.put(idToken.getId(), symbol);
+                        symbolMap.put(idToken.getId(), symbol);
                     } else {
-                        reporter.reportCannotFindImportedSymbol(idToken, m_moduleToken);
+                        reporter.reportCannotFindImportedSymbol(idToken, moduleToken);
                     }
                 } else {
-                    reporter.reportCannotFindModule(m_moduleToken);
+                    reporter.reportCannotFindModule(moduleToken);
                 }
             } else {
-                reporter.reportCannotFindImportedSymbol(idToken, m_moduleToken);
+                reporter.reportCannotFindImportedSymbol(idToken, moduleToken);
             }
         }
     }
@@ -147,7 +147,7 @@ public class SmiImports {
         for (int i = 0; i < V1_V2_MAP.length; i += 4) {
             String oldMib = V1_V2_MAP[i];
             String oldId = V1_V2_MAP[i + 1];
-            if (oldMib.equals(m_moduleToken.getId())
+            if (oldMib.equals(moduleToken.getId())
                     && oldId.equals(id)) {
                 return new Pair<String, String>(V1_V2_MAP[i + 2], V1_V2_MAP[i + 3]);
             }

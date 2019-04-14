@@ -16,19 +16,19 @@
 package org.wintersleep.snmp.mib.smi;
 
 public class SmiModuleRevision {
-    private final String m_revision;
-    private final String m_description;
+    private final String revision;
+    private final String description;
 
     public SmiModuleRevision(String revision, String description) {
-        m_revision = revision;
-        m_description = description;
+        this.revision = revision;
+        this.description = description;
     }
 
     public String getDescription() {
-        return m_description;
+        return description;
     }
 
     public String getRevision() {
-        return m_revision;
+        return revision;
     }
 }

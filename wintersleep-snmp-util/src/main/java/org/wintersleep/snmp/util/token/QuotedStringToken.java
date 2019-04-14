@@ -19,11 +19,11 @@ import org.wintersleep.snmp.util.location.Location;
 */
 public class QuotedStringToken extends StringToken {
 
-    private char m_quoteChar;
+    private char quoteChar;
 
     public QuotedStringToken(Location location, String value, char quoteChar) {
         super(location, strip(value, quoteChar));
-        m_quoteChar = quoteChar;
+        this.quoteChar = quoteChar;
     }
 
     private static String strip(String str, char quoteChar) {
@@ -35,11 +35,11 @@ public class QuotedStringToken extends StringToken {
 
 
     public char getQuoteChar() {
-        return m_quoteChar;
+        return quoteChar;
     }
 
     @Override
     public String toString() {
-        return m_quoteChar + m_value + m_quoteChar;
+        return quoteChar + value + quoteChar;
     }
 }

@@ -19,22 +19,22 @@ import org.wintersleep.snmp.util.location.Location;
 
 public class IntegerToken extends AbstractToken {
 
-    private int m_value;
+    private int value;
 
     public IntegerToken(Location location, int value) {
         super(location);
-        m_value = value;
+        this.value = value;
     }
 
     public int getValue() {
-        return m_value;
+        return value;
     }
 
     public Integer getObject() {
-        return m_value;
+        return value;
     }
 
     public String toString() {
-        return getLocation().toString() + Location.SEPARATOR + m_value;
+        return getLocation().toString() + Location.SEPARATOR + value;
     }
 }

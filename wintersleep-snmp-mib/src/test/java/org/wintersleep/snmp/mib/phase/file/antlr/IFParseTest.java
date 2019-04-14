@@ -68,9 +68,9 @@ public class IFParseTest extends TestCase {
                 assertNotNull(a);
                 assertEquals(1741, a.getLocation().getLine());
 
-                if (m_log.isDebugEnabled()) {
+                if (LOGGER.isDebugEnabled()) {
                     for (ASNAssignment ta : module.getAssignments()) {
-                        m_log.debug(ta.getModule().getSymbolToken() + " " + ta.getSymbolToken());
+                        LOGGER.debug(ta.getModule().getSymbolToken() + " " + ta.getSymbolToken());
                     }
                 }
                 assertEquals(99, module.getAssignments().size());

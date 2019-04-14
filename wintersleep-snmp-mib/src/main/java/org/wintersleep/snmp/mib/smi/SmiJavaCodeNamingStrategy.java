@@ -21,11 +21,11 @@ public class SmiJavaCodeNamingStrategy implements SmiCodeNamingStrategy {
 
 	public static final String ATTR_OIDS = "AttrOids";
 	
-	private String packagePrefix_;
+	private String packagePrefix;
 
 	public SmiJavaCodeNamingStrategy(String packagePrefix) {
 		super();
-		packagePrefix_ = packagePrefix;
+		this.packagePrefix = packagePrefix;
 	}
 
 	public String getModuleId(SmiModule module) {
@@ -38,7 +38,7 @@ public class SmiJavaCodeNamingStrategy implements SmiCodeNamingStrategy {
 	}
 
 	public String getFullModuleId(SmiModule module) {
-		return packagePrefix_ + "." + getModuleId(module).toLowerCase();
+		return packagePrefix + "." + getModuleId(module).toLowerCase();
 	}
 
 	public String getCodeConstantId(SmiVariable variable) {

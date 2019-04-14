@@ -23,34 +23,34 @@ import org.wintersleep.snmp.mib.phase.xref.XRefProblemReporter;
  */
 public class SmiIndex {
 
-    private final ScopedId m_scopedId;
-    private final SmiRow m_row;
-    private final boolean m_implied;
+    private final ScopedId scopedId;
+    private final SmiRow row;
+    private final boolean implied;
 	
 	public SmiIndex(SmiRow row, ScopedId scopedId, boolean implied) {
-        m_row = row;
-        m_scopedId = scopedId;
-        m_implied = implied;
+        this.row = row;
+        this.scopedId = scopedId;
+        this.implied = implied;
 	}
 
 	public boolean isImplied() {
-		return m_implied;
+		return implied;
 	}
 
 	public SmiVariable getColumn() {
-		return (SmiVariable) m_scopedId.getSymbol();
+		return (SmiVariable) scopedId.getSymbol();
 	}
 
 	public SmiRow getRow() {
-		return m_row;
+		return row;
 	}
 
     public boolean isColumnFromOtherTable() {
-        return m_row.getTable() != getColumn().getTable();
+        return row.getTable() != getColumn().getTable();
     }
 
     public void resolveReferences(XRefProblemReporter reporter) {
-        m_scopedId.resolveReferences(reporter);
+        scopedId.resolveReferences(reporter);
     }
 
 }

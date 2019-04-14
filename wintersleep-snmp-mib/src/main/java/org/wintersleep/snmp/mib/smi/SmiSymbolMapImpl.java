@@ -27,13 +27,13 @@ import java.util.Map;
 */
 class SmiSymbolMapImpl<T extends SmiSymbol> extends GenMultiMap<String, T> implements SmiSymbolMap<T> {
 
-    private final Class<T> m_symbolClass;
-    private final Map<String, SmiModule> m_moduleMap;
+    private final Class<T> symbolClass;
+    private final Map<String, SmiModule> moduleMap;
 
     public SmiSymbolMapImpl(Class<T> symbolClass, Map<String, SmiModule> moduleMap) {
         super(MultiValueMap.decorate(new HashMap(), ArrayList.class));
-        m_symbolClass = symbolClass;
-        m_moduleMap = moduleMap;
+        this.symbolClass = symbolClass;
+        this.moduleMap = moduleMap;
     }
 
     public T find(String symbolId) throws IllegalArgumentException {
@@ -42,7 +42,7 @@ class SmiSymbolMapImpl<T extends SmiSymbol> extends GenMultiMap<String, T> imple
 
     public T find(String moduleId, String symbolId) throws IllegalArgumentException {
         if (moduleId != null) {
-            SmiModule module = m_moduleMap.get(moduleId);
+            SmiModule module = moduleMap.get(moduleId);
             if (module == null) {
                 throw new IllegalArgumentException("Module " + moduleId + " could not be found.");
             }
@@ -50,10 +50,10 @@ class SmiSymbolMapImpl<T extends SmiSymbol> extends GenMultiMap<String, T> imple
             if (symbol == null) {
                 return null;
             }
-            if (m_symbolClass.isAssignableFrom(symbol.getClass())) {
-                return m_symbolClass.cast(symbol);
+            if (symbolClass.isAssignableFrom(symbol.getClass())) {
+                return symbolClass.cast(symbol);
             } else {
-                //throw new IllegalArgumentException(symbol.getClass().getSimpleName() + " with id " + symbolId + " is not an instance of " + m_symbolClass);
+                //throw new IllegalArgumentException(symbol.getClass().getSimpleName() + " with id " + symbolId + " is not an instance of " + symbolClass);
                 return null; // when the lookup is through the global map, we also return null for an object that is of the wrong type.
             }
         } else {
@@ -67,12 +67,12 @@ class SmiSymbolMapImpl<T extends SmiSymbol> extends GenMultiMap<String, T> imple
 
     @SuppressWarnings("unchecked")
     public Collection<T> getAll() {
-        return m_impl.values();
+        return impl.values();
     }
 
     @SuppressWarnings("unchecked")
     public Iterator<T> iterator() {
-        return m_impl.values().iterator();
+        return impl.values().iterator();
     }
 
 }

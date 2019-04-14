@@ -21,35 +21,35 @@ import org.wintersleep.snmp.mib.phase.xref.XRefProblemReporter;
 
 public class SmiField {
 
-    private SmiType m_parentType;
-    private IdToken m_columnIdToken;
-    private SmiVariable m_column;
-    private SmiType m_type;
+    private SmiType parentType;
+    private IdToken columnIdToken;
+    private SmiVariable column;
+    private SmiType type;
 
     public SmiField(SmiType parentType, IdToken columnIdToken, SmiType type) {
-        m_parentType = parentType;
-        m_columnIdToken = columnIdToken;
-        m_type = type;
+        this.parentType = parentType;
+        this.columnIdToken = columnIdToken;
+        this.type = type;
     }
 
     public SmiType getParentType() {
-        return m_parentType;
+        return parentType;
     }
 
     public IdToken getColumnIdToken() {
-        return m_columnIdToken;
+        return columnIdToken;
     }
 
     public SmiVariable getColumn() {
-        return m_column;
+        return column;
     }
 
     public SmiType getType() {
-        return m_type;
+        return type;
     }
 
     public void resolveReferences(XRefProblemReporter reporter) {
-        m_column = m_parentType.getModule().resolveReference(m_columnIdToken, SmiVariable.class, reporter);
+        column = parentType.getModule().resolveReference(columnIdToken, SmiVariable.class, reporter);
     }
 
     // TODO resolve type?

@@ -21,91 +21,91 @@ import org.wintersleep.snmp.util.token.IdToken;
 
 public class SmiObjectType extends SmiOidMacro {
 
-    protected SmiType m_type;
-    private IdToken m_accessToken;
-    private IdToken m_maxAccessToken;
-    private String m_description;
+    protected SmiType type;
+    private IdToken accessToken;
+    private IdToken maxAccessToken;
+    private String description;
 
-    private ObjectTypeAccessV1 m_accessV1;
-    private ObjectTypeAccessV2 m_accessV2;
-    private AccessAll m_accessAll;
+    private ObjectTypeAccessV1 accessV1;
+    private ObjectTypeAccessV2 accessV2;
+    private AccessAll accessAll;
 
     public SmiObjectType(IdToken idToken, SmiModule module) {
         super(idToken, module);
     }
 
     public SmiType getType() {
-        return m_type;
+        return type;
     }
 
     public void setType(SmiType type) {
-        m_type = type;
+        this.type = type;
     }
 
     public void resolveReferences(XRefProblemReporter reporter) {
-        m_type = m_type.resolveThis(reporter, null);
+        type = type.resolveThis(reporter, null);
 
-        if (m_accessToken != null) {
-            m_accessV1 = ObjectTypeAccessV1.find(m_accessToken.getId(), false);
-            if (m_accessV1 != null) {
-                m_accessAll = m_accessV1.getAccessAll();
+        if (accessToken != null) {
+            accessV1 = ObjectTypeAccessV1.find(accessToken.getId(), false);
+            if (accessV1 != null) {
+                accessAll = accessV1.getAccessAll();
             } else {
-                reporter.reportInvalidAccess(m_accessToken);
-                m_accessAll = AccessAll.find(m_accessToken.getId(), false);
+                reporter.reportInvalidAccess(accessToken);
+                accessAll = AccessAll.find(accessToken.getId(), false);
             }
         } else {
-            m_accessV2 = ObjectTypeAccessV2.find(m_maxAccessToken.getId(), false);
-            if (m_accessV2 != null) {
-                m_accessAll = m_accessV2.getAccessAll();
+            accessV2 = ObjectTypeAccessV2.find(maxAccessToken.getId(), false);
+            if (accessV2 != null) {
+                accessAll = accessV2.getAccessAll();
             } else {
-                reporter.reportInvalidMaxAccess(m_maxAccessToken);
-                m_accessAll = AccessAll.find(m_maxAccessToken.getId(), false);
+                reporter.reportInvalidMaxAccess(maxAccessToken);
+                accessAll = AccessAll.find(maxAccessToken.getId(), false);
             }
         }
     }
 
     public String getDescription() {
-        return m_description;
+        return description;
     }
 
     public void setDescription(String description) {
-        m_description = description;
+        this.description = description;
     }
 
     public void setStatus(StatusAll status) {
-        m_status = status;
+        this.status = status;
     }
 
     public IdToken getAccessToken() {
-        return m_accessToken;
+        return accessToken;
     }
 
     public void setAccessToken(IdToken accessToken) {
-        m_accessToken = accessToken;
+        this.accessToken = accessToken;
     }
 
     public IdToken getMaxAccessToken() {
-        return m_maxAccessToken;
+        return maxAccessToken;
     }
 
     public void setMaxAccessToken(IdToken maxAccessToken) {
-        m_maxAccessToken = maxAccessToken;
+        this.maxAccessToken = maxAccessToken;
     }
 
     public ObjectTypeAccessV1 getAccessV1() {
-        return m_accessV1;
+        return accessV1;
     }
 
     public ObjectTypeAccessV2 getAccessV2() {
-        return m_accessV2;
+        return accessV2;
     }
 
     public ObjectTypeAccessV2 getMaxAccess() {
-        return m_accessV2;
+        return accessV2;
     }
 
     public AccessAll getAccessAll() {
-        return m_accessAll;
+        return accessAll;
     }
 
 }

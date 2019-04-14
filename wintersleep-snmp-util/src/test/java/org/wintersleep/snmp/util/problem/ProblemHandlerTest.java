@@ -22,37 +22,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProblemHandlerTest extends TestCase {
-    private TestProblemEventHandler m_teh;
-    private ExampleProblemReporter m_eh;
+    private TestProblemEventHandler teh;
+    private ExampleProblemReporter pr;
 
     protected void setUp() throws Exception {
-        m_teh = new TestProblemEventHandler();
+        teh = new TestProblemEventHandler();
 
-        ProblemReporterFactory factory = new DefaultProblemReporterFactory(this.getClass().getClassLoader(), m_teh);
-        m_eh = factory.create(
+        ProblemReporterFactory factory = new DefaultProblemReporterFactory(this.getClass().getClassLoader(), teh);
+        pr = factory.create(
                 ExampleProblemReporter.class);
     }
 
     public void testSimpleMessage() {
-        m_eh.simpleMessage();
-        assertNotNull(m_teh.getLastProblemEvent());
-        assertEquals("Simple message", m_teh.getLastProblemEvent().getLocalizedMessage());
-        assertNull(m_teh.getLastProblemEvent().getLocation());
+        pr.simpleMessage();
+        assertNotNull(teh.getLastProblemEvent());
+        assertEquals("Simple message", teh.getLastProblemEvent().getLocalizedMessage());
+        assertNull(teh.getLastProblemEvent().getLocation());
     }
 
     public void testListSize() {
         List<String> l = new ArrayList<String>();
         l.add("bla");
-        m_eh.reportListSize(l);
-        assertEquals("List size = 1", m_teh.getLastProblemEvent().getLocalizedMessage());
-        assertNull(m_teh.getLastProblemEvent().getLocation());
+        pr.reportListSize(l);
+        assertEquals("List size = 1", teh.getLastProblemEvent().getLocalizedMessage());
+        assertNull(teh.getLastProblemEvent().getLocation());
     }
 
     public void testLocation() {
         Location location = new Location("/tmp/test", 77, 20);
-        m_eh.simpleLocation(location);
+        pr.simpleLocation(location);
 
-        assertEquals("Simple location message", m_teh.getLastProblemEvent().getLocalizedMessage());
-        assertSame(location, m_teh.getLastProblemEvent().getLocation());
+        assertEquals("Simple location message", teh.getLastProblemEvent().getLocalizedMessage());
+        assertSame(location, teh.getLastProblemEvent().getLocation());
     }
 }

@@ -21,8 +21,8 @@ import java.util.List;
 
 public abstract class AbstractURLListFactory implements URLListFactory {
 
-    protected String m_rootPath;
-    protected List<String> m_children;
+    protected String rootPath;
+    protected List<String> children;
 
     public AbstractURLListFactory() {
         this("");
@@ -33,24 +33,24 @@ public abstract class AbstractURLListFactory implements URLListFactory {
     }
 
     public AbstractURLListFactory(String rootPath, List<String> children) {
-        m_rootPath = rootPath;
-        m_children = children;
+        this.rootPath = rootPath;
+        this.children = children;
     }
 
     public String getRootPath() {
-        return m_rootPath;
+        return rootPath;
     }
 
     public void setRootPath(String rootPath) {
-        m_rootPath = rootPath;
+        this.rootPath = rootPath;
     }
 
     public List<String> getChildren() {
-        return m_children;
+        return children;
     }
 
     public void setChildren(List<String> children) {
-        m_children = children;
+        this.children = children;
     }
 
     public void add(String child) {

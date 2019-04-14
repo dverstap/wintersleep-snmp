@@ -34,20 +34,20 @@ import static org.wintersleep.snmp.mib.smi.SmiPrimitiveType.INTEGER;
 
 public class ModuleParser {
 
-    private static final Logger m_log = LoggerFactory.getLogger(ModuleParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModuleParser.class);
 
-    private final SmiModule m_module;
+    private final SmiModule module;
 
     public ModuleParser(SmiModule module) {
-        m_module = module;
+        this.module = module;
     }
 
     public SmiModule getModule() {
-        return m_module;
+        return module;
     }
 
     private Location makeLocation(Token token) {
-        String source = m_module.getIdToken().getLocation().getSource();
+        String source = module.getIdToken().getLocation().getSource();
         return new Location(source, token.getLine(), token.getColumn());
     }
 
@@ -67,9 +67,9 @@ public class ModuleParser {
     public IntKeywordToken intkt(Token idToken, SmiPrimitiveType primitiveType, SmiVersion version) {
         if (version != null) {
             if (version == SmiVersion.V1) {
-                m_module.incV1Features();
+                module.incV1Features();
             } else {
-                m_module.incV2Features();
+                module.incV2Features();
             }
         }
         return new IntKeywordToken(makeLocation(idToken), idToken.getText(), primitiveType);
@@ -108,8 +108,8 @@ public class ModuleParser {
     }
 
     public void addImports(IdToken moduleToken, List<IdToken> importedTokenList) {
-        SmiImports result = new SmiImports(m_module, moduleToken, importedTokenList);
-        m_module.getImports().add(result);
+        SmiImports result = new SmiImports(module, moduleToken, importedTokenList);
+        module.getImports().add(result);
     }
 
     public OidComponent createOidComponent(OidComponent parent, Token id, Token value) {
@@ -119,67 +119,67 @@ public class ModuleParser {
     }
 
     public SmiOidValue createOidValue(IdToken idToken, OidComponent lastOidComponent) {
-        SmiOidValue result = new SmiOidValue(idToken, m_module);
+        SmiOidValue result = new SmiOidValue(idToken, module);
         result.setLastOidComponent(lastOidComponent);
         return result;
     }
 
     public SmiMacro createMacro(IdToken idToken) {
-        return new SmiMacro(idToken, m_module);
+        return new SmiMacro(idToken, module);
     }
 
     public SmiOidMacro createOidMacro(IdToken idToken) {
-        return new SmiOidMacro(idToken, m_module);
+        return new SmiOidMacro(idToken, module);
     }
 
     public SmiVariable createVariable(IdToken idToken, SmiType t, Token units, SmiDefaultValue defaultValue) {
         final String methodWithParams = "createVariable(" + idToken.getId() + ")";
-        m_log.debug(methodWithParams);
+        LOGGER.debug(methodWithParams);
 
         QuotedStringToken unitsToken = null;
         if (units != null) {
             unitsToken = new QuotedStringToken(makeLocation(units), units.getText(), '\"');
         }
-        return new SmiVariable(idToken, m_module, t, unitsToken, defaultValue);
+        return new SmiVariable(idToken, module, t, unitsToken, defaultValue);
     }
 
     public SmiNotificationType createNotification(IdToken idToken, List<IdToken> objectTokens,
                                                   StatusV2 status, String description, String reference) {
         final String methodWithParams = "createNotification(" + idToken.getId() + ")";
-        m_log.debug(methodWithParams);
+        LOGGER.debug(methodWithParams);
 
-        return new SmiNotificationType(idToken, m_module, objectTokens, status, description, reference);
+        return new SmiNotificationType(idToken, module, objectTokens, status, description, reference);
     }
 
     public SmiTrapType createTrap(IdToken idToken, IdToken enterpriseIdToken,
                                   List<IdToken> objectTokens, String description, String reference) {
         final String methodWithParams = "createTrap(" + idToken.getId() + ")";
-        m_log.debug(methodWithParams);
+        LOGGER.debug(methodWithParams);
 
-        return new SmiTrapType(idToken, m_module, enterpriseIdToken, objectTokens,
+        return new SmiTrapType(idToken, module, enterpriseIdToken, objectTokens,
                 description, reference);
     }
 
     public SmiRow createRow(IdToken idToken, SmiType t) {
         final String methodWithParams = "createRow(" + idToken.getId() + ")";
-        m_log.debug(methodWithParams);
+        LOGGER.debug(methodWithParams);
 
-        SmiRow result = new SmiRow(idToken, m_module);
+        SmiRow result = new SmiRow(idToken, module);
         result.setType(t);
         return result;
     }
 
     public SmiTable createTable(IdToken idToken, SmiType t) {
         final String methodWithParams = "createTable(" + idToken.getId() + ")";
-        m_log.debug(methodWithParams);
+        LOGGER.debug(methodWithParams);
 
-        SmiTable result = new SmiTable(idToken, m_module);
+        SmiTable result = new SmiTable(idToken, module);
         result.setType(t);
         return result;
     }
 
     public SmiTextualConvention createTextualConvention(IdToken idToken, Token displayHint, StatusV2 status, Token description, Token reference, SmiType type) {
-        SmiTextualConvention result = new SmiTextualConvention(idToken, m_module, getOptCStr(displayHint), status, getCStr(description), getOptCStr(reference));
+        SmiTextualConvention result = new SmiTextualConvention(idToken, module, getOptCStr(displayHint), status, getCStr(description), getOptCStr(reference));
 
         if (type.getBaseType() == null) {
             result.setBaseType(type);
@@ -195,7 +195,7 @@ public class ModuleParser {
     }
 
     public SmiType createSequenceType(IdToken idToken) {
-        return new SmiType(idToken, m_module);
+        return new SmiType(idToken, module);
     }
 
     public SmiType createType(IdToken idToken, SmiType baseType) {
@@ -206,7 +206,7 @@ public class ModuleParser {
         if (idToken == null) {
             result = baseType;
         } else {
-            result = new SmiType(idToken, m_module);
+            result = new SmiType(idToken, module);
             result.setBaseType(baseType);
         }
         return result;
@@ -222,30 +222,30 @@ public class ModuleParser {
             if (intToken.getPrimitiveType() == INTEGER) {
                 type.setBaseType(SmiConstants.INTEGER_TYPE);
             } else {
-                type.setBaseType(new SmiReferencedType(intToken, m_module));
+                type.setBaseType(new SmiReferencedType(intToken, module));
             }
             type.setEnumValues(namedNumbers);
             type.setRangeConstraints(rangeConstraints);
             return type;
         }
-        return new SmiReferencedType(intToken, m_module);
+        return new SmiReferencedType(intToken, module);
     }
 
     private SmiType createPotentiallyTaggedType(IdToken idToken, Token applicationTagToken) {
         SmiType type;
         if (applicationTagToken != null) {
             int tag = Integer.parseInt(applicationTagToken.getText());
-            type = new SmiType(idToken, m_module, tag);
+            type = new SmiType(idToken, module, tag);
         } else {
-            type = new SmiType(idToken, m_module);
+            type = new SmiType(idToken, module);
         }
         return type;
     }
 
     public SmiType createBitsType(IdToken idToken, List<SmiNamedNumber> namedNumbers) {
-        m_module.incV2Features();
+        module.incV2Features();
         if (idToken != null || namedNumbers != null) {
-            SmiType type = new SmiType(idToken, m_module);
+            SmiType type = new SmiType(idToken, module);
             type.setBaseType(SmiConstants.BITS_TYPE);
             type.setBitFields(namedNumbers);
             return type;
@@ -268,7 +268,7 @@ public class ModuleParser {
                                      List<SmiNamedNumber> namedNumbers,
                                      List<SmiRange> sizeConstraints,
                                      List<SmiRange> rangeConstraints) {
-        SmiReferencedType referencedType = new SmiReferencedType(idt(referencedIdToken), m_module);
+        SmiReferencedType referencedType = new SmiReferencedType(idt(referencedIdToken), module);
         if (moduleToken != null) {
             referencedType.setReferencedModuleToken(idt(moduleToken));
         }
@@ -278,7 +278,7 @@ public class ModuleParser {
 
         SmiType result;
         if (idToken != null) {
-            result = new SmiType(idToken, m_module);
+            result = new SmiType(idToken, module);
             result.setBaseType(referencedType);
         } else {
             result = referencedType;
@@ -289,7 +289,7 @@ public class ModuleParser {
 
 
     public SmiType createChoiceType(IdToken idToken) {
-        return SmiProtocolType.createChoiceType(idToken, m_module);
+        return SmiProtocolType.createChoiceType(idToken, module);
     }
 
     public void addField(SmiType sequenceType, Token col, SmiType fieldType) {
@@ -297,7 +297,7 @@ public class ModuleParser {
     }
 
     public SmiType createSequenceOfType(Token elementTypeNameToken) {
-        SmiType sequenceOfType = new SmiType(null, m_module);
+        SmiType sequenceOfType = new SmiType(null, module);
         sequenceOfType.setElementTypeToken(idt(elementTypeNameToken));
         return sequenceOfType;
     }
@@ -326,21 +326,21 @@ public class ModuleParser {
 
     public void addSymbol(SmiSymbol symbol) {
         if (symbol != null) {
-            m_module.addSymbol(symbol);
+            module.addSymbol(symbol);
         }
     }
 
     public StatusV2 findStatusV2(String text) {
-        m_module.incV2Features();
+        module.incV2Features();
         return StatusV2.find(text, true);
     }
 
     public ScopedId makeScopedId(Token moduleToken, Token symbolToken) {
-        return new ScopedId(m_module, moduleToken != null ? idt(moduleToken) : null, idt(symbolToken));
+        return new ScopedId(module, moduleToken != null ? idt(moduleToken) : null, idt(symbolToken));
     }
 
     public void setModuleIdentity(Token lastUpdated, Token organization, Token contactInfo, Token description, List<SmiModuleRevision> revisions) {
-        m_module.setModuleIdentity(new SmiModuleIdentity(getOptCStr(lastUpdated), getOptCStr(organization), getOptCStr(contactInfo), getOptCStr(description), revisions));
+        module.setModuleIdentity(new SmiModuleIdentity(getOptCStr(lastUpdated), getOptCStr(organization), getOptCStr(contactInfo), getOptCStr(description), revisions));
     }
 
     public SmiModuleRevision createModuleRevision(Token revision, Token description) {

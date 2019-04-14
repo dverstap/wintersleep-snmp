@@ -17,29 +17,29 @@ package org.wintersleep.snmp.util.pair;
 
 public class Pair<T1, T2> {
 
-    private T1 m_first;
-    private T2 m_second;
+    private T1 first;
+    private T2 second;
 
 
     public Pair(T1 first, T2 second) {
-        m_first = first;
-        m_second = second;
+        this.first = first;
+        this.second = second;
     }
 
     public T1 getFirst() {
-        return m_first;
+        return first;
     }
 
     public void setFirst(T1 first) {
-        m_first = first;
+        this.first = first;
     }
 
     public T2 getSecond() {
-        return m_second;
+        return second;
     }
 
     public void setSecond(T2 second) {
-        m_second = second;
+        this.second = second;
     }
 
     public boolean equals(Object o) {
@@ -48,16 +48,16 @@ public class Pair<T1, T2> {
 
         Pair pair = (Pair) o;
 
-        if (m_first != null ? !m_first.equals(pair.m_first) : pair.m_first != null) return false;
-        if (m_second != null ? !m_second.equals(pair.m_second) : pair.m_second != null) return false;
+        if (first != null ? !first.equals(pair.first) : pair.first != null) return false;
+        if (second != null ? !second.equals(pair.second) : pair.second != null) return false;
 
         return true;
     }
 
     public int hashCode() {
         int result;
-        result = (m_first != null ? m_first.hashCode() : 0);
-        result = 31 * result + (m_second != null ? m_second.hashCode() : 0);
+        result = (first != null ? first.hashCode() : 0);
+        result = 31 * result + (second != null ? second.hashCode() : 0);
         return result;
     }
 }

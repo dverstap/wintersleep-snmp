@@ -18,38 +18,38 @@ package org.wintersleep.snmp.mib.smi;
 import java.util.List;
 
 public class SmiModuleIdentity {
-    private final String m_lastUpdated;
-    private final String m_organization;
-    private final String m_contactInfo;
-    private final String m_description;
+    private final String lastUpdated;
+    private final String organization;
+    private final String contactInfo;
+    private final String description;
 
-    private final List<SmiModuleRevision> m_revisions;
+    private final List<SmiModuleRevision> revisions;
 
     public SmiModuleIdentity(String lastUpdated, String organization, String contactInfo, String description, List<SmiModuleRevision> revisions) {
-        m_lastUpdated = lastUpdated;
-        m_organization = organization;
-        m_contactInfo = contactInfo;
-        m_description = description;
-        m_revisions = revisions;
+        this.lastUpdated = lastUpdated;
+        this.organization = organization;
+        this.contactInfo = contactInfo;
+        this.description = description;
+        this.revisions = revisions;
     }
 
     public String getLastUpdated() {
-        return m_lastUpdated;
+        return lastUpdated;
     }
 
     public String getOrganization() {
-        return m_organization;
+        return organization;
     }
 
     public String getContactInfo() {
-        return m_contactInfo;
+        return contactInfo;
     }
 
     public String getDescription() {
-        return m_description;
+        return description;
     }
 
     public List<SmiModuleRevision> getRevisions() {
-        return m_revisions;
+        return revisions;
     }
 }

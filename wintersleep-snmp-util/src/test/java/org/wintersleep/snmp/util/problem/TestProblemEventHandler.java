@@ -18,13 +18,13 @@ package org.wintersleep.snmp.util.problem;
 
 public class TestProblemEventHandler extends AbstractProblemEventHandler {
 
-    private ProblemEvent m_lastProblemEvent;
+    private ProblemEvent lastProblemEvent;
 
     public void handle(ProblemEvent event) {
-        m_lastProblemEvent = event;
+        lastProblemEvent = event;
     }
 
     public ProblemEvent getLastProblemEvent() {
-        return m_lastProblemEvent;
+        return lastProblemEvent;
     }
 }

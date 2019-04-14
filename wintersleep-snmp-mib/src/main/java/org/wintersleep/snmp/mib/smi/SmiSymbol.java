@@ -26,9 +26,9 @@ import java.util.Collections;
 
 public abstract class SmiSymbol implements Serializable, Comparable {
 
-    private IdToken m_idToken;
-    private SmiModule m_module;
-    private Map<Object, Object> m_userData;
+    private IdToken idToken;
+    private SmiModule module;
+    private Map<Object, Object> userData;
 
     public SmiSymbol(IdToken idToken, SmiModule module) {
         super();
@@ -37,8 +37,8 @@ public abstract class SmiSymbol implements Serializable, Comparable {
             throw new IllegalArgumentException();
         }
 
-        m_idToken = idToken;
-        m_module = module;
+        this.idToken = idToken;
+        this.module = module;
     }
 
     public SmiSymbol(SmiModule module) {
@@ -48,29 +48,29 @@ public abstract class SmiSymbol implements Serializable, Comparable {
             throw new IllegalArgumentException();
         }
 
-        m_module = module;
+        this.module = module;
     }
 
     public String getId() {
-        return m_idToken != null ? m_idToken.getId() : null;
+        return idToken != null ? idToken.getId() : null;
     }
 
     public IdToken getIdToken() {
-        return m_idToken;
+        return idToken;
     }
 
     public abstract String getCodeId();
 
     public String getFullCodeId() {
-        return m_module.getMib().getCodeNamingStrategy().getFullCodeId(this);
+        return module.getMib().getCodeNamingStrategy().getFullCodeId(this);
     }
 
     public SmiModule getModule() {
-        return m_module;
+        return module;
     }
 
     public Location getLocation() {
-        return m_idToken != null ? m_idToken.getLocation() : null;
+        return idToken != null ? idToken.getLocation() : null;
     }
 
     public String getUcId() {
@@ -80,13 +80,13 @@ public abstract class SmiSymbol implements Serializable, Comparable {
 
     @Override
     public String toString() {
-        return m_module.getId() + ": " + getId();
+        return module.getId() + ": " + getId();
     }
 
     @Override
     public int hashCode() {
-        if (m_idToken != null) {
-            return m_idToken.getId().hashCode();
+        if (idToken != null) {
+            return idToken.getId().hashCode();
         }
         return super.hashCode();
     }
@@ -97,10 +97,10 @@ public abstract class SmiSymbol implements Serializable, Comparable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (m_idToken != null) {
+        if (idToken != null) {
             if (obj instanceof SmiSymbol) {
                 SmiSymbol other = (SmiSymbol) obj;
-                return this.m_module.equals(other.m_module) && other.getId().equals(this.getId());
+                return this.module.equals(other.module) && other.getId().equals(this.getId());
             }
         }
         return super.equals(obj);
@@ -126,31 +126,31 @@ public abstract class SmiSymbol implements Serializable, Comparable {
      * @return A non-modifiable non-null Map of all the associated user data.
      */
     public Map<Object, Object> getUserData() {
-        if (m_userData == null) {
+        if (userData == null) {
             return Collections.emptyMap();
         }
-        return m_userData;
+        return userData;
     }
 
     public void addUserData(Object key, Object value) {
-        if (m_userData == null) {
-            m_userData = new HashMap<Object, Object>();
+        if (userData == null) {
+            userData = new HashMap<Object, Object>();
         }
-        m_userData.put(key, value);
+        userData.put(key, value);
     }
 
     public Object findUserData(Object key) {
-        if (m_userData == null) {
+        if (userData == null) {
             return null;
         }
-        return m_userData.get(key);
+        return userData.get(key);
     }
 
     @SuppressWarnings("unchecked")
     public <T> T findUserData(Class<T> key) {
-        if (m_userData == null) {
+        if (userData == null) {
             return null;
         }
-        return (T) m_userData.get(key);
+        return (T) userData.get(key);
     }
 }

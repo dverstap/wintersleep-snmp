@@ -102,13 +102,13 @@ public class SNMPv2_SMISymbolDefiner extends AbstractSymbolDefiner {
 
     private void addExtUTCTimeType() {
         if (isMissing("ExtUTCTime")) {
-            SmiType type = new SmiType(idt("ExtUTCTime"), m_module);
+            SmiType type = new SmiType(idt("ExtUTCTime"), module);
             type.setBaseType(SmiConstants.OCTET_STRING_TYPE);
             List<SmiRange> constraints = new ArrayList<SmiRange>();
             constraints.add(new SmiRange(new BigIntegerToken(11)));
             constraints.add(new SmiRange(new BigIntegerToken(13)));
             type.setSizeConstraints(constraints);
-            m_module.addSymbol(type);
+            module.addSymbol(type);
         }
     }
 

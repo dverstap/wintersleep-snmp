@@ -22,18 +22,18 @@ public enum ObjectTypeAccessV2 implements AccessPermissions {
     READ_WRITE(AccessAll.READ_WRITE),
     READ_CREATE(AccessAll.READ_CREATE);
 
-    private AccessAll m_accessAll;
+    private AccessAll accessAll;
 
     ObjectTypeAccessV2(AccessAll accessAll) {
-        m_accessAll = accessAll;
+        this.accessAll = accessAll;
     }
 
     public AccessAll getAccessAll() {
-        return m_accessAll;
+        return accessAll;
     }
 
     public String toString() {
-        return m_accessAll.toString();
+        return accessAll.toString();
     }
 
     public static ObjectTypeAccessV2 find(String keyword, boolean mandatory) {

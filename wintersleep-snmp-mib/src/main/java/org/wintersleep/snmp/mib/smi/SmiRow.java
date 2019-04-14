@@ -26,14 +26,14 @@ import java.util.List;
 
 public class SmiRow extends SmiObjectType {
 
-    private static final Logger log = LoggerFactory.getLogger(SmiRow.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SmiRow.class);
 
     // TODO remove?
-    private List<SmiRow> m_parentRows = new ArrayList<SmiRow>();
-    private List<SmiRow> m_childRows = new ArrayList<SmiRow>();
+    private List<SmiRow> parentRows = new ArrayList<SmiRow>();
+    private List<SmiRow> childRows = new ArrayList<SmiRow>();
 
-    private List<SmiIndex> m_indexes;
-    private ScopedId m_augmentsId;
+    private List<SmiIndex> indexes;
+    private ScopedId augmentsId;
 
     public SmiRow(IdToken idToken, SmiModule module) {
         super(idToken, module);
@@ -50,7 +50,7 @@ public class SmiRow extends SmiObjectType {
             if (column == null) {
                 // This can happen when a new mib adds new columns to a table:
                 // for example: kdiff3 RFC1269-MIB BGP4-MIB
-                log.debug("{}: Could not find SmiVariable for {}", getIdToken(), child);
+                LOGGER.debug("{}: Could not find SmiVariable for {}", getIdToken(), child);
             } else {
                 result.add(column);
             }
@@ -59,28 +59,28 @@ public class SmiRow extends SmiObjectType {
     }
 
     public SmiRow getAugments() {
-        if (m_augmentsId != null) {
+        if (augmentsId != null) {
             // TODO type safety check when resolving
-            return (SmiRow) m_augmentsId.getSymbol();
+            return (SmiRow) augmentsId.getSymbol();
         } else {
             return null;
         }
     }
 
     public void setAugmentsId(ScopedId augmentsId) {
-        m_augmentsId = augmentsId;
+        this.augmentsId = augmentsId;
     }
 
     public List<SmiIndex> getIndexes() {
-        return m_indexes;
+        return indexes;
     }
 
     public List<SmiRow> getChildRows() {
-        return m_childRows;
+        return childRows;
     }
 
     public List<SmiRow> getParentRows() {
-        return m_parentRows;
+        return parentRows;
     }
 
     public SmiVariable findColumn(String id) {
@@ -93,19 +93,19 @@ public class SmiRow extends SmiObjectType {
     }
 
     public SmiIndex addIndex(ScopedId scopedId, boolean isImplied) {
-        if (m_indexes == null) {
-            m_indexes = new ArrayList<SmiIndex>();
+        if (indexes == null) {
+            indexes = new ArrayList<SmiIndex>();
         }
         SmiIndex index = new SmiIndex(this, scopedId, isImplied);
-        m_indexes.add(index);
+        indexes.add(index);
         return index;
     }
 
     public boolean hasSameIndexes(SmiRow other) {
         boolean result = false;
-        if (m_indexes.size() == other.m_indexes.size()) {
+        if (indexes.size() == other.indexes.size()) {
             boolean tmpResult = true;
-            Iterator<SmiIndex> i = m_indexes.iterator();
+            Iterator<SmiIndex> i = indexes.iterator();
             Iterator<SmiIndex> j = other.getIndexes().iterator();
             while (tmpResult && i.hasNext() && j.hasNext()) {
                 SmiIndex i1 = i.next();
@@ -126,24 +126,24 @@ public class SmiRow extends SmiObjectType {
     }
 
     public void addParentRow(SmiRow row) {
-        m_parentRows.add(row);
-        row.m_childRows.add(this);
+        parentRows.add(row);
+        row.childRows.add(this);
     }
 
 
     @Override
     public void resolveReferences(XRefProblemReporter reporter) {
         super.resolveReferences(reporter);
-        if (m_indexes != null) {
-            for (SmiIndex index : m_indexes) {
+        if (indexes != null) {
+            for (SmiIndex index : indexes) {
                 index.resolveReferences(reporter);
             }
         } else {
-            m_augmentsId.resolveReferences(reporter);
+            augmentsId.resolveReferences(reporter);
             SmiRow augmentedRow = getAugments();
             if (augmentedRow != null) {
-                augmentedRow.m_childRows.add(this);
-                m_parentRows.add(augmentedRow);
+                augmentedRow.childRows.add(this);
+                parentRows.add(augmentedRow);
             }
         }
     }

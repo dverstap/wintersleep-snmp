@@ -25,50 +25,50 @@ import java.util.List;
 
 public class SmiNotificationType extends SmiOidMacro implements Notification {
 
-    private List<IdToken> m_objectTokens;
-    private List<SmiVariable> m_objects = new ArrayList<SmiVariable>();
-    private StatusV2 m_statusV2;
-    private String m_description;
-    private String m_reference;
+    private List<IdToken> objectTokens;
+    private List<SmiVariable> objects = new ArrayList<SmiVariable>();
+    private StatusV2 statusV2;
+    private String description;
+    private String reference;
 
     public SmiNotificationType(IdToken idToken, SmiModule module, List<IdToken> objectTokens, StatusV2 statusV2, String description, String reference) {
         super(idToken, module);
-        m_objectTokens = objectTokens;
-        if (m_objectTokens == null) {
-            m_objectTokens = Collections.emptyList();
+        this.objectTokens = objectTokens;
+        if (this.objectTokens == null) {
+            this.objectTokens = Collections.emptyList();
         }
-        m_statusV2 = statusV2;
-        m_description = description;
-        m_reference = reference;
+        this.statusV2 = statusV2;
+        this.description = description;
+        this.reference = reference;
     }
 
     public void resolveReferences(XRefProblemReporter reporter) {
-        for (IdToken objectToken : m_objectTokens) {
+        for (IdToken objectToken : objectTokens) {
             SmiVariable variable = getModule().resolveReference(objectToken, SmiVariable.class, reporter);
             if (variable != null) {
-                m_objects.add(variable);
+                objects.add(variable);
             }
         }
     }
 
     public List<SmiVariable> getObjects() {
-        return m_objects;
+        return objects;
     }
 
     public List<IdToken> getObjectTokens() {
-    	return m_objectTokens;
+    	return objectTokens;
     }
 
     public StatusV2 getStatusV2() {
-        return m_statusV2;
+        return statusV2;
     }
 
     public String getDescription() {
-        return m_description;
+        return description;
     }
 
     public String getReference() {
-        return m_reference;
+        return reference;
     }
 
 }

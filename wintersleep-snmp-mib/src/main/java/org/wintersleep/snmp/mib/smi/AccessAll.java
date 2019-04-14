@@ -25,14 +25,14 @@ public enum AccessAll implements AccessPermissions {
     READ_CREATE,
     NOT_IMPLEMENTED;
 
-    private String m_keyword;
+    private String keyword;
 
     private AccessAll() {
-        m_keyword = name().toLowerCase().replace('_', '-');
+        keyword = name().toLowerCase().replace('_', '-');
     }
 
     public String toString() {
-        return m_keyword;
+        return keyword;
     }
 
     public static AccessAll find(String keyword, boolean mandatory) {
@@ -61,7 +61,7 @@ public enum AccessAll implements AccessPermissions {
     }
 
     public boolean isSupportedBy(MacroType macroType) {
-        return m_supportedMacroTypes.contains(macroType);
+        return supportedMacroTypes.contains(macroType);
     }
 */
 

@@ -18,18 +18,18 @@ package org.wintersleep.snmp.util.token;
 import org.wintersleep.snmp.util.location.Location;
 
 public class GenericToken<Value> extends AbstractToken {
-    protected Value m_value;
+    protected Value value;
 
     public GenericToken(Location location, Value value) {
         super(location);
-        m_value = value;
+        this.value = value;
     }
 
     public Value getValue() {
-        return m_value;
+        return value;
     }
 
     public Value getObject() {
-        return m_value;
+        return value;
     }
 }

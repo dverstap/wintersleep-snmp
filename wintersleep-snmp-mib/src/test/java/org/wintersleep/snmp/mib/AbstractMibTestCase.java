@@ -39,16 +39,16 @@ public abstract class AbstractMibTestCase extends TestCase {
 
     public static final String LIBSMI_DIR_NAME = LIBSMI_DIR.getAbsolutePath();
 
-    private static final Logger m_log = LoggerFactory.getLogger(AbstractMibTestCase.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMibTestCase.class);
 
     private final SmiVersion version;
 
-    private static ThreadLocal<Class<? extends AbstractMibTestCase>> m_testClass = new ThreadLocal<Class<? extends AbstractMibTestCase>>();
-    private static ThreadLocal<SmiMib> m_mib = new ThreadLocal<SmiMib>();
+    private static ThreadLocal<Class<? extends AbstractMibTestCase>> testClass = new ThreadLocal<Class<? extends AbstractMibTestCase>>();
+    private static ThreadLocal<SmiMib> mib = new ThreadLocal<SmiMib>();
 
-    private SmiType m_integer32;
-    private SmiType m_counter;
-    private SmiDefaultParser m_parser;
+    private SmiType integer32;
+    private SmiType counter;
+    private SmiDefaultParser parser;
 
 
     private static File findMibs() {
@@ -74,28 +74,28 @@ public abstract class AbstractMibTestCase extends TestCase {
 
 
     protected SmiDefaultParser getParser() {
-        return m_parser;
+        return parser;
     }
 
     protected SmiMib getMib() {
         // this is a rather ugly hack to mimic JUnit4 @BeforeClass, without having to annotate all test methods:
-        if (m_mib.get() == null || m_testClass.get() != getClass()) {
+        if (mib.get() == null || testClass.get() != getClass()) {
             try {
                 SmiParser parser = createParser();
                 Stopwatch stopWatch = Stopwatch.createStarted();
                 SmiMib mib = parser.parse();
-                m_log.info("Parsing time: " + stopWatch.elapsed(TimeUnit.MILLISECONDS) + " ms");
+                LOGGER.info("Parsing time: " + stopWatch.elapsed(TimeUnit.MILLISECONDS) + " ms");
                 if (mustParseSuccessfully()) {
                     assertTrue(((SmiDefaultParser) parser).getProblemEventHandler().isOk());
                     assertEquals(0, ((SmiDefaultParser) parser).getProblemEventHandler().getSeverityCount(ProblemSeverity.ERROR));
                 }
-                m_mib.set(mib);
-                m_testClass.set(getClass());
+                AbstractMibTestCase.mib.set(mib);
+                testClass.set(getClass());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-        return m_mib.get();
+        return mib.get();
     }
 
     protected boolean mustParseSuccessfully() {
@@ -104,9 +104,9 @@ public abstract class AbstractMibTestCase extends TestCase {
 
     protected SmiParser createParser() throws Exception {
         URLListFactory urlListFactory = createURLListFactory();
-        m_parser = new SmiDefaultParser();
-        m_parser.getFileParserPhase().setInputUrls(urlListFactory.create());
-        return m_parser;
+        parser = new SmiDefaultParser();
+        parser.getFileParserPhase().setInputUrls(urlListFactory.create());
+        return parser;
     }
 
     public URLListFactory createURLListFactory() {
@@ -130,39 +130,39 @@ public abstract class AbstractMibTestCase extends TestCase {
     }
 
     public SmiType getInteger32() {
-        if (m_integer32 == null) {
-            m_integer32 = getMib().getTypes().find("Integer32");
-            assertSame(SmiConstants.INTEGER_TYPE, m_integer32.getBaseType());
-            assertSame(SmiPrimitiveType.INTEGER_32, m_integer32.getPrimitiveType());
-            assertEquals(1, m_integer32.getRangeConstraints().size());
-            assertEquals(-2147483648, m_integer32.getRangeConstraints().get(0).getMinValue().intValue());
-            assertEquals(2147483647, m_integer32.getRangeConstraints().get(0).getMaxValue().intValue());
-            assertNull(m_integer32.getSizeConstraints());
-            assertNull(m_integer32.getEnumValues());
-            assertNull(m_integer32.getBitFields());
-            assertNull(m_integer32.getFields());
+        if (integer32 == null) {
+            integer32 = getMib().getTypes().find("Integer32");
+            assertSame(SmiConstants.INTEGER_TYPE, integer32.getBaseType());
+            assertSame(SmiPrimitiveType.INTEGER_32, integer32.getPrimitiveType());
+            assertEquals(1, integer32.getRangeConstraints().size());
+            assertEquals(-2147483648, integer32.getRangeConstraints().get(0).getMinValue().intValue());
+            assertEquals(2147483647, integer32.getRangeConstraints().get(0).getMaxValue().intValue());
+            assertNull(integer32.getSizeConstraints());
+            assertNull(integer32.getEnumValues());
+            assertNull(integer32.getBitFields());
+            assertNull(integer32.getFields());
         }
-        return m_integer32;
+        return integer32;
     }
 
     public SmiType getCounter() {
-        if (m_counter == null) {
-            m_counter = getMib().getTypes().find("Counter");
-            assertSame(SmiConstants.INTEGER_TYPE, m_counter.getBaseType());
-            assertSame(SmiPrimitiveType.COUNTER_32, m_counter.getPrimitiveType());
-            assertEquals(1, m_counter.getRangeConstraints().size());
-            assertEquals(0, m_counter.getRangeConstraints().get(0).getMinValue().intValue());
-            assertEquals(0xFFFFFFFFL, m_counter.getRangeConstraints().get(0).getMaxValue().longValue());
-            assertNull(m_counter.getSizeConstraints());
-            assertNull(m_counter.getEnumValues());
-            assertNull(m_counter.getBitFields());
-            assertNull(m_counter.getFields());
+        if (counter == null) {
+            counter = getMib().getTypes().find("Counter");
+            assertSame(SmiConstants.INTEGER_TYPE, counter.getBaseType());
+            assertSame(SmiPrimitiveType.COUNTER_32, counter.getPrimitiveType());
+            assertEquals(1, counter.getRangeConstraints().size());
+            assertEquals(0, counter.getRangeConstraints().get(0).getMinValue().intValue());
+            assertEquals(0xFFFFFFFFL, counter.getRangeConstraints().get(0).getMaxValue().longValue());
+            assertNull(counter.getSizeConstraints());
+            assertNull(counter.getEnumValues());
+            assertNull(counter.getBitFields());
+            assertNull(counter.getFields());
         }
-        return m_counter;
+        return counter;
     }
 
     protected void showOverview() {
-        for (SmiModule module : m_mib.get().getModules()) {
+        for (SmiModule module : mib.get().getModules()) {
             for (SmiSymbol symbol : module.getSymbols()) {
                 String msg = module.getId() + ": " + symbol.getId() + ": " + symbol.getClass().getSimpleName();
                 if (symbol instanceof SmiOidValue) {

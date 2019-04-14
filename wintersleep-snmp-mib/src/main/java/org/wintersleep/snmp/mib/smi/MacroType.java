@@ -28,19 +28,19 @@ public enum MacroType {
     AGENT_CAPABILITIES(SmiVersion.V2, "ACCESS"),
     TRAP_TYPE(SmiVersion.V1, null);
 
-    private final SmiVersion m_version;
-    private final String m_accessFieldName;
+    private final SmiVersion version;
+    private final String accessFieldName;
 
     MacroType(SmiVersion version, String accessFieldName) {
-        m_version = version;
-        m_accessFieldName = accessFieldName;
+        this.version = version;
+        this.accessFieldName = accessFieldName;
     }
 
     public SmiVersion getVersion() {
-        return m_version;
+        return version;
     }
 
     public String getAccessFieldName() {
-        return m_accessFieldName;
+        return accessFieldName;
     }
 }
