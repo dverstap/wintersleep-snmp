@@ -3,13 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wintersleep-snmp-mib2html</artifactId>
     <packaging>jar</packaging>
-    <version>0.25-SNAPSHOT</version>
-    <name>Wintersleep SNMP Mib to HTML Compiler</name>
+    <version>master-SNAPSHOT</version>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Wintersleep SNMP Mib to HTML Compiler</description>
 
     <parent>
         <groupId>org.wintersleep.snmp</groupId>
         <artifactId>wintersleep-snmp</artifactId>
-        <version>0.25-SNAPSHOT</version>
+        <version>master-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -78,5 +79,28 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jetbrains.dokka</groupId>
+                        <artifactId>dokka-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>dokka</goal>
+                                    <goal>javadocJar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

@@ -30,8 +30,6 @@ TODO
 
 - Integrate xdoc(s) (there's two of them) and remove them.
 
-- Fix deployment to Maven Central.
-
 - Add extensive mib parsing integration tests, for example from:
 
   - https://github.com/librenms/librenms/tree/master/mibs

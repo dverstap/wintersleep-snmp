@@ -34,6 +34,8 @@ import org.wintersleep.snmp.mib.smi.SmiVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+
 public class ModuleBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(ModuleBuilder.class);
@@ -112,16 +114,16 @@ public class ModuleBuilder {
                 .arg(JExpr.lit(berValue));
         ec.javadoc().append("<pre>" + v.getId() + ": " + v.getOidStr() + "</pre>\n\n");
         if (primitiveType != null) {
-            ec.javadoc().append("<pre>Type:" + primitiveType + "<pre>\n\n");
+            ec.javadoc().append("<pre>" + primitiveType + "</pre>\n\n");
         }
         if (v instanceof SmiObjectType) {
             SmiObjectType objectType = (SmiObjectType) v;
-            ec.javadoc().append("<pre>" + objectType.getDescription() + "</pre>");
+            ec.javadoc().append("<pre>" + escapeHtml4(objectType.getDescription()) + "</pre>");
 
         }
         if (v instanceof SmiNotificationType) {
         	SmiNotificationType notificationType = (SmiNotificationType) v;
-        	ec.javadoc().append("<pre>" + notificationType.getDescription() + "</pre>");
+        	ec.javadoc().append("<pre>" + escapeHtml4(notificationType.getDescription()) + "</pre>");
         }
 
         // TODO add link to generated enum type, if applicable

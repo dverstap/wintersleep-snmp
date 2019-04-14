@@ -3,13 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wintersleep-snmp-test</artifactId>
     <packaging>jar</packaging>
-    <version>0.25-SNAPSHOT</version>
-    <name>Wintersleep SNMP Integration Test</name>
+    <version>master-SNAPSHOT</version>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Wintersleep SNMP Integration Test</description>
 
     <parent>
         <groupId>org.wintersleep.snmp</groupId>
         <artifactId>wintersleep-snmp</artifactId>
-        <version>0.25-SNAPSHOT</version>
+        <version>master-SNAPSHOT</version>
     </parent>
 
     <dependencies>
