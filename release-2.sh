@@ -18,4 +18,4 @@ git checkout `find . -name pom.xml`
 git tag ${GIT_TAG}
 git push --tags
 
-rm -f `find . -name pom.xml`
+rm -f `find . -name pom.xml.versionsBackup`
