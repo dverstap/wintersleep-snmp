@@ -16,8 +16,12 @@
 
 package org.wintersleep.snmp.mib.smi;
 
+import com.google.common.base.Preconditions;
 import org.wintersleep.snmp.mib.phase.xref.XRefProblemReporter;
 import org.wintersleep.snmp.util.token.IdToken;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class SmiOidValue extends SmiValue {
 
@@ -31,6 +35,7 @@ public class SmiOidValue extends SmiValue {
 
     public SmiOidValue(IdToken idToken, SmiModule internalModule, SmiOidNode node) {
         super(idToken, internalModule);
+        Preconditions.checkNotNull(idToken);
         this.node = node;
     }
 

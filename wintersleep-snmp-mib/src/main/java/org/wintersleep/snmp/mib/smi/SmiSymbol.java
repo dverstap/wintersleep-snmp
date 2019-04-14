@@ -15,46 +15,43 @@
  */
 package org.wintersleep.snmp.mib.smi;
 
+import com.google.common.base.Preconditions;
 import org.wintersleep.snmp.mib.phase.xref.XRefProblemReporter;
 import org.wintersleep.snmp.util.location.Location;
 import org.wintersleep.snmp.util.token.IdToken;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
 
+@ParametersAreNonnullByDefault
 public abstract class SmiSymbol implements Serializable, Comparable {
 
     private IdToken idToken;
     private SmiModule module;
     private Map<Object, Object> userData;
 
-    public SmiSymbol(IdToken idToken, SmiModule module) {
-        super();
-
-        if (module == null) {
-            throw new IllegalArgumentException();
-        }
-
+    public SmiSymbol(@Nullable IdToken idToken, SmiModule module) {
+        Preconditions.checkNotNull(module);
         this.idToken = idToken;
         this.module = module;
     }
 
     public SmiSymbol(SmiModule module) {
-        super();
-
-        if (module == null) {
-            throw new IllegalArgumentException();
-        }
-
+        Preconditions.checkNotNull(module);
         this.module = module;
     }
 
+    @Nullable
     public String getId() {
         return idToken != null ? idToken.getId() : null;
     }
 
+    @Nullable
     public IdToken getIdToken() {
         return idToken;
     }
@@ -65,16 +62,21 @@ public abstract class SmiSymbol implements Serializable, Comparable {
         return module.getMib().getCodeNamingStrategy().getFullCodeId(this);
     }
 
+    @Nonnull
     public SmiModule getModule() {
         return module;
     }
 
+    @Nullable
     public Location getLocation() {
         return idToken != null ? idToken.getLocation() : null;
     }
 
+    @Nonnull
     public String getUcId() {
-        return SmiUtil.ucFirst(getId());
+        String id = getId();
+        Preconditions.checkNotNull(id);
+        return SmiUtil.ucFirst(id);
     }
 
 

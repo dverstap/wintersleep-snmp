@@ -15,7 +15,10 @@
  */
 package org.wintersleep.snmp.mib.smi;
 
+import com.google.common.base.Preconditions;
 import org.wintersleep.snmp.util.token.IdToken;
+
+import javax.annotation.Nonnull;
 
 public class SmiTextualConvention extends SmiType {
 
@@ -26,10 +29,27 @@ public class SmiTextualConvention extends SmiType {
 
     public SmiTextualConvention(IdToken idToken, SmiModule module, String displayHint, StatusV2 statusV2, String description, String reference) {
         super(idToken, module);
+        Preconditions.checkNotNull(idToken);
         this.displayHint = displayHint;
         this.statusV2 = statusV2;
         this.description = description;
         this.reference = reference;
+    }
+
+    @Nonnull
+    @Override
+    public String getId() {
+        String id = super.getId();
+        Preconditions.checkNotNull(id);
+        return id;
+    }
+
+    @Nonnull
+    @Override
+    public IdToken getIdToken() {
+        IdToken idToken = super.getIdToken();
+        Preconditions.checkNotNull(idToken);
+        return idToken;
     }
 
     public String getDisplayHint() {

@@ -15,15 +15,17 @@
  */
 package org.wintersleep.snmp.mib.smi;
 
+import com.google.common.base.Preconditions;
 import org.wintersleep.snmp.mib.phase.xref.XRefProblemReporter;
 import org.wintersleep.snmp.util.token.IdToken;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- * This class is only used during parsing, to temporarily referenced type that are defined
- * somewhere else, or that have not even been defined. If the mib is correct, there will
- * never be instances of this class in the final SmiMib datastructure.
+ * This class is only used during parsing, to temporarily reference types that are defined
+ * somewhere else, or that have not yet been defined. If the mib is correct, there will
+ * never be instances of this class in the final SmiMib data structure.
  * <p>
  * TODO move class out of public API
  */
@@ -34,9 +36,26 @@ public class SmiReferencedType extends SmiType {
 
     public SmiReferencedType(IdToken idToken, SmiModule module) {
         super(idToken, module);
+        Preconditions.checkNotNull(idToken);
 
         // note that the idToken in this is case is the token where the reference
         // is made, not the token where the Type is defined.
+    }
+
+    @Nonnull
+    @Override
+    public String getId() {
+        String id = super.getId();
+        Preconditions.checkNotNull(id);
+        return id;
+    }
+
+    @Nonnull
+    @Override
+    public IdToken getIdToken() {
+        IdToken idToken = super.getIdToken();
+        Preconditions.checkNotNull(idToken);
+        return idToken;
     }
 
     public IdToken getReferencedModuleToken() {

@@ -15,12 +15,32 @@
  */
 package org.wintersleep.snmp.mib.smi;
 
+import com.google.common.base.Preconditions;
 import org.wintersleep.snmp.util.token.IdToken;
+
+import javax.annotation.Nonnull;
 
 public abstract class SmiValue extends SmiSymbol {
 
     public SmiValue(IdToken idToken, SmiModule module) {
         super(idToken, module);
+        Preconditions.checkNotNull(idToken);
     }
-    
+
+    @Nonnull
+    @Override
+    public String getId() {
+        String id = super.getId();
+        Preconditions.checkNotNull(id);
+        return id;
+    }
+
+    @Nonnull
+    @Override
+    public IdToken getIdToken() {
+        IdToken idToken = super.getIdToken();
+        Preconditions.checkNotNull(idToken);
+        return idToken;
+    }
+
 }

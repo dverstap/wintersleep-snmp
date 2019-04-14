@@ -24,7 +24,7 @@ TODO
 
 - Remove dependency on commons-beanutils.
 
-- JSR305 annotations
+- More JSR305 annotations
 
 - Upgrade SNMP mibs from `libsmi`.
 

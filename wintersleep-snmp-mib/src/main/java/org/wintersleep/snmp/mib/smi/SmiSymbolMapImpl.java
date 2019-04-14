@@ -3,6 +3,9 @@ package org.wintersleep.snmp.mib.smi;
 import org.wintersleep.snmp.util.multimap.GenMultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,6 +28,7 @@ import java.util.Map;
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+@ParametersAreNonnullByDefault
 class SmiSymbolMapImpl<T extends SmiSymbol> extends GenMultiMap<String, T> implements SmiSymbolMap<T> {
 
     private final Class<T> symbolClass;
@@ -36,10 +40,12 @@ class SmiSymbolMapImpl<T extends SmiSymbol> extends GenMultiMap<String, T> imple
         this.moduleMap = moduleMap;
     }
 
+    @Nullable
     public T find(String symbolId) throws IllegalArgumentException {
         return getOne(symbolId);
     }
 
+    @Nullable
     public T find(String moduleId, String symbolId) throws IllegalArgumentException {
         if (moduleId != null) {
             SmiModule module = moduleMap.get(moduleId);
@@ -61,15 +67,18 @@ class SmiSymbolMapImpl<T extends SmiSymbol> extends GenMultiMap<String, T> imple
         }
     }
 
+    @Nonnull
     public List<T> findAll(String symbolId) {
         return getAll(symbolId);
     }
 
+    @Nonnull
     @SuppressWarnings("unchecked")
     public Collection<T> getAll() {
         return impl.values();
     }
 
+    @Nonnull
     @SuppressWarnings("unchecked")
     public Iterator<T> iterator() {
         return impl.values().iterator();

@@ -15,7 +15,10 @@
  */
 package org.wintersleep.snmp.mib.smi;
 
+import com.google.common.base.Preconditions;
 import org.wintersleep.snmp.util.token.IdToken;
+
+import javax.annotation.Nonnull;
 
 /**
  * Types such as ObjectSyntax, SimpleSyntax and ApplicationSyntax, that are only used in SNMP protocol PDU's,
@@ -25,6 +28,23 @@ public class SmiProtocolType extends SmiType {
 
     public SmiProtocolType(IdToken idToken, SmiModule module) {
         super(idToken, module);
+        Preconditions.checkNotNull(idToken);
+    }
+
+    @Nonnull
+    @Override
+    public String getId() {
+        String id = super.getId();
+        Preconditions.checkNotNull(id);
+        return id;
+    }
+
+    @Nonnull
+    @Override
+    public IdToken getIdToken() {
+        IdToken idToken = super.getIdToken();
+        Preconditions.checkNotNull(idToken);
+        return idToken;
     }
 
     public static SmiType createChoiceType(IdToken idToken, SmiModule module) {

@@ -118,8 +118,8 @@ open class HtmlBasePage(val file: File,
     }
 
     // TODO: the text parameter should be a body lambda
-    protected fun HtmlBlockTag.symbolLink(symbol: SmiSymbol, text: Any? = null, anchor: String? = null, title: String? = null) {
-        val href = symbol.module.id + ".html#" + if (anchor != null) anchor else symbol.id
+    protected fun HtmlBlockTag.symbolLink(symbol: SmiValue, text: Any? = null, anchor: String? = null, title: String? = null) {
+        val href = symbol.module.id + ".html#" + (anchor ?: symbol.id)
         val myTitle = when {
             title != null -> title
             symbol is SmiObjectType -> symbol.description

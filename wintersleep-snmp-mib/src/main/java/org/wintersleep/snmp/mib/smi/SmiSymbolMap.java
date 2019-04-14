@@ -1,5 +1,8 @@
 package org.wintersleep.snmp.mib.smi;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Collection;
 
@@ -18,6 +21,7 @@ import java.util.Collection;
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+@ParametersAreNonnullByDefault
 public interface SmiSymbolMap<T extends SmiSymbol> extends Iterable<T> {
 
 
@@ -26,6 +30,7 @@ public interface SmiSymbolMap<T extends SmiSymbol> extends Iterable<T> {
      * @return The unique symbol with the required id, or null if it is not found.
      * @throws IllegalArgumentException if there is more than one symbol with the required id.
      */
+    @Nullable
     T find(String symbolId) throws IllegalArgumentException;
 
     /**
@@ -34,14 +39,17 @@ public interface SmiSymbolMap<T extends SmiSymbol> extends Iterable<T> {
      * @return The unique symbol with the required id, or null if it is not found.
      * @throws IllegalArgumentException if the module is not found or if there is more than one symbol with the required id.
      */
+    @Nullable
     T find(String moduleId, String symbolId) throws IllegalArgumentException;
 
     /**
      * @param symbolId The required id of the symbols.
      * @return All the SmiSymbol with the required id, or an empty list if none are found.
      */
+    @Nonnull
     List<T> findAll(String symbolId);
 
+    @Nonnull
     Collection<T> getAll();
 
     int size();
