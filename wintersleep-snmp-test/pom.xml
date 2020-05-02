@@ -46,11 +46,6 @@
                                 <mib2java id="libsmi"
                                           packageName="org.wintersleep.snmp.test.libsmi"
                                           outputDir="${project.build.directory}/generated-sources/mib2java">
-                                    <!--<taskName>libsmi</taskName>-->
-                                    <!--
-                                                                        <packageName>org.wintersleep.snmp.test.libsmi</packageName>
-                                                                        <outputDir></outputDir>
-                                    -->
                                     <fileset dir="../mibs/libsmi/">
                                         <exclude name="**/*orig"/>
                                         <!-- obsoleted by RFC-1213: -->

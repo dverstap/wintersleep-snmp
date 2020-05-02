@@ -12,12 +12,12 @@
 
     <properties>
         <dokka.version>0.9.18</dokka.version>
-        <kotlin.version>1.3.30</kotlin.version>
-        <kotlinx.html.version>0.6.12</kotlinx.html.version>
+        <kotlin.version>1.3.70</kotlin.version>
+        <kotlinx.html.version>0.7.1</kotlinx.html.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.version>1.7.26</slf4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
     <developers>
@@ -109,11 +109,6 @@
                 <version>4.12</version>
             </dependency>
             <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.ant</groupId>
                 <artifactId>ant</artifactId>
                 <version>1.10.5</version>
@@ -135,8 +130,9 @@
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
+                <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wintersleep.snmp</groupId>
@@ -332,7 +328,7 @@
                             </execution>
                         </executions>
                     </plugin>
-<!--
+                    <!--
                     <plugin>
                         <groupId>org.jetbrains.dokka</groupId>
                         <artifactId>dokka-maven-plugin</artifactId>
@@ -346,7 +342,7 @@
                             </execution>
                         </executions>
                     </plugin>
--->
+                    -->
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
